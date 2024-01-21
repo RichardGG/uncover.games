@@ -26,7 +26,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: yarn global add @quasar/cli
+    - run: yarn
+    # - run: yarn global add @quasar/cli
     - run: yarn quasar build
     # - run: npm ci
     # - run: npm run build --if-present
