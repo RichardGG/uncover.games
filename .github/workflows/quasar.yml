@@ -39,6 +39,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: yarn
+    - run: echo "${{ secrets.ENV_FILE }}" > .env
     - run: yarn quasar build
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
