@@ -43,7 +43,7 @@ jobs:
       env:
         ENV_FILE: ${{ secrets.ENV_FILE }}
       run: |
-        echo "${{ ENV_FILE }}" > .env 
+        echo "${{ secrets.ENV_FILE }}" > .env 
     - run: yarn quasar build
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
