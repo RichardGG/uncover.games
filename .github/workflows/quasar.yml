@@ -39,7 +39,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: yarn
-    - run: echo "${{ vars.ENV_FILE }}" > .env 
+    - shell: bash
+      env:
+        ENV_FILE: ${{ secrets.ENV_FILE }}
+      run: |
+        echo "${{ ENV_FILE }}" > .env 
     - run: yarn quasar build
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
