@@ -18,6 +18,13 @@ export type ListResponse = {
   files: Array<File>,
 }
 
+export type ProgressEvent = {
+  loaded: number,
+  total: number,
+}
+
+export interface ProgressUpdate { (progress: number): void }
+
 const DRIVE_BASE_URL = 'https://www.googleapis.com/drive/v3/files'
 
 export const useDriveStore = defineStore('drive', {
@@ -38,7 +45,7 @@ export const useDriveStore = defineStore('drive', {
     saveToken(token: string) {
       this.token = token
     },
-    listFiles(files:Array<File> = [], pageToken:string|null = null): Promise<Array<File>> {
+    listFiles(progressUpdate:ProgressUpdate, files:Array<File> = [], pageToken:string|null = null, progress = 0): Promise<Array<File>> {
       // Loads all pages of files
       return axios.get(DRIVE_BASE_URL, {
         params: {
@@ -49,13 +56,16 @@ export const useDriveStore = defineStore('drive', {
         },
         headers: {
           Authorization: 'Bearer ' + this.token
-        }
+        },
+        onDownloadProgress(progressEvent) {
+          progressUpdate(progressEvent.loaded + progress)
+        },
       })
       .then(({ data }) => {
         const response:ListResponse = data
         files = files.concat(response.files)
         if (response.nextPageToken) {
-          return this.listFiles(files, response.nextPageToken)
+          return this.listFiles(progressUpdate, files, response.nextPageToken, progress)
         }
         return files
       })

@@ -5,7 +5,7 @@
 </template>
   
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, ref, onMounted } from 'vue'
   import { find } from 'lodash'
   import { useDriveStore } from 'src/stores/driveStore'
   import { useGamesStore } from 'src/stores/gamesStore'
@@ -21,13 +21,15 @@
       const driveStore = useDriveStore()
       const gamesStore = useGamesStore()
 
-      // TODO move to mounted
-      const file = find(gamesStore.files, { name: props.fileName?.replace('\\', '_') } )
-      if (file) {
-        driveStore.getFile(file.id, { responseType: "arraybuffer" }).then(({ data }) => {
-          url.value = 'data:imaimgUrlge/jpeg;base64, ' + btoa(new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
-        })
-      }
+      onMounted(() => {
+        // TODO need to implement lazy scroll so all don't load at once
+        const file = find(gamesStore.files, { name: props.fileName?.replace('\\', '_') } )
+        if (file) {
+          driveStore.getFile(file.id, { responseType: "arraybuffer" }).then(({ data }) => {
+            url.value = 'data:imaimgUrlge/jpeg;base64, ' + btoa(new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+          })
+        }
+      })
 
       return { url }
     }
