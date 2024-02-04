@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; height: calc(100vh - 100px);" v-if="loading">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: calc(100vh - 100px);" v-if="loading">
     <div style="font-size: 26px;">
       Loading...
     </div>
