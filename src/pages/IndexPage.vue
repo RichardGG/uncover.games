@@ -3,10 +3,10 @@
     <div style="font-size: 26px;">
       Loading...
     </div>
-    <table>
+    <table style="margin-top: 20px;">
       <tr v-for="(status, type) in loadingStatus" :key="type">
         <td>{{ type }}</td>
-        <td>{{ status.loading ? status.progress : '✅' }}</td>
+        <td style="min-width: 100px; text-align: right;">{{ status.loading ? status.progress : '✅' }}</td>
       </tr>
     </table>
   </div>
@@ -18,8 +18,8 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import { some, find } from 'lodash'
 import { filesize } from 'filesize'
 import { useDriveStore, File } from 'src/stores/driveStore'
-import { useGamesStore } from 'stores/gamesStore'
-import { useFiltersStore } from 'stores/filtersStore'
+import { useGamesStore, Game, Tag } from 'stores/gamesStore'
+import { useFiltersStore, Filter } from 'stores/filtersStore'
 import LibraryPanel from 'src/components/LibraryPanel.vue'
 
 export type LoadingStatus = {
@@ -88,35 +88,41 @@ export default defineComponent({
 
       const getFile = <K extends keyof LoadingStatuses>(files:Array<File>, fileName:K):any => {
         const fileId = find(files, { name: `${fileName}.json` } )?.id
+        if (!fileId) {
+          return
+        }
+
         loadingStatus.value[fileName].progress = 'waiting'
-        return driveStore.getFile(fileId, { 
+        const promise = driveStore.getFile(fileId, { 
           onDownloadProgress: (progress:ProgressEvent) => {
             loadingStatus.value[fileName].progress = filesize(progress.loaded)
           }
-        }).then(({ data }) => {loadingStatus.value[fileName].loading = false; gamesStore.games = data})
+        })
+        promise.then(({ data }) => loadingStatus.value[fileName].loading = false)
+        return promise
       }
 
       // Load data from Google Drive (TODO fetch all pages etc)
-      driveStore.listFiles((progress:number) => loadingStatus.value.Files.progress = filesize(progress)).then((files) => {
+      driveStore.listFiles((progress:number) => loadingStatus.value.Files.progress = filesize(progress)).then((files: File[]) => {
         loadingStatus.value.Files.loading = false
         gamesStore.files = files
-        getFile(files, 'Games').then(({ data }) => gamesStore.games = data)
-        getFile(files, 'AgeRatings').then(({ data }) => gamesStore.ageRatings = data)
-        getFile(files, 'Categories').then(({ data }) => gamesStore.categories = data)
-        getFile(files, 'Companies').then(({ data }) => gamesStore.companies = data)
-        getFile(files, 'CompletionStatuses').then(({ data }) => gamesStore.completionStatuses = data)
-        getFile(files, 'Emulators').then(({ data }) => gamesStore.emulators = data)
-        getFile(files, 'Features').then(({ data }) => gamesStore.features = data)
-        getFile(files, 'FilterPresets').then(({ data }) => filtersStore.filterPresets = data)
-        // getFile(files, 'GameScanners').then(({ data }) => gamesStore.gameScanners = data)
-        getFile(files, 'Genres').then(({ data }) => gamesStore.genres = data)
-        // getFile(files, 'ImportExclusions').then(({ data }) => gamesStore.importExclusions = data)
-        getFile(files, 'Platforms').then(({ data }) => gamesStore.platforms = data)
-        getFile(files, 'Regions').then(({ data }) => gamesStore.regions = data)
-        getFile(files, 'Series').then(({ data }) => gamesStore.series = data)
-        getFile(files, 'Sources').then(({ data }) => gamesStore.sources = data)
-        getFile(files, 'Tags').then(({ data }) => gamesStore.tags = data)
-      }, { onDownloadProgress: (progress:ProgressEvent) => progress.loaded / progress.total })
+        getFile(files, 'Games').then(({ data }:{ data: Array<Game> }) => gamesStore.games = data)
+        getFile(files, 'AgeRatings').then(({ data }:{ data: Array<Tag> }) => gamesStore.ageRatings = data)
+        getFile(files, 'Categories').then(({ data }:{ data: Array<Tag> }) => gamesStore.categories = data)
+        getFile(files, 'Companies').then(({ data }:{ data: Array<Tag> }) => gamesStore.companies = data)
+        getFile(files, 'CompletionStatuses').then(({ data }:{ data: Array<Tag> }) => gamesStore.completionStatuses = data)
+        getFile(files, 'Emulators').then(({ data }:{ data: Array<Tag> }) => gamesStore.emulators = data)
+        getFile(files, 'Features').then(({ data }:{ data: Array<Tag> }) => gamesStore.features = data)
+        getFile(files, 'FilterPresets').then(({ data }:{ data: Array<Filter> }) => filtersStore.filterPresets = data)
+        // getFile(files, 'GameScanners').then(({ data }:{ data: Array<Tag> }) => gamesStore.gameScanners = data)
+        getFile(files, 'Genres').then(({ data }:{ data: Array<Tag> }) => gamesStore.genres = data)
+        // getFile(files, 'ImportExclusions').then(({ data }:{ data: Array<Tag> }) => gamesStore.importExclusions = data)
+        getFile(files, 'Platforms').then(({ data }:{ data: Array<Tag> }) => gamesStore.platforms = data)
+        getFile(files, 'Regions').then(({ data }:{ data: Array<Tag> }) => gamesStore.regions = data)
+        getFile(files, 'Series').then(({ data }:{ data: Array<Tag> }) => gamesStore.series = data)
+        getFile(files, 'Sources').then(({ data }:{ data: Array<Tag> }) => gamesStore.sources = data)
+        getFile(files, 'Tags').then(({ data }:{ data: Array<Tag> }) => gamesStore.tags = data)
+      })
 
     })
 

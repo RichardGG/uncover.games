@@ -77,7 +77,6 @@ export default defineComponent({
             return {
               label: filter.Name,
               click: () => {
-                console.log('applying filter', filter)
                 filtersStore.currentFilter = filter
               }
             }

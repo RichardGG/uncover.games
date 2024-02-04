@@ -98,9 +98,7 @@ export const useFiltersStore = defineStore('filtersStore', {
     },
 
     matchesFilter(game: Game): boolean {
-      // console.log('matchesFilter')
       if (!this.currentFilter.Settings) {
-        console.log('no settings')
         return true
       }
 
@@ -206,15 +204,12 @@ export const useFiltersStore = defineStore('filtersStore', {
         }
         if (key === 'CompletionStatuses') {
           result = this.idFilter(game.CompletionStatusId, this.currentFilter.Settings.CompletionStatuses)
-          // console.log('completion status', result)
         }
 
         // TODO handle early escape differently depending if AND or OR
         if (result === true) {
-          // console.log('this should match')
           return true
         } else {
-          // console.log('result', result)
         }
       }
       return false
