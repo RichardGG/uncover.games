@@ -116,6 +116,8 @@ export type Sort = {
 
 export type GamesState = {
   sort: Sort|null,
+  sortDesc: boolean,
+  search: string,
   games: Array<Game>,
   files: Array<File>,
 
@@ -143,6 +145,8 @@ export const useGamesStore = defineStore('gamesStore', {
       label: 'Name',
       value: 'Name',
     },
+    sortDesc: true,
+    search: '',
     games: [],
     files: [],
 

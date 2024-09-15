@@ -35,16 +35,16 @@
       </q-menu>
     </q-btn>
 
+    <q-input v-model="search" />
+
+    <q-toggle v-model="sortDesc" />
+
     <q-select
       v-model="sort"
       :options="sortOptions"
       filled
       style="min-width: 200px;"
-    >
-
-
-      
-    </q-select>
+    />
   </q-toolbar>
 </template>
 
@@ -64,7 +64,7 @@ export default defineComponent({
   setup () {
     const gamesStore = useGamesStore()
     const filtersStore = useFiltersStore()
-    const { sort } = storeToRefs(gamesStore)
+    const { sort, sortDesc, search } = storeToRefs(gamesStore)
 
     // TODO maybe just define these in the template?
     const menuOptions = computed(() => [
@@ -113,7 +113,7 @@ export default defineComponent({
     ]
 
     return {
-      sort, sortOptions, menuOptions
+      sort, sortOptions, menuOptions, sortDesc, search
     }
   }
 })
