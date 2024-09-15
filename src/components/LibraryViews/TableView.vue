@@ -4,6 +4,9 @@
     :columns="columns"
     :rows="games"
     row-key="Id"
+    :virtual-scroll="true"
+    style="height: calc(100vh - 100px); width: calc(100% - 40px)"
+    :rows-per-page-options="[0]"
   >
     <template v-slot:body-cell-Cover="props">
       <q-td>

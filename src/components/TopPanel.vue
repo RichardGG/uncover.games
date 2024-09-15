@@ -1,8 +1,5 @@
 <template>
     <q-toolbar>
-    <q-toolbar-title>
-      Uncover.Games
-    </q-toolbar-title>
 
     <q-btn color="secondary" label="...">
       <q-menu>
@@ -35,9 +32,7 @@
       </q-menu>
     </q-btn>
 
-    <q-input v-model="search" />
-
-    <q-toggle v-model="sortDesc" />
+    <q-input v-model="search" standout dense class="q-mx-md" />
 
     <q-select
       v-model="sort"
@@ -45,6 +40,9 @@
       filled
       style="min-width: 200px;"
     />
+
+    <q-btn square padding="sm" class="q-mx-md" :icon="sortDesc ? 'arrow_downward' : 'arrow_upward'" @click="sortDesc = !sortDesc" />
+
   </q-toolbar>
 </template>
 
