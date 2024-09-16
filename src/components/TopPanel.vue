@@ -34,22 +34,13 @@
 
     <q-input v-model="search" standout dense class="q-mx-md" />
 
-    <q-select
-      v-model="sort"
-      :options="sortOptions"
-      filled
-      style="min-width: 200px;"
-    />
-
-    <q-btn square padding="sm" class="q-mx-md" :icon="sortDesc ? 'arrow_downward' : 'arrow_upward'" @click="sortDesc = !sortDesc" />
-
   </q-toolbar>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { map } from 'lodash'
-import { useGamesStore } from 'stores/gamesStore'
+import { Sort, useGamesStore } from 'stores/gamesStore'
 import { useFiltersStore, Filter } from 'stores/filtersStore'
 import { storeToRefs } from 'pinia'
 
@@ -62,34 +53,7 @@ export default defineComponent({
   setup () {
     const gamesStore = useGamesStore()
     const filtersStore = useFiltersStore()
-    const { sort, sortDesc, search } = storeToRefs(gamesStore)
-
-    // TODO maybe just define these in the template?
-    const menuOptions = computed(() => [
-      {
-        label: 'Sort',
-      },
-      {
-        label: 'Filter Presets',
-          options: map(filtersStore.filterPresets, (filter: Filter) => {
-            return {
-              label: filter.Name,
-              click: () => {
-                filtersStore.currentFilter = filter
-              }
-            }
-          })
-      },
-      {
-        label: 'Filter',
-      },
-      {
-        label: 'Group By',
-      },
-      {
-        label: 'View',
-      },
-    ])
+    const { sort, sortDesc, search, view } = storeToRefs(gamesStore)
 
     const sortOptions = [
       {
@@ -109,6 +73,53 @@ export default defineComponent({
         value: 'LastActivity',
       },
     ]
+
+    // TODO maybe just define these in the template?
+    const menuOptions = computed(() => [
+      {
+        label: 'Sort',
+        options: [
+          {
+            label: sortDesc.value ? 'Desc' : 'Asc',
+            click: () => sortDesc.value = !sortDesc.value,
+          },
+          ...map(sortOptions, (sortOption: Sort) => {
+            return {
+              label: sortOption.label,
+              click: () => sort.value = sortOption
+            }
+          })
+        ]
+      },
+      {
+        label: 'Filter Presets',
+        options: map(filtersStore.filterPresets, (filter: Filter) => {
+          return {
+            label: filter.Name,
+            click: () => filtersStore.currentFilter = filter
+          }
+        })
+      },
+      {
+        label: 'Filter',
+      },
+      {
+        label: 'Group By',
+      },
+      {
+        label: 'View',
+        options: [
+          {
+            label: 'Grid',
+            click: () => view.value = 'grid',
+          },
+          {
+            label: 'Table',
+            click: () => view.value = 'table',
+          }
+        ]
+      },
+    ])
 
     return {
       sort, sortOptions, menuOptions, sortDesc, search

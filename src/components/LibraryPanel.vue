@@ -1,6 +1,6 @@
 <template>
   <q-page class="column items-center justify-evenly">
-    <TableView :games="games" v-if="true" />
+    <TableView :games="games" v-if="view === 'table'" />
     <GridView :games="games" v-else />
   </q-page>
 </template>
@@ -20,7 +20,7 @@ export default defineComponent({
   setup () {
     const gamesStore = useGamesStore()
     const filtersStore = useFiltersStore()
-    const { sort } = storeToRefs(gamesStore)
+    const { sort, view } = storeToRefs(gamesStore)
 
     const games = computed(() => {
       let games = filter(gamesStore.games, (game: Game) => {
@@ -37,7 +37,7 @@ export default defineComponent({
       return games
     })
 
-    return { games, sort }
+    return { games, sort, view }
   }
 })
 </script>

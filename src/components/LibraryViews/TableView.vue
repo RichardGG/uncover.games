@@ -56,6 +56,7 @@ export default defineComponent({
         label: 'Name',
         name: 'Name',
         field: 'Name',
+        align: 'left',
       },
       {
         label: 'CommunityScore',
