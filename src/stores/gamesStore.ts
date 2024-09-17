@@ -147,7 +147,7 @@ export const useGamesStore = defineStore('gamesStore', {
       label: 'Name',
       value: 'Name',
     },
-    sortDesc: true,
+    sortDesc: false,
     search: '',
     view: 'table',
 

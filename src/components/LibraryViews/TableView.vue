@@ -79,11 +79,6 @@ export default defineComponent({
         field: (row: Game) => row.Source?.Name,
       },
       {
-        label: 'Hidden',
-        name: 'Hidden',
-        field: 'Hidden',
-      },
-      {
         label: 'Actions',
         name: 'Actions',
         field: 'Actions',
