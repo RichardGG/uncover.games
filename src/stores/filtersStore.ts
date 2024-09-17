@@ -103,6 +103,7 @@ export const useFiltersStore = defineStore('filtersStore', {
       }
 
       const keys = Object.keys(this.currentFilter.Settings) as Array<keyof typeof this.currentFilter.Settings>;
+      let matchedKey = false
 
       for (const key of keys) {
         const value = this.currentFilter.Settings[key]
@@ -114,9 +115,11 @@ export const useFiltersStore = defineStore('filtersStore', {
         // UseAndFilteringStyle: boolean,
         if (key === 'IsUnInstalled' && this.currentFilter.Settings.IsUnInstalled) {
           result = !game.IsInstalled
+          matchedKey = true
         }
         if (key === 'IsInstalled' && this.currentFilter.Settings.IsInstalled) {
           result = game.IsInstalled
+          matchedKey = true
         }
         if (key === 'Hidden') {
           // TODO check if this matches the playnite behaviour
@@ -127,6 +130,7 @@ export const useFiltersStore = defineStore('filtersStore', {
           }
         }
         if (key === 'Favorite' && this.currentFilter.Settings.Favorite) {
+          matchedKey = true
           result = game.Favorite
         }
         if (key === 'Name') {
@@ -139,33 +143,43 @@ export const useFiltersStore = defineStore('filtersStore', {
           // TODO check how this filter works === ?
         }
         if (key === 'Genre') {
+          matchedKey = true
           result = this.arrayFilter(game.GenreIds, this.currentFilter.Settings.Genre)
         }
         if (key === 'Platform') {
+          matchedKey = true
           result = this.arrayFilter(game.PlatformIds, this.currentFilter.Settings.Platform)
         }
         if (key === 'Publisher') {
+          matchedKey = true
           result = this.arrayFilter(game.PublisherIds, this.currentFilter.Settings.Publisher)
         }
         if (key === 'Developer') {
+          matchedKey = true
           result = this.arrayFilter(game.DeveloperIds, this.currentFilter.Settings.Developer)
         }
         if (key === 'Category') {
+          matchedKey = true
           result = this.arrayFilter(game.CategoryIds, this.currentFilter.Settings.Category)
         }
         if (key === 'Tag') {
+          matchedKey = true
           result = this.arrayFilter(game.TagIds, this.currentFilter.Settings.Tag)
         }
         if (key === 'Series') {
+          matchedKey = true
           result = this.arrayFilter(game.SeriesIds, this.currentFilter.Settings.Series)
         }
         if (key === 'Region') {
+          matchedKey = true
           result = this.arrayFilter(game.RegionIds, this.currentFilter.Settings.Region)
         }
         if (key === 'Source') {
+          matchedKey = true
           result = this.idFilter(game.SourceId, this.currentFilter.Settings.Source)
         }
         if (key === 'AgeRating') {
+          matchedKey = true
           result = this.arrayFilter(game.AgeRatingIds, this.currentFilter.Settings.AgeRating)
         }
         if (key === 'Library') {
@@ -173,6 +187,7 @@ export const useFiltersStore = defineStore('filtersStore', {
           // result = this.arrayFilter(game.Library, this.currentFilter.Settings.Library)
         }
         if (key === 'Feature') {
+          matchedKey = true
           result = this.arrayFilter(game.FeatureIds, this.currentFilter.Settings.Feature)
         }
         if (key === 'UserScore') {
@@ -203,6 +218,7 @@ export const useFiltersStore = defineStore('filtersStore', {
           // TODO
         }
         if (key === 'CompletionStatuses') {
+          matchedKey = true
           result = this.idFilter(game.CompletionStatusId, this.currentFilter.Settings.CompletionStatuses)
         }
 
@@ -211,6 +227,9 @@ export const useFiltersStore = defineStore('filtersStore', {
           return true
         } else {
         }
+      }
+      if (!matchedKey) { 
+        return true
       }
       return false
     }
