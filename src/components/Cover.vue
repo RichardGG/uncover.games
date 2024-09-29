@@ -10,11 +10,8 @@
 </template>
   
 <script lang="ts">
-  import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
-  import { find } from 'lodash'
-  import axios from 'axios'
+  import { defineComponent, ref } from 'vue'
   import { useDriveStore } from 'src/stores/driveStore'
-  import { useGamesStore } from 'src/stores/gamesStore'
   
   export default defineComponent({
     name: 'CoverImage',
@@ -33,16 +30,12 @@
       const rotationY = ref(0)
       const hovering = ref(false)
       const driveStore = useDriveStore()
-      const gamesStore = useGamesStore()
 
-      const controller = new AbortController()
-
-      const file = find(gamesStore.files, { name: props.fileName?.replace('\\', '_') } )
-      if (file) {
-        driveStore.getFile(file.id, { responseType: "arraybuffer", signal: controller.signal }).then(({ data }) => {
-          url.value = 'data:imaimgUrlge/jpeg;base64, ' + btoa(new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
-        }).catch((e) => {
-          // TODO check, likely CancelledError
+      if (props.fileName){
+        driveStore.initImage(props.fileName).then((dataUri) => {
+          if (dataUri) {
+            url.value = dataUri
+          }
         })
       }
 

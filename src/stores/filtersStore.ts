@@ -47,13 +47,21 @@ export type Filter = {
   SortingOrderDirection: number|null, // TODO should be an enum from export?
 }
 
+export type Sort = {
+  label: string|null,
+  value: string|null,
+}
+
 export type FiltersState = {
   currentFilter: Filter,
-  filterPresets: Array<Filter>,
+  sort: Sort|null,
+  sortDesc: boolean,
+  search: string,
+  view: string,
 }
 
 import { intersection } from 'lodash'
-import { Game } from './gamesStore'
+import { Game } from './collectionsStore'
 
 export const useFiltersStore = defineStore('filtersStore', {
   state: (): FiltersState => ({
@@ -65,7 +73,13 @@ export const useFiltersStore = defineStore('filtersStore', {
       SortingOrder: null,
       SortingOrderDirection: null,
     },
-    filterPresets: [],
+    sort: {
+      label: 'Name',
+      value: 'Name',
+    },
+    sortDesc: false,
+    search: '',
+    view: 'table',
   }),
   actions: {
     arrayFilter(ids: Array<string>|null, filter: TagFilter|null): boolean|null {

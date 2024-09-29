@@ -40,8 +40,8 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { map } from 'lodash'
-import { Sort, useGamesStore } from 'stores/gamesStore'
-import { useFiltersStore, Filter } from 'stores/filtersStore'
+import { useCollectionsStore } from 'stores/collectionsStore'
+import { useFiltersStore, Filter, Sort } from 'stores/filtersStore'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
@@ -51,9 +51,9 @@ export default defineComponent({
   },
 
   setup () {
-    const gamesStore = useGamesStore()
     const filtersStore = useFiltersStore()
-    const { sort, sortDesc, search, view } = storeToRefs(gamesStore)
+    const collectionsStore = useCollectionsStore()
+    const { sort, sortDesc, search, view } = storeToRefs(filtersStore)
 
     const sortOptions = [
       {
@@ -93,7 +93,7 @@ export default defineComponent({
       },
       {
         label: 'Filter Presets',
-        options: map(filtersStore.filterPresets, (filter: Filter) => {
+        options: map(collectionsStore.FilterPresets, (filter: Filter) => {
           return {
             label: filter.Name,
             click: () => filtersStore.currentFilter = filter

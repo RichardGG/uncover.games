@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Game } from 'stores/gamesStore'
+import { Game } from 'stores/collectionsStore'
 import Cover from 'src/components/Cover.vue'
 
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
   props: {
     games: Array<Game>
   },
-  setup (props) {
+  setup () {
     const columns = [
       {
         label: 'Cover',

@@ -6,9 +6,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { filter, sortBy, reverse } from 'lodash'
-import { useGamesStore, Game } from 'stores/gamesStore'
+import { useCollectionsStore, Game } from 'stores/collectionsStore'
 import { useFiltersStore } from 'stores/filtersStore'
 import TableView from 'src/components/LibraryViews/TableView.vue'
 import GridView from 'src/components/LibraryViews/GridView.vue'
@@ -18,30 +18,30 @@ export default defineComponent({
   name: 'LibraryPanel',
   components: { TableView, GridView },
   setup () {
-    const gamesStore = useGamesStore()
+    const collectionsStore = useCollectionsStore()
     const filtersStore = useFiltersStore()
-    const { sort, view } = storeToRefs(gamesStore)
+    const { currentFilter, sort, view  } = storeToRefs(filtersStore)
 
     const games = computed(() => {
-      let games = filter(gamesStore.games, (game: Game) => {
+      let games = filter(collectionsStore.Games, (game: Game) => {
             const matches = filtersStore.matchesFilter(game)
             return matches
         })
       games = sortBy(games, sort.value?.value ?? 'Name')
-      if (gamesStore.sortDesc) {
+      if (filtersStore.sortDesc) {
         games = reverse(games)
       }
       games = games.filter((game) => {
         let result = !game.Hidden
-        if (gamesStore.search) {
-          result = result && (game.Name?.toLowerCase()?.includes(gamesStore.search.toLowerCase()) ?? false)
+        if (filtersStore.search) {
+          result = result && (game.Name?.toLowerCase()?.includes(filtersStore.search.toLowerCase()) ?? false)
         }
         return result
       })
       return games
     })
 
-    return { games, sort, view }
+    return { games, sort, view, currentFilter }
   }
 })
 </script>

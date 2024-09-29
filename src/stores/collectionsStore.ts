@@ -109,66 +109,72 @@ export type Game = {
   Name: string|null,
 }
 
-export type Sort = {
-  label: string|null,
-  value: string|null,
+export const CollectionTypes = [
+  'Files',
+  'Games',
+  'AgeRatings',
+  'Categories',
+  'Companies',
+  'CompletionStatuses',
+  'Emulators',
+  'Features',
+  'FilterPresets',
+  'GameScanners',
+  'Genres',
+  'ImportExclusions',
+  'Platforms',
+  'Regions',
+  'Series',
+  'Sources',
+  'Tags',
+]
+
+export type CollectionType = typeof CollectionTypes[number]
+
+export type CollectionsMap<Types> = {
+  [key in CollectionType]: Types;
 }
 
-export type GamesState = {
-  sort: Sort|null,
-  sortDesc: boolean,
-  search: string,
-  view: string,
-
-  games: Array<Game>,
-  files: Array<File>,
-
-  ageRatings: Array<Tag>,
-  categories: Array<Tag>,
-  companies: Array<Tag>,
-  completionStatuses: Array<Tag>,
-  emulators: Array<Tag>,
-  features: Array<Tag>,
-  // gameScanners: Array<Tag>,
-  genres: Array<Tag>,
-  // importExclusions: Array<Tag>,
-  platforms: Array<Tag>,
-  regions: Array<Tag>,
-  series: Array<Tag>,
-  sources: Array<Tag>,
-  tags: Array<Tag>,
+export interface CollectionsState extends CollectionsMap< Array<File> | Array<Tag> | Array<Game> > {
+  'Files': Array<File>,
+  'Games': Array<Game>,
+  'AgeRatings': Array<Tag>,
+  'Categories': Array<Tag>,
+  'Companies': Array<Tag>,
+  'CompletionStatuses': Array<Tag>,
+  'Emulators': Array<Tag>,
+  'Features': Array<Tag>,
+  'FilterPresets': Array<Tag>,
+  'GameScanners': Array<Tag>,
+  'Genres': Array<Tag>,
+  'ImportExclusions': Array<Tag>,
+  'Platforms': Array<Tag>,
+  'Regions': Array<Tag>,
+  'Series': Array<Tag>,
+  'Sources': Array<Tag>,
+  'Tags': Array<Tag>,
 }
 
 import type { File } from './driveStore'
 
-export const useGamesStore = defineStore('gamesStore', {
-  state: (): GamesState => ({
-    sort: {
-      label: 'Name',
-      value: 'Name',
-    },
-    sortDesc: false,
-    search: '',
-    view: 'table',
-
-    games: [],
-    files: [],
-
-    // TODO consider moving these to other stores
-    ageRatings: [],
-    categories: [],
-    companies: [],
-    completionStatuses: [],
-    emulators: [],
-    features: [],
-    gameScanners: [],
-    genres: [],
-    importExclusions: [],
-    isOpen: [],
-    platforms: [],
-    regions: [],
-    series: [],
-    sources: [],
-    tags: [],
-  } as GamesState),
+export const useCollectionsStore = defineStore('collectionsStore', {
+  state: (): CollectionsState => ({
+    'Files': [],
+    'Games': [],
+    'AgeRatings': [],
+    'Categories': [],
+    'Companies': [],
+    'CompletionStatuses': [],
+    'Emulators': [],
+    'Features': [],
+    'FilterPresets': [],
+    'GameScanners': [],
+    'Genres': [],
+    'ImportExclusions': [],
+    'Platforms': [],
+    'Regions': [],
+    'Series': [],
+    'Sources': [],
+    'Tags': [],
+  } as CollectionsState),
 })

@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
 import { chunk } from 'lodash'
-import { Game } from 'stores/gamesStore'
+import { Game } from 'stores/collectionsStore'
 import Cover from 'src/components/Cover.vue'
 
 export default defineComponent({
