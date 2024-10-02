@@ -119,9 +119,9 @@ export const CollectionTypes = [
   'Emulators',
   'Features',
   'FilterPresets',
-  'GameScanners',
+  // 'GameScanners',
   'Genres',
-  'ImportExclusions',
+  // 'ImportExclusions',
   'Platforms',
   'Regions',
   'Series',
@@ -145,9 +145,9 @@ export interface CollectionsState extends CollectionsMap< Array<File> | Array<Ta
   'Emulators': Array<Tag>,
   'Features': Array<Tag>,
   'FilterPresets': Array<Tag>,
-  'GameScanners': Array<Tag>,
+  // 'GameScanners': Array<Tag>,
   'Genres': Array<Tag>,
-  'ImportExclusions': Array<Tag>,
+  // 'ImportExclusions': Array<Tag>,
   'Platforms': Array<Tag>,
   'Regions': Array<Tag>,
   'Series': Array<Tag>,
@@ -158,23 +158,7 @@ export interface CollectionsState extends CollectionsMap< Array<File> | Array<Ta
 import type { File } from './driveStore'
 
 export const useCollectionsStore = defineStore('collectionsStore', {
-  state: (): CollectionsState => ({
-    'Files': [],
-    'Games': [],
-    'AgeRatings': [],
-    'Categories': [],
-    'Companies': [],
-    'CompletionStatuses': [],
-    'Emulators': [],
-    'Features': [],
-    'FilterPresets': [],
-    'GameScanners': [],
-    'Genres': [],
-    'ImportExclusions': [],
-    'Platforms': [],
-    'Regions': [],
-    'Series': [],
-    'Sources': [],
-    'Tags': [],
-  } as CollectionsState),
+  state: (): CollectionsState => {
+    return {} as CollectionsState
+  },
 })

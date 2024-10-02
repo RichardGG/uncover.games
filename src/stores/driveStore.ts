@@ -1,12 +1,19 @@
 import { defineStore } from 'pinia'
 import axios, { ResponseType } from 'axios'
 import { find } from 'lodash'
-import { useCollectionsStore, CollectionType, CollectionTypes } from 'stores/collectionsStore'
+import { useCollectionsStore, CollectionType, CollectionTypes, CollectionsMap } from 'stores/collectionsStore'
 
 export type DriveState = {
   token: string|null,
-  fetchProgress: LoadingStatuses,
-  files: File[],
+  states: CacheStates,
+}
+
+export type CacheState = {
+  state: 'pending'|'loading-cache'|'downloading'|'done'
+}
+
+export type CacheStates = {
+  [key in CollectionType]: CacheState;
 }
 
 export type File = {
@@ -22,115 +29,23 @@ export type ListResponse = {
   files: Array<File>,
 }
 
-export type ProgressEvent = {
-  loaded: number,
-  total: number,
-}
-
-export type LoadingStatus = {
-  loading: boolean,
-  progress: number,
-}
-
-export type LoadingStatuses = {
-  Files: LoadingStatus,
-  Games: LoadingStatus,
-  AgeRatings: LoadingStatus,
-  Categories: LoadingStatus,
-  Companies: LoadingStatus,
-  CompletionStatuses: LoadingStatus,
-  Emulators: LoadingStatus,
-  Features: LoadingStatus,
-  FilterPresets: LoadingStatus,
-  // GameScanners: LoadingStatus,
-  Genres: LoadingStatus,
-  // ImportExclusions: LoadingStatus,
-  Platforms: LoadingStatus,
-  Regions: LoadingStatus,
-  Series: LoadingStatus,
-  Sources: LoadingStatus,
-  Tags: LoadingStatus,
-}
-
 export interface ProgressUpdate { (progress: number): void }
 
 const DRIVE_BASE_URL = 'https://www.googleapis.com/drive/v3/files'
 
 export const useDriveStore = defineStore('drive', {
-  state: () => ({
-    token: null,
-    fetchProgress: {
-      Files: {
-        loading: false,
-        progress: 0,
-      },
-      Games: {
-        loading: false,
-        progress: 0,
-      },
-      AgeRatings: {
-        loading: false,
-        progress: 0,
-      },
-      Categories: {
-        loading: false,
-        progress: 0,
-      },
-      Companies: {
-        loading: false,
-        progress: 0,
-      },
-      CompletionStatuses: {
-        loading: false,
-        progress: 0,
-      },
-      Emulators: {
-        loading: false,
-        progress: 0,
-      },
-      Features: {
-        loading: false,
-        progress: 0,
-      },
-      FilterPresets: {
-        loading: false,
-        progress: 0,
-      },
-      // GameScanners: {
-      //   loading: false,
-      //   progress: 0,
-      // },
-      Genres: {
-        loading: false,
-        progress: 0,
-      },
-      // ImportExclusions: {
-      //   loading: false,
-      //   progress: 0,
-      // },
-      Platforms: {
-        loading: false,
-        progress: 0,
-      },
-      Regions: {
-        loading: false,
-        progress: 0,
-      },
-      Series: {
-        loading: false,
-        progress: 0,
-      },
-      Sources: {
-        loading: false,
-        progress: 0,
-      },
-      Tags: {
-        loading: false,
-        progress: 0,
-      },
-    },
-    files: [],
-  } as DriveState),
+  state: () => {
+    const states:CacheStates = {}
+    CollectionTypes.forEach((type: CollectionType) => {
+      states[type] = {
+        state: 'pending',
+      }
+    })
+    return {
+      token: null,
+      states: states,
+    } as DriveState
+  },
 
   actions: {
     startAuth() {
@@ -196,12 +111,6 @@ export const useDriveStore = defineStore('drive', {
         headers: {
           Authorization: 'Bearer ' + this.token
         },
-        onDownloadProgress: (progressEvent) => {
-          this.fetchProgress.Files = {
-            loading: true,
-            progress: this.fetchProgress.Files.progress + progressEvent.loaded
-          }
-        },
       })
       .then(async ({ data }) => {
         // Add files to files array
@@ -261,6 +170,7 @@ export const useDriveStore = defineStore('drive', {
           // Files is handled in initFiles
           continue
         }
+        this.states[collectionType].state = 'loading-cache'
         const cachedResponse = await this.getCachedData('Collections', collectionType)
         if (cachedResponse) {
           // Store the cached collection
@@ -277,13 +187,17 @@ export const useDriveStore = defineStore('drive', {
         // Check if the cached data is old
         if (this.needsRefresh(metadata, cachedResponse)) {
           try {
+            this.states[collectionType].state = 'downloading'
             this.getFile(metadata.id).then(({ data }) => {
               this.setCachedData('Collections', collectionType, JSON.stringify(data))
               collectionsStore[collectionType] = data
+              this.states[collectionType].state = 'done'
             })
           } catch (e) {
             // TODO should we do something if the request fails
           }
+        } else {
+          this.states[collectionType].state = 'done'
         }
       }
     },
@@ -291,6 +205,7 @@ export const useDriveStore = defineStore('drive', {
     async initFiles() {
       const collectionsStore = useCollectionsStore()
       return new Promise(async () => {
+        this.states.Files.state = 'loading-cache'
         const cachedResponse = await this.getCachedData('files', 'allFiles')
         if (cachedResponse) {
           // Store the cached files and check collections
@@ -299,9 +214,12 @@ export const useDriveStore = defineStore('drive', {
         }
 
         // Store the fetched files and check collections
+        this.states.Files.state = 'downloading'
         const files = await this.fetchFiles()
         collectionsStore.Files = files
         this.initCollections()
+
+        this.states.Files.state = 'done'
 
         // Cache the fetched files
         this.setCachedData('files', 'allFiles', JSON.stringify(files))

@@ -1,22 +1,18 @@
 <template>
-  <!-- <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: calc(100vh - 100px);" v-if="loading">
-    <div style="font-size: 26px;">
-      Loading...
-    </div>
-    <table style="margin-top: 20px;">
-      <tr v-for="(status, type) in loadingStatus" :key="type">
-        <td>{{ type }}</td>
-        <td style="min-width: 100px; text-align: right;">{{ status.loading ? status.progress : '✅' }}</td>
-      </tr>
-    </table>
-  </div> -->
   <LibraryPanel/>
+  <q-linear-progress v-if="loadingMessage" indeterminate size="25px" class="fixed-bottom z-top">
+    <div class="absolute-full flex flex-center">
+      <q-badge color="white" text-color="accent" :label="loadingMessage" />
+    </div>
+  </q-linear-progress>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue'
-import { useDriveStore } from 'src/stores/driveStore'
+import { computed, defineComponent, onMounted } from 'vue'
+import { CacheState, CacheStates, useDriveStore } from 'src/stores/driveStore'
 import LibraryPanel from 'src/components/LibraryPanel.vue'
+import { storeToRefs } from 'pinia';
+import { CollectionTypes } from 'src/stores/collectionsStore';
 
 export type LoadingStatus = {
   loading: boolean,
@@ -27,43 +23,49 @@ export default defineComponent({
   name: 'IndexPage',
   components: { LibraryPanel },
   setup () {
+    const driveStore = useDriveStore()
     onMounted(() => {
-      const driveStore = useDriveStore()
-
       if (!driveStore.token) {
         driveStore.startAuth()
         return
       }
-
-      
-
-      // Let's plan how this caching is going to work:
-
-      // Things we need to do:
-      // Load/Cache File List
-      // Load/Cache Files
-
-      // Cache process:
-      // - Check if cached
-      //  - Load from cache
-      //   - Save to gameStore
-      //   - Fetch (see below)
-      //  - Fetch
-      //   - Store in cache
-      //   - Save to gameStore
-
-      // driveStore handles cache
-      // saving to gameStore handled here 
-      
-      // Create file map
-      // On files changed, update the file map, trigger update of any changed ids?
-      // 
-
       driveStore.initGamesStore()
-
     })
 
-    // return { loading, loadingStatus }
+    const { states } = storeToRefs(driveStore)
+    const cachesLoading = computed(() => {
+      const caches:Array<string> = []
+      CollectionTypes.forEach((type:keyof CacheStates) => {
+        const state:CacheState = states.value[type]
+        if (state && state.state === 'loading-cache') {
+          caches.push(type)
+        }
+      })
+      return caches
+    })
+    const filesDownloading = computed(() => {
+      const files:Array<string> = []
+      CollectionTypes.forEach((type:keyof CacheStates) => {
+        const state:CacheState = states.value[type]
+        if (state && state.state === 'downloading') {
+          files.push(type)
+        }
+      })
+      return files
+    })
+    const loadingMessage = computed(() => {
+      if (cachesLoading.value.length) {
+        return 'Loading caches'
+      }
+      if (filesDownloading.value.length) {
+        return 'Downloading files'
+      }
+      return null
+    })
+
+    return {
+      loadingMessage, states
+    }
   }
 })
 </script>
