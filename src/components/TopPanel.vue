@@ -10,7 +10,16 @@
             :key="`menu-${index}`"
             v-close-popup="!link.options"
           >
-            <q-item-section>{{ link.label }}</q-item-section>
+            <q-item-section avatar>
+              <q-icon color="primary" name="swap_vert" v-if="link.label === 'Sort'" />
+              <q-icon color="primary" name="bookmark_border" v-if="link.label === 'Filter Presets'" />
+              <q-icon color="primary" name="filter_alt" v-if="link.label === 'Filter'" />
+              <q-icon color="primary" name="list" v-if="link.label === 'Group By'" />
+              <q-icon color="primary" name="grid_view" v-if="link.label === 'View'" />
+            </q-item-section>
+            <q-item-section>
+              {{ link.label }}
+            </q-item-section>
             <q-item-section side v-if="link.options">
               <q-icon name="keyboard_arrow_right" />
             </q-item-section>
@@ -23,7 +32,9 @@
                   clickable
                   @click="option.click"
                 >
-                  <q-item-section>{{ option.label }}</q-item-section>
+                  <q-item-section>
+                    {{ option.label }}
+                  </q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
