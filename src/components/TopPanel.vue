@@ -127,6 +127,10 @@ export default defineComponent({
           {
             label: 'Table',
             click: () => view.value = 'table',
+          },
+          {
+            label: 'Data Storage',
+            click: () => view.value = 'storage',
           }
         ]
       },
