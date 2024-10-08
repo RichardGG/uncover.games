@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios, { ResponseType } from 'axios'
 import { find } from 'lodash'
-import { useCollectionsStore, CollectionType, CollectionTypes, CollectionsMap } from 'stores/collectionsStore'
+import { useCollectionsStore, CollectionType, CollectionTypes } from 'stores/collectionsStore'
 
 export type DriveState = {
   token: string|null,

@@ -67,21 +67,145 @@ export default defineComponent({
     const { sort, sortDesc, search, view } = storeToRefs(filtersStore)
 
     const sortOptions = [
+      // {
+      //   label: 'Name',
+      //   value: 'Name',
+      // },
+      // {
+      //   label: 'Release Date',
+      //   value: 'ReleaseDate',
+      // },
+      // {
+      //   label: 'Community Score',
+      //   value: 'CommunityScore',
+      // },
+      // {
+      //   label: 'Last Activity',
+      //   value: 'LastActivity',
+      // },
       {
-        label: 'Name',
-        value: 'Name',
+        label: 'Age Rating',
+        value: 'AgeRating',
       },
       {
-        label: 'Release Date',
-        value: 'ReleaseDate',
+        label: 'Category',
+        value: 'Category',
       },
       {
         label: 'Community Score',
         value: 'CommunityScore',
       },
       {
-        label: 'Last Activity',
-        value: 'LastActivity',
+        label: 'Completion Status',
+        value: 'CompletionStatus',
+      },
+      {
+        label: 'Critic Score',
+        value: 'CriticScore',
+      },
+      {
+        label: 'Date Added',
+        value: 'DateAdded',
+      },
+      {
+        label: 'Date Modified',
+        value: 'DateModified',
+      },
+      {
+        label: 'Developer',
+        value: 'Developer',
+      },
+      {
+        label: 'Favourite',
+        value: 'Favourite',
+      },
+      {
+        label: 'Feature',
+        value: 'Feature',
+      },
+      {
+        label: 'Genre',
+        value: 'Genre',
+      },
+      {
+        label: 'Hidden',
+        value: 'Hidden',
+      },
+      {
+        label: 'Image, ROM or ISO Path',
+        value: 'Image, ROM or ISO Path',
+      },
+      {
+        label: 'Install Size',
+        value: 'InstallSize',
+      },
+      {
+        label: 'Installation Folder',
+        value: 'InstallationFolder',
+      },
+      {
+        label: 'Installation Status',
+        value: 'InstallationStatus',
+      },
+      {
+        label: 'Last Played',
+        value: 'LastPlayed',
+      },
+      {
+        label: 'Library',
+        value: 'Library',
+      },
+      {
+        label: 'Name',
+        value: 'Name',
+      },
+      {
+        label: 'Platform',
+        value: 'Platform',
+      },
+      {
+        label: 'Play Count',
+        value: 'PlayCount',
+      },
+      {
+        label: 'Publisher',
+        value: 'Publisher',
+      },
+      {
+        label: 'Recent Activity',
+        value: 'RecentActivity',
+      },
+      {
+        label: 'Region',
+        value: 'Region',
+      },
+      {
+        label: 'Release Date',
+        value: 'ReleaseDate',
+      },
+      {
+        label: 'Series',
+        value: 'Series',
+      },
+      {
+        label: 'Source',
+        value: 'Source',
+      },
+      {
+        label: 'Tag',
+        value: 'Tag',
+      },
+      {
+        label: 'Time Played',
+        value: 'TimePlayed',
+      },
+      {
+        label: 'User Score',
+        value: 'UserScore',
+      },
+      {
+        label: 'Version',
+        value: 'Version',
       },
     ]
 

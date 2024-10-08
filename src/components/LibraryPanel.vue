@@ -33,13 +33,6 @@ export default defineComponent({
       if (filtersStore.sortDesc) {
         games = reverse(games)
       }
-      games = games.filter((game) => {
-        let result = !game.Hidden
-        if (filtersStore.search) {
-          result = result && (game.Name?.toLowerCase()?.includes(filtersStore.search.toLowerCase()) ?? false)
-        }
-        return result
-      })
       return games
     })
 

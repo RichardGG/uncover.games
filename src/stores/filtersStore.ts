@@ -112,13 +112,20 @@ export const useFiltersStore = defineStore('filtersStore', {
     },
 
     matchesFilter(game: Game): boolean {
+      // Return early if using quick search and it doesn't match
+      if (this.search && !(game.Name?.toLowerCase()?.includes(this.search.toLowerCase()) ?? false)) {
+        return false
+      }
+
       if (!this.currentFilter.Settings) {
-        return true
+        // Default to not showing Hidden
+        return !game.Hidden
       }
 
       const keys = Object.keys(this.currentFilter.Settings) as Array<keyof typeof this.currentFilter.Settings>;
       let matchedKey = false
 
+      // TODO change logic so it can be AND instead of OR
       for (const key of keys) {
         const value = this.currentFilter.Settings[key]
         if (! value) {
