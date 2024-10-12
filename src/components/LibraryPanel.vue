@@ -1,7 +1,7 @@
 <template>
   <q-page class="column items-center justify-evenly">
-    <TableView :games="games" v-if="view === 'table'" />
-    <GridView :games="games" v-else-if="view === 'grid'" />
+    <TableView v-if="view === 'table'" :games="games" />
+    <GridView v-else-if="view === 'grid'" :games="games" />
     <StorageView v-else-if="view === 'storage'" />
   </q-page>
 </template>
@@ -9,12 +9,13 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { filter, sortBy, reverse } from 'lodash'
-import { useCollectionsStore, Game } from 'stores/collectionsStore'
+import { useCollectionsStore } from 'stores/collectionsStore'
 import { useFiltersStore } from 'stores/filtersStore'
 import TableView from 'src/components/LibraryViews/TableView.vue'
 import GridView from 'src/components/LibraryViews/GridView.vue'
 import StorageView from 'src/components/LibraryViews/StorageView.vue'
 import { storeToRefs } from 'pinia'
+import { Game } from 'src/types/Game/Game'
 
 export default defineComponent({
   name: 'LibraryPanel',

@@ -1,10 +1,10 @@
 <template>
   <div>
     <q-virtual-scroll
+      v-slot="{ item, index }"
       style="max-height: calc(100vh - 100px);"
       :items="gameRows"
       separator
-      v-slot="{ item, index }"
       :virtual-scroll-item-size="200"
     >
       <q-item
@@ -14,7 +14,7 @@
         <q-item-section>
           <div class="flex">
             <div v-for="(game, index) in item" :key="index">
-              <Cover :title="game.Name" :fileName="game.CoverImage" :width="gameWidth - 10" style="margin: 0 5px" />
+              <Cover :title="game.Name" :file-name="game.CoverImage" :width="gameWidth - 10" style="margin: 0 5px" />
             </div>
           </div>
         </q-item-section>
@@ -26,8 +26,8 @@
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
 import { chunk } from 'lodash'
-import { Game } from 'stores/collectionsStore'
 import Cover from 'src/components/Cover.vue'
+import { Game } from 'src/types/Game/Game';
 
 export default defineComponent({
   name: 'GridView',

@@ -8,26 +8,34 @@
     :rows-per-page-options="[0]"
     hide-bottom
   >
-    <template v-slot:body-cell-Debug="props">
+    <template #body-cell-Debug="props">
       <q-td>
         {{ props.row }}
       </q-td>
     </template>
-    <template v-slot:body-cell-Cover="props">
+    <template #body-cell-Cover="props">
       <q-td>
-        <Cover :width="30" :fileName="props.row.CoverImage" />
+        <Cover :width="30" :file-name="props.row.CoverImage" />
       </q-td>
     </template>
-    <template v-slot:body-cell-Actions="props">
+    <template #body-cell="props">
+      <q-td :props="props">
+        {{ props.value }}
+        <q-tooltip v-if="props.value" anchor="bottom left" self="top left" :offset="[-10, -10]">
+          {{ props.value }}
+        </q-tooltip>
+      </q-td>
+    </template>
+    <template #body-cell-Actions="props">
       <q-td>
         <q-btn color="secondary" label="...">
           <q-menu auto-close>
             <q-list style="min-width: 100px">
               <q-item 
-                clickable 
-                @click="openLink(link.Url)"
-                v-for="(link, index) in props.row.Links"
+                v-for="(link, index) in props.row.Links" 
                 :key="`link-${props.row.Id}-${index}`"
+                clickable
+                @click="openLink(link.Url)"
               >
                 <q-item-section>{{ link.Name }}</q-item-section>
               </q-item>
@@ -41,10 +49,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Game } from 'stores/collectionsStore'
 import Cover from 'src/components/Cover.vue'
-import { map } from 'lodash';
-import { format } from 'quasar';
+import { QTableColumn } from 'quasar';
+import { Game } from 'src/types/Game/Game';
+import { GameField } from 'src/types/Game/GameField';
+import { formatGameField } from 'src/types/Game/GameFieldFormats';
 
 export default defineComponent({
   name: 'TableView',
@@ -53,197 +62,68 @@ export default defineComponent({
     games: Array<Game>
   },
   setup () {
-    // TODO consider getting the fields from Game in CollectionsStore?
-    // TODO generic helper function formatField for formatting the data for these fields
+    
+    let columnMap: Partial<{[K in GameField]: string}> = {
+      'Name': 'Name',
+      'Platforms': 'Platform',
+      // 'Library': 'Library', IDK
+      'Developers': 'Developer',
+      'Publishers': 'Publisher',
+      'ReleaseDate': 'Release Date',
+      'Genres': 'Genre',
+      'Categories': 'Category',
+      'Features': 'Features',
+      'Tags': 'Tag',
+      'IsInstalled': 'Installed',
+      'InstallDirectory': 'Installation Folder',
+      'InstallSize': 'Install Size',
+      'Roms': 'Image, ROM, or ISO Path',
+      'LastActivity': 'Last Played',
+      'RecentActivity': 'Recent Activity',
+      'Playtime': 'Time Played',
+      'PlayCount': 'Play Count',
+      'CompletionStatus': 'Completion Status',
+      'Series': 'Series',
+      'Version': 'Version',
+      'AgeRatings': 'Age Rating',
+      'Regions': 'Region',
+      'Source': 'Source',
+      'Added': 'Added',
+      'Modified': 'Modified',
+      'UserScore': 'User Score',
+      'CriticScore': 'Critic Score',
+      'CommunityScore': 'Community Score',
+    }
+
     // TODO custom columns, custom order
-    let columns = [
+    let columns: QTableColumn[] = [
       {
         label: 'Actions',
         name: 'Actions',
         field: 'Actions',
       },
-
-      // {
-      //   label: 'Debug',
-      //   name: 'Debug',
-      //   field: 'Debug',
-      // },
-
-
       {
         label: 'Cover',
         name: 'Cover',
         field: 'Cover',
       },
-      {
-        label: 'Name',
-        name: 'Name',
-        field: 'Name',
-      },
-      {
-        label: 'Platform',
-        name: 'Platform',
-        field: 'Platform',
-      },
-      {
-        label: 'Library',
-        name: 'Library',
-        field: 'Library',
-      },
-      {
-        label: 'Developer',
-        name: 'Developer',
-        field: (row: Game) => map(row.Developers, 'Name').join(', '),
-      },
-      {
-        label: 'Publisher',
-        name: 'Publisher',
-        field: (row: Game) => map(row.Publishers, 'Name').join(', '),
-      },
-      {
-        label: 'Release Date',
-        name: 'Release Date',
-        // TODO date transform
-        field: (row: Game) => row.ReleaseDate?.ReleaseDate,
-      },
-      {
-        label: 'Genre',
-        name: 'Genre',
-        field: (row: Game) => map(row.Genres, 'Name').join(', '),
-      },
-      {
-        label: 'Category',
-        name: 'Category',
-        field: (row: Game) => map(row.Categories, 'Name').join(', '),
-      },
-      {
-        label: 'Features',
-        name: 'Features',
-        field: (row: Game) => map(row.Features, 'Name').join(', '),
-      },
-      {
-        label: 'Tag',
-        name: 'Tag',
-        field: (row: Game) => map(row.Tags, 'Name').join(', '),
-      },
-      {
-        label: 'Installed',
-        name: 'Installed',
-        field: (row: Game) => row.IsInstalled ? 'Yes' : 'No',
-      },
-      {
-        label: 'Installation Folder',
-        name: 'Installation Folder',
-        field: 'InstallDirectory',
-      },
-      {
-        label: 'Install Size',
-        name: 'Install Size',
-        field: (row: Game) => row.InstallSize ? format.humanStorageSize(row.InstallSize) : '',
-      },
-      {
-        label: 'Image, ROM, or ISO Path',
-        name: 'Image, ROM, or ISO Path',
-        // TODO no idea if this is correct
-        field: (row: Game) => map(row.Roms, 'Name').join(', '),
-      },
-      {
-        label: 'Last Played',
-        name: 'Last Played',
-        // TODO date transform
-        field: (row: Game) => row.LastActivity,
-      },
-      {
-        label: 'Recent Activity',
-        name: 'Recent Activity',
-        // TODO date transform
-        field: (row: Game) => row.RecentActivity,
-      },
-      {
-        label: 'Time Played',
-        name: 'Time Played',
-        field: (row: Game) => {
-          const seconds = row.Playtime
-          if (seconds < 60) {
-            return `${seconds} seconds`
-          }
-          const minutes = Math.floor(seconds / 60)
-          if (minutes < 60) {
-            return `${minutes} minutes`
-          }
-          const hours = Math.floor(minutes / 60)
-          return `${hours}h ${minutes % 60}m`
-        },
-      },
-      {
-        label: 'Play Count',
-        name: 'Play Count',
-        field: 'PlayCount',
-      },
-      {
-        label: 'Completion Status',
-        name: 'Completion Status',
-        field: (row: Game) => row.CompletionStatus?.Name,
-      },
-      {
-        label: 'Series',
-        name: 'Series',
-        field: (row: Game) => map(row.Series, 'Name').join(', '),
-      },
-      {
-        label: 'Version',
-        name: 'Version',
-        field: 'Version',
-      },
-      {
-        label: 'Age Rating',
-        name: 'Age Rating',
-        field: (row: Game) => map(row.AgeRatings, 'Name').join(', '),
-      },
-      {
-        label: 'Region',
-        name: 'Region',
-        field: (row: Game) => map(row.Regions, 'Name').join(', '),
-      },
-      {
-        label: 'Source',
-        name: 'Source',
-        field: (row: Game) => row.Source?.Name,
-      },
-      {
-        label: 'Added',
-        name: 'Added',
-        // TODO date transform
-        field: (row: Game) => row.Added,
-      },
-      {
-        label: 'Modified',
-        name: 'Modified',
-        // TODO date transform
-        field: (row: Game) => row.Modified,
-      },
-      {
-        label: 'User Score',
-        name: 'User Score',
-        field: 'UserScore',
-      },
-      {
-        label: 'Critic Score',
-        name: 'Critic Score',
-        field: 'CriticScore',
-      },
-      {
-        label: 'Community Score',
-        name: 'Community Score',
-        field: 'CommunityScore',
-      },
     ]
+
+    for (const key in columnMap) {
+      const field = key as GameField;
+      columns.push({
+        label: columnMap[field] || '',
+        name: columnMap[field] || '',
+        field: (game: Game) => formatGameField(game, field),
+      })
+    }
 
     columns = columns.map((item) => ({ 
       ...item,
       align: 'left',
       // style: 'min-width: 200px; max-width: 500px; white-space: normal;',
-      style: 'max-width: 500px;',
+      style: 'max-width: 500px; overflow: hidden;',
+      classes: 'game-table-cell',
     }))
 
     const openLink = (url: string) => window.open(url, '_blank')
@@ -251,3 +131,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+  .game-table-cell:hover {
+
+  }
+</style>

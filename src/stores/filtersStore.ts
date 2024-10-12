@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 
 export type TagFilter = {
-  Ids: Array<string>|null,
-  Text: string|null,
+  Ids: Array<string> | null,
+  Text: string | null,
 }
 
 export type FilterSettings = {
@@ -11,57 +11,57 @@ export type FilterSettings = {
   IsUnInstalled: boolean,
   Hidden: boolean,
   Favorite: boolean,
-  Name: TagFilter|null,
-  Version: TagFilter|null,
-  ReleaseYear: TagFilter|null,
-  Genre: TagFilter|null,
-  Platform: TagFilter|null,
-  Publisher: TagFilter|null,
-  Developer: TagFilter|null,
-  Category: TagFilter|null,
-  Tag: TagFilter|null,
-  Series: TagFilter|null,
-  Region: TagFilter|null,
-  Source: TagFilter|null,
-  AgeRating: TagFilter|null,
-  Library: TagFilter|null,
-  Feature: TagFilter|null,
-  UserScore: TagFilter|null,
-  CriticScore: TagFilter|null,
-  CommunityScore: TagFilter|null,
-  LastActivity: TagFilter|null,
-  RecentActivity: TagFilter|null,
-  Added: TagFilter|null,
-  Modified: TagFilter|null,
-  PlayTime: TagFilter|null,
-  InstallSize: TagFilter|null,
-  CompletionStatuses: TagFilter|null,
+  Name: TagFilter | null,
+  Version: TagFilter | null,
+  ReleaseYear: TagFilter | null,
+  Genre: TagFilter | null,
+  Platform: TagFilter | null,
+  Publisher: TagFilter | null,
+  Developer: TagFilter | null,
+  Category: TagFilter | null,
+  Tag: TagFilter | null,
+  Series: TagFilter | null,
+  Region: TagFilter | null,
+  Source: TagFilter | null,
+  AgeRating: TagFilter | null,
+  Library: TagFilter | null,
+  Feature: TagFilter | null,
+  UserScore: TagFilter | null,
+  CriticScore: TagFilter | null,
+  CommunityScore: TagFilter | null,
+  LastActivity: TagFilter | null,
+  RecentActivity: TagFilter | null,
+  Added: TagFilter | null,
+  Modified: TagFilter | null,
+  PlayTime: TagFilter | null,
+  InstallSize: TagFilter | null,
+  CompletionStatuses: TagFilter | null,
 }
 
 export type Filter = {
-  Settings: FilterSettings|null,
-  Id: string|null,
-  Name: string|null,
-  GroupingOrder: number|null, // TODO should be an enum from export?
-  SortingOrder: number|null, // TODO should be an enum from export?
-  SortingOrderDirection: number|null, // TODO should be an enum from export?
+  Settings: FilterSettings | null,
+  Id: string | null,
+  Name: string | null,
+  GroupingOrder: number | null, // TODO should be an enum from export?
+  SortingOrder: number | null, // TODO should be an enum from export?
+  SortingOrderDirection: number | null, // TODO should be an enum from export?
 }
 
 export type Sort = {
-  label: string|null,
-  value: string|null,
+  label: string | null,
+  value: string | null,
 }
 
 export type FiltersState = {
   currentFilter: Filter,
-  sort: Sort|null,
+  sort: Sort | null,
   sortDesc: boolean,
   search: string,
   view: string,
 }
 
 import { intersection } from 'lodash'
-import { Game } from './collectionsStore'
+import { Game } from 'src/types/Game/Game'
 
 export const useFiltersStore = defineStore('filtersStore', {
   state: (): FiltersState => ({
@@ -82,7 +82,7 @@ export const useFiltersStore = defineStore('filtersStore', {
     view: 'table',
   }),
   actions: {
-    arrayFilter(ids: Array<string>|null, filter: TagFilter|null): boolean|null {
+    arrayFilter(ids: Array<string> | null, filter: TagFilter | null): boolean | null {
       if (!filter) {
         return null
       }
@@ -95,7 +95,7 @@ export const useFiltersStore = defineStore('filtersStore', {
       return false
     },
 
-    idFilter(id: string|null, filter: TagFilter|null): boolean|null {
+    idFilter(id: string | null, filter: TagFilter | null): boolean | null {
       if (!filter) {
         return null
       }
@@ -128,11 +128,11 @@ export const useFiltersStore = defineStore('filtersStore', {
       // TODO change logic so it can be AND instead of OR
       for (const key of keys) {
         const value = this.currentFilter.Settings[key]
-        if (! value) {
+        if (!value) {
           continue
         }
 
-        let result: boolean|null = null
+        let result: boolean | null = null
         // UseAndFilteringStyle: boolean,
         if (key === 'IsUnInstalled' && this.currentFilter.Settings.IsUnInstalled) {
           result = !game.IsInstalled
@@ -249,7 +249,7 @@ export const useFiltersStore = defineStore('filtersStore', {
         } else {
         }
       }
-      if (!matchedKey) { 
+      if (!matchedKey) {
         return true
       }
       return false
