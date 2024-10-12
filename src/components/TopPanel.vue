@@ -5,22 +5,22 @@
       <q-menu>
         <q-list style="min-width: 100px">
           <q-item 
-            clickable 
-            v-for="(link, index) in menuOptions"
+            v-for="(link, index) in menuOptions" 
             :key="`menu-${index}`"
             v-close-popup="!link.options"
+            clickable
           >
             <q-item-section avatar>
-              <q-icon color="primary" name="swap_vert" v-if="link.label === 'Sort'" />
-              <q-icon color="primary" name="bookmark_border" v-if="link.label === 'Filter Presets'" />
-              <q-icon color="primary" name="filter_alt" v-if="link.label === 'Filter'" />
-              <q-icon color="primary" name="list" v-if="link.label === 'Group By'" />
-              <q-icon color="primary" name="grid_view" v-if="link.label === 'View'" />
+              <q-icon v-if="link.label === 'Sort'" color="primary" name="swap_vert" />
+              <q-icon v-if="link.label === 'Filter Presets'" color="primary" name="bookmark_border" />
+              <q-icon v-if="link.label === 'Filter'" color="primary" name="filter_alt" />
+              <q-icon v-if="link.label === 'Group By'" color="primary" name="list" />
+              <q-icon v-if="link.label === 'View'" color="primary" name="grid_view" />
             </q-item-section>
             <q-item-section>
               {{ link.label }}
             </q-item-section>
-            <q-item-section side v-if="link.options">
+            <q-item-section v-if="link.options" side>
               <q-icon name="keyboard_arrow_right" />
             </q-item-section>
             <q-menu v-if="link.options" auto-close anchor="top end" self="top start">

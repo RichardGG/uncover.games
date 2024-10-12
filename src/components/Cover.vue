@@ -1,6 +1,11 @@
 <template>
   <div :style="`perspective: 1000px; position: relative; z-index: ${hovering ? 2 : 1};`">
-    <div class="game-cover" :style="`width: ${width}px; height: ${width * 1.5}px; background: #eeeeee; display: flex; align-items: center; position: relative; transform: scale(${hovering ? 1.1 : 1}) rotateY(${rotationX}deg) rotateX(${rotationY}deg);`" @mousemove="onHover" @mouseout="onOut">
+    <div
+      class="game-cover"
+      :style="`width: ${width}px; height: ${width * 1.5}px; background: #eeeeee; display: flex; align-items: center; position: relative; transform: scale(${hovering ? 1.1 : 1}) rotateY(${rotationX}deg) rotateX(${rotationY}deg);`"
+      @mousemove="onHover"
+      @mouseout="onOut"
+    >
       <div :style="`position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: ${width / 9}px; padding: ${width / 9}px;`">
         {{ title }}
       </div>
@@ -17,8 +22,14 @@
     name: 'CoverImage',
     components: { },
     props: {
-      title: String,
-      fileName: String,
+      title: {
+        type: String,
+        default: ''
+      },
+      fileName: {
+        type: String,
+        default: ''
+      },
       width: {
         type: Number,
         default: 50,
@@ -39,11 +50,12 @@
         })
       }
 
-      const onHover = ({ layerX, layerY, target }:{ layerX: number, layerY: number, target: Element }) => {
+      const onHover = (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
         window.requestAnimationFrame(() => {
           hovering.value = true
-          rotationX.value = (layerX / target.clientWidth) * 20 - 10
-          rotationY.value = ((layerY / target.clientHeight) * 20 - 10) * -1
+          rotationX.value = (event.layerX / target.clientWidth) * 20 - 10
+          rotationY.value = ((event.layerY / target.clientHeight) * 20 - 10) * -1
         })
       }
 

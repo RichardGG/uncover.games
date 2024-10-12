@@ -59,7 +59,10 @@ export default defineComponent({
   name: 'TableView',
   components: { Cover },
   props: {
-    games: Array<Game>
+    games: {
+      type: Array<Game>,
+      default: [],
+    }
   },
   setup () {
     
