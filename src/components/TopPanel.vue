@@ -4,8 +4,8 @@
     <q-btn color="secondary" label="...">
       <q-menu>
         <q-list style="min-width: 100px">
-          <q-item 
-            v-for="(link, index) in menuOptions" 
+          <q-item
+            v-for="(link, index) in menuOptions"
             :key="`menu-${index}`"
             v-close-popup="!link.options"
             clickable
@@ -21,9 +21,15 @@
               {{ link.label }}
             </q-item-section>
             <q-item-section v-if="link.options" side>
-              <q-icon name="keyboard_arrow_right" />
+              <q-icon :name="menuOpened[index] ? 'keyboard_arrow_up' : 'keyboard_arrow_down'" />
             </q-item-section>
-            <q-menu v-if="link.options" auto-close anchor="top end" self="top start">
+            <q-menu
+              v-if="link.options"
+              auto-close
+              :fit="true"
+              @before-show="() => menuOpened[index] = true"
+              @before-hide="() => menuOpened[index] = false"
+            >
               <q-list>
                 <q-item
                   v-for="option in link.options"
@@ -49,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { map } from 'lodash'
 import { useCollectionsStore } from 'stores/collectionsStore'
 import { useFiltersStore, Filter, Sort } from 'stores/filtersStore'
@@ -65,6 +71,7 @@ export default defineComponent({
     const filtersStore = useFiltersStore()
     const collectionsStore = useCollectionsStore()
     const { sort, sortDesc, search, view } = storeToRefs(filtersStore)
+    const menuOpened = ref([false])
 
     const sortOptions = [
       // {
@@ -261,7 +268,7 @@ export default defineComponent({
     ])
 
     return {
-      sort, sortOptions, menuOptions, sortDesc, search
+      sort, sortOptions, menuOptions, sortDesc, search, menuOpened
     }
   }
 })
