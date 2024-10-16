@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { File } from './driveStore'
 import { Game } from 'src/types/Game/Game';
 import { Tag } from 'src/types/Game/GameFieldTypes';
+import { Filter } from './filtersStore';
 
 export const CollectionTypes = [
   'Files',
@@ -38,7 +39,7 @@ export interface CollectionsState extends CollectionsMap<Array<File> | Array<Tag
   'CompletionStatuses': Array<Tag>,
   'Emulators': Array<Tag>,
   'Features': Array<Tag>,
-  'FilterPresets': Array<Tag>,
+  'FilterPresets': Array<Filter>,
   // 'GameScanners': Array<Tag>,
   'Genres': Array<Tag>,
   // 'ImportExclusions': Array<Tag>,

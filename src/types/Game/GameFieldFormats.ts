@@ -123,7 +123,7 @@ export const formatGameField = (game: Game, field: GameField): string => {
 
   if (GameValueTypes[field] === 'object' && typeof game[field] === 'object') {
     const fieldObject = game[field] as Tag;
-    return fieldObject.Name || ''
+    return fieldObject?.Name || ''
   }
 
   if (GameValueTypes[field] === 'date' && typeof game[field] === 'string') {

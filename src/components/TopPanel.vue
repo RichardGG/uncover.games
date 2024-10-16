@@ -4,42 +4,112 @@
     <q-btn color="secondary" label="...">
       <q-menu>
         <q-list style="min-width: 100px">
-          <q-item
-            v-for="(link, index) in menuOptions"
-            :key="`menu-${index}`"
-            v-close-popup="!link.options"
-            clickable
-          >
+          <q-item clickable>
             <q-item-section avatar>
-              <q-icon v-if="link.label === 'Sort'" color="primary" name="swap_vert" />
-              <q-icon v-if="link.label === 'Filter Presets'" color="primary" name="bookmark_border" />
-              <q-icon v-if="link.label === 'Filter'" color="primary" name="filter_alt" />
-              <q-icon v-if="link.label === 'Group By'" color="primary" name="list" />
-              <q-icon v-if="link.label === 'View'" color="primary" name="grid_view" />
+              <q-icon color="primary" name="swap_vert" />
             </q-item-section>
-            <q-item-section>
-              {{ link.label }}
-            </q-item-section>
-            <q-item-section v-if="link.options" side>
-              <q-icon :name="menuOpened[index] ? 'keyboard_arrow_up' : 'keyboard_arrow_down'" />
+            <q-item-section>Sort</q-item-section>
+            <q-item-section side>
+              <q-icon :name="menuOpened.sort ? 'keyboard_arrow_up' : 'keyboard_arrow_down'" />
             </q-item-section>
             <q-menu
-              v-if="link.options"
               auto-close
               :fit="true"
-              @before-show="() => menuOpened[index] = true"
-              @before-hide="() => menuOpened[index] = false"
+              @before-show="() => menuOpened.sort = true"
+              @before-hide="() => menuOpened.sort = false"
             >
               <q-list>
+                <q-item clickable @click=" () => sortDesc = false">
+                  <q-item-section>
+                    Ascending
+                  </q-item-section>
+                </q-item>
+                <q-item clickable @click=" () => sortDesc = true">
+                  <q-item-section>
+                    Descending
+                  </q-item-section>
+                </q-item>
                 <q-item
-                  v-for="option in link.options"
+                  v-for="option in sortOptions"
                   :key="option.label"
-                  dense
                   clickable
-                  @click="option.click"
+                  @click=" () => sort = option"
                 >
                   <q-item-section>
                     {{ option.label }}
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-item>
+          <q-item clickable>
+            <q-item-section avatar>
+              <q-icon color="primary" name="bookmark_border" />
+            </q-item-section>
+            <q-item-section>Filter Presets</q-item-section>
+            <q-item-section side>
+              <q-icon :name="menuOpened.filterPresets ? 'keyboard_arrow_up' : 'keyboard_arrow_down'" />
+            </q-item-section>
+            <q-menu
+              auto-close
+              :fit="true"
+              @before-show="() => menuOpened.filterPresets = true"
+              @before-hide="() => menuOpened.filterPresets = false"
+            >
+              <q-list>
+                <q-item
+                  v-for="filter in collectionsStore.FilterPresets"
+                  :key="filter.Name + ''"
+                  clickable
+                  @click=" () => currentFilter = filter"
+                >
+                  <q-item-section>
+                    {{ filter.Name }}
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-item>
+          <q-item v-close-popup clickable>
+            <q-item-section avatar>
+              <q-icon color="primary" name="filter_alt" />
+            </q-item-section>
+            <q-item-section>Filter</q-item-section>
+          </q-item>
+          <q-item v-close-popup clickable>
+            <q-item-section avatar>
+              <q-icon color="primary" name="list" />
+            </q-item-section>
+            <q-item-section>Group By</q-item-section>
+          </q-item>
+          <q-item clickable>
+            <q-item-section avatar>
+              <q-icon color="primary" name="grid_view" />
+            </q-item-section>
+            <q-item-section>View</q-item-section>
+            <q-item-section side>
+              <q-icon :name="menuOpened.view ? 'keyboard_arrow_up' : 'keyboard_arrow_down'" />
+            </q-item-section>
+            <q-menu
+              auto-close
+              :fit="true"
+              @before-show="() => menuOpened.view = true"
+              @before-hide="() => menuOpened.view = false"
+            >
+              <q-list>
+                <q-item clickable @click="() => view = 'grid'">
+                  <q-item-section>
+                    Grid
+                  </q-item-section>
+                </q-item>
+                <q-item clickable @click="() => view = 'table'">
+                  <q-item-section>
+                    Table
+                  </q-item-section>
+                </q-item>
+                <q-item clickable @click="() => view = 'storage'">
+                  <q-item-section>
+                    Data Storage
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -55,10 +125,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
-import { map } from 'lodash'
+import { defineComponent, ref } from 'vue'
 import { useCollectionsStore } from 'stores/collectionsStore'
-import { useFiltersStore, Filter, Sort } from 'stores/filtersStore'
+import { useFiltersStore } from 'stores/filtersStore'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
@@ -70,8 +139,12 @@ export default defineComponent({
   setup () {
     const filtersStore = useFiltersStore()
     const collectionsStore = useCollectionsStore()
-    const { sort, sortDesc, search, view } = storeToRefs(filtersStore)
-    const menuOpened = ref([false])
+    const { sort, sortDesc, search, view, currentFilter } = storeToRefs(filtersStore)
+    const menuOpened = ref({
+      sort: false,
+      filterPresets: false,
+      view: false,
+    })
 
     const sortOptions = [
       // {
@@ -216,59 +289,8 @@ export default defineComponent({
       },
     ]
 
-    // TODO maybe just define these in the template?
-    const menuOptions = computed(() => [
-      {
-        label: 'Sort',
-        options: [
-          {
-            label: sortDesc.value ? 'Desc' : 'Asc',
-            click: () => sortDesc.value = !sortDesc.value,
-          },
-          ...map(sortOptions, (sortOption: Sort) => {
-            return {
-              label: sortOption.label,
-              click: () => sort.value = sortOption
-            }
-          })
-        ]
-      },
-      {
-        label: 'Filter Presets',
-        options: map(collectionsStore.FilterPresets, (filter: Filter) => {
-          return {
-            label: filter.Name,
-            click: () => filtersStore.currentFilter = filter
-          }
-        })
-      },
-      {
-        label: 'Filter',
-      },
-      {
-        label: 'Group By',
-      },
-      {
-        label: 'View',
-        options: [
-          {
-            label: 'Grid',
-            click: () => view.value = 'grid',
-          },
-          {
-            label: 'Table',
-            click: () => view.value = 'table',
-          },
-          {
-            label: 'Data Storage',
-            click: () => view.value = 'storage',
-          }
-        ]
-      },
-    ])
-
     return {
-      sort, sortOptions, menuOptions, sortDesc, search, menuOpened
+      sort, sortOptions, sortDesc, search, menuOpened, currentFilter, view, collectionsStore
     }
   }
 })
