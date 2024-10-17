@@ -20,11 +20,17 @@
             >
               <q-list>
                 <q-item clickable @click=" () => sortDesc = false">
+                  <q-item-section avatar>
+                    <q-icon v-if="!sortDesc" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     Ascending
                   </q-item-section>
                 </q-item>
                 <q-item clickable @click=" () => sortDesc = true">
+                  <q-item-section avatar>
+                    <q-icon v-if="sortDesc" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     Descending
                   </q-item-section>
@@ -35,6 +41,9 @@
                   clickable
                   @click=" () => sort = option"
                 >
+                  <q-item-section avatar>
+                    <q-icon v-if="option.value === sort?.value" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     {{ option.label }}
                   </q-item-section>
@@ -63,6 +72,9 @@
                   clickable
                   @click=" () => currentFilter = filter"
                 >
+                  <q-item-section avatar>
+                    <q-icon v-if="currentFilter.Id === filter.Id" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     {{ filter.Name }}
                   </q-item-section>
@@ -98,16 +110,25 @@
             >
               <q-list>
                 <q-item clickable @click="() => view = 'grid'">
+                  <q-item-section avatar>
+                    <q-icon v-if="view === 'grid'" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     Grid
                   </q-item-section>
                 </q-item>
                 <q-item clickable @click="() => view = 'table'">
+                  <q-item-section avatar>
+                    <q-icon v-if="view === 'table'" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     Table
                   </q-item-section>
                 </q-item>
                 <q-item clickable @click="() => view = 'storage'">
+                  <q-item-section avatar>
+                    <q-icon v-if="view === 'storage'" color="primary" name="check" />
+                  </q-item-section>
                   <q-item-section>
                     Data Storage
                   </q-item-section>
@@ -147,22 +168,6 @@ export default defineComponent({
     })
 
     const sortOptions = [
-      // {
-      //   label: 'Name',
-      //   value: 'Name',
-      // },
-      // {
-      //   label: 'Release Date',
-      //   value: 'ReleaseDate',
-      // },
-      // {
-      //   label: 'Community Score',
-      //   value: 'CommunityScore',
-      // },
-      // {
-      //   label: 'Last Activity',
-      //   value: 'LastActivity',
-      // },
       {
         label: 'Age Rating',
         value: 'AgeRating',
