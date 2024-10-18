@@ -13,7 +13,7 @@
       >
         <q-item-section>
           <div class="flex">
-            <div v-for="(game, colIndex) in row" :key="colIndex">
+            <div v-for="(game, colIndex) in row" :key="colIndex" @click="() => filtersStore.game = game">
               <Cover :title="game.Name" :file-name="game.CoverImage" :width="gameWidth - 10" style="margin: 0 5px" />
             </div>
           </div>
@@ -28,6 +28,7 @@ import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
 import { chunk } from 'lodash'
 import Cover from 'src/components/Cover.vue'
 import { Game } from 'src/types/Game/Game';
+import { useFiltersStore } from 'src/stores/filtersStore';
 
 export default defineComponent({
   name: 'GridView',
@@ -39,6 +40,7 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const filtersStore = useFiltersStore()
     const windowSize = ref(1000)
     const rowSize = computed(() => Math.floor(windowSize.value / 130))
     const rowHeight = computed(() => (windowSize.value / rowSize.value) * 2)
@@ -61,7 +63,7 @@ export default defineComponent({
       return row.reduce<string>((prev: string, current: Game): string => `${prev}:${current.Id}`, '')
     }
 
-    return { gameRows, gameWidth, windowSize, getRowIndex, rowHeight }
+    return { gameRows, gameWidth, windowSize, getRowIndex, rowHeight, filtersStore }
   }
 })
 </script>

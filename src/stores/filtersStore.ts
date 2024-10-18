@@ -58,6 +58,7 @@ export type FiltersState = {
   sortDesc: boolean,
   search: string,
   view: string,
+  game: Game|null,
 }
 
 import { intersection } from 'lodash'
@@ -80,6 +81,7 @@ export const useFiltersStore = defineStore('filtersStore', {
     sortDesc: false,
     search: '',
     view: 'table',
+    game: null,
   }),
   actions: {
     initStore() {
