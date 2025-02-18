@@ -3,10 +3,10 @@
         TODO
     </div>
 </template>
-  
+
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
-  
+
   export default defineComponent({
     name: 'FilterPanel',
     components: { },
@@ -36,8 +36,8 @@
             type: 'Boolean',
         },
         {
-            label: 'Match all filters', // WOW it does support and
-            value: 'UseAndFilteringStyle', // WOW it does support and
+            label: 'Match all filters',
+            value: 'UseAndFilteringStyle',
             type: 'Boolean',
         },
         {

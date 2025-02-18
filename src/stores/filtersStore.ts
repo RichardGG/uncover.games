@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { GameField } from 'src/types/Game/GameField'
 
 export type TagFilter = {
   Ids: Array<string> | null,
@@ -49,7 +50,7 @@ export type Filter = {
 
 export type Sort = {
   label: string | null,
-  value: string | null,
+  value: GameField | null,
 }
 
 export type FiltersState = {
@@ -85,6 +86,7 @@ export const useFiltersStore = defineStore('filtersStore', {
   }),
   actions: {
     initStore() {
+      // Load current state from local storage
       const filterJson = window.localStorage.getItem('currentFilter')
       if (filterJson) {
         this.currentFilter = JSON.parse(filterJson)
@@ -110,7 +112,8 @@ export const useFiltersStore = defineStore('filtersStore', {
       })
     },
 
-    arrayFilter(ids: Array<string> | null, filter: TagFilter | null): boolean | null {
+    arrayFilter(ids: Array<string> | null, filter: TagFilter | null | undefined): boolean | null {
+      // Check array style filters, eg Platforms or Genres
       if (!filter) {
         return null
       }
@@ -123,7 +126,8 @@ export const useFiltersStore = defineStore('filtersStore', {
       return false
     },
 
-    idFilter(id: string | null, filter: TagFilter | null): boolean | null {
+    idFilter(id: string | null, filter: TagFilter | null | undefined): boolean | null {
+      // Match single id style filters, eg Source or CompletionStatus
       if (!filter) {
         return null
       }
@@ -140,6 +144,8 @@ export const useFiltersStore = defineStore('filtersStore', {
     },
 
     matchesFilter(game: Game): boolean {
+      // Checks if a game matches a filter set
+
       // Return early if using quick search and it doesn't match
       if (this.search && !(game.Name?.toLowerCase()?.includes(this.search.toLowerCase()) ?? false)) {
         return false
@@ -147,140 +153,132 @@ export const useFiltersStore = defineStore('filtersStore', {
 
       if (!this.currentFilter.Settings) {
         // Default to not showing Hidden
+        // TODO should we remove this?
         return !game.Hidden
       }
 
       const keys = Object.keys(this.currentFilter.Settings) as Array<keyof typeof this.currentFilter.Settings>;
-      let matchedKey = false
+      const andStyle = this.currentFilter.Settings?.UseAndFilteringStyle
 
-      // TODO change logic so it can be AND instead of OR
       for (const key of keys) {
         const value = this.currentFilter.Settings[key]
         if (!value) {
           continue
         }
 
-        let result: boolean | null = null
-        // UseAndFilteringStyle: boolean,
-        if (key === 'IsUnInstalled' && this.currentFilter.Settings.IsUnInstalled) {
-          result = !game.IsInstalled
-          matchedKey = true
-        }
-        if (key === 'IsInstalled' && this.currentFilter.Settings.IsInstalled) {
-          result = game.IsInstalled
-          matchedKey = true
-        }
-        if (key === 'Hidden') {
-          // TODO check if this matches the playnite behaviour
-          if (this.currentFilter.Settings.Hidden) {
-            result = game.Hidden
-          } else {
-            result = !game.Hidden
-          }
-        }
-        if (key === 'Favorite' && this.currentFilter.Settings.Favorite) {
-          matchedKey = true
-          result = game.Favorite
-        }
-        if (key === 'Name') {
-          // TODO check how this filter works contains?
-        }
-        if (key === 'Version') {
-          // TODO check how this filter works === ?
-        }
-        if (key === 'ReleaseYear') {
-          // TODO check how this filter works === ?
-        }
-        if (key === 'Genre') {
-          matchedKey = true
-          result = this.arrayFilter(game.GenreIds, this.currentFilter.Settings.Genre)
-        }
-        if (key === 'Platform') {
-          matchedKey = true
-          result = this.arrayFilter(game.PlatformIds, this.currentFilter.Settings.Platform)
-        }
-        if (key === 'Publisher') {
-          matchedKey = true
-          result = this.arrayFilter(game.PublisherIds, this.currentFilter.Settings.Publisher)
-        }
-        if (key === 'Developer') {
-          matchedKey = true
-          result = this.arrayFilter(game.DeveloperIds, this.currentFilter.Settings.Developer)
-        }
-        if (key === 'Category') {
-          matchedKey = true
-          result = this.arrayFilter(game.CategoryIds, this.currentFilter.Settings.Category)
-        }
-        if (key === 'Tag') {
-          matchedKey = true
-          result = this.arrayFilter(game.TagIds, this.currentFilter.Settings.Tag)
-        }
-        if (key === 'Series') {
-          matchedKey = true
-          result = this.arrayFilter(game.SeriesIds, this.currentFilter.Settings.Series)
-        }
-        if (key === 'Region') {
-          matchedKey = true
-          result = this.arrayFilter(game.RegionIds, this.currentFilter.Settings.Region)
-        }
-        if (key === 'Source') {
-          matchedKey = true
-          result = this.idFilter(game.SourceId, this.currentFilter.Settings.Source)
-        }
-        if (key === 'AgeRating') {
-          matchedKey = true
-          result = this.arrayFilter(game.AgeRatingIds, this.currentFilter.Settings.AgeRating)
-        }
-        if (key === 'Library') {
-          // TODO what is Library?
-          // result = this.arrayFilter(game.Library, this.currentFilter.Settings.Library)
-        }
-        if (key === 'Feature') {
-          matchedKey = true
-          result = this.arrayFilter(game.FeatureIds, this.currentFilter.Settings.Feature)
-        }
-        if (key === 'UserScore') {
-          // TODO
-        }
-        if (key === 'CriticScore') {
-          // TODO
-        }
-        if (key === 'CommunityScore') {
-          // TODO
-        }
-        if (key === 'LastActivity') {
-          // TODO
-        }
-        if (key === 'RecentActivity') {
-          // TODO
-        }
-        if (key === 'Added') {
-          // TODO
-        }
-        if (key === 'Modified') {
-          // TODO
-        }
-        if (key === 'PlayTime') {
-          // TODO
-        }
-        if (key === 'InstallSize') {
-          // TODO
-        }
-        if (key === 'CompletionStatuses') {
-          matchedKey = true
-          result = this.idFilter(game.CompletionStatusId, this.currentFilter.Settings.CompletionStatuses)
-        }
+        const matches: boolean = this.matchesCondition(game, key)
 
-        // TODO handle early escape differently depending if AND or OR
-        if (result === true) {
+        if (andStyle && !matches) {
+            // AND style, stop searching if any condition doesn't match
+            return false
+        }
+        if (!andStyle && matches) {
+          // OR style, stop searching if any condition matches
           return true
-        } else {
         }
       }
-      if (!matchedKey) {
-        return true
+      // If AND and didn't previously fail return true
+      // If OR and didn't previously pass return false
+      return andStyle || false
+    },
+
+    matchesCondition(game: Game, key: keyof typeof this.currentFilter.Settings): boolean {
+      if (key === 'IsUnInstalled' && this.currentFilter.Settings?.IsUnInstalled) {
+        return !game.IsInstalled
       }
-      return false
+      if (key === 'IsInstalled' && this.currentFilter.Settings?.IsInstalled) {
+        return game.IsInstalled
+      }
+      if (key === 'Hidden') {
+        // TODO check if this matches the playnite behaviour
+        if (this.currentFilter.Settings?.Hidden) {
+          return game.Hidden
+        } else {
+          return !game.Hidden
+        }
+      }
+      if (key === 'Favorite' && this.currentFilter.Settings?.Favorite) {
+        return game.Favorite
+      }
+      if (key === 'Name') {
+        // TODO check how this filter works contains?
+      }
+      if (key === 'Version') {
+        // TODO check how this filter works === ?
+      }
+      if (key === 'ReleaseYear') {
+        // TODO check how this filter works === ?
+      }
+      if (key === 'Genre') {
+        return this.arrayFilter(game.GenreIds, this.currentFilter.Settings?.Genre) || false
+      }
+      if (key === 'Platform') {
+        return this.arrayFilter(game.PlatformIds, this.currentFilter.Settings?.Platform) || false
+      }
+      if (key === 'Publisher') {
+        return this.arrayFilter(game.PublisherIds, this.currentFilter.Settings?.Publisher) || false
+      }
+      if (key === 'Developer') {
+        return this.arrayFilter(game.DeveloperIds, this.currentFilter.Settings?.Developer) || false
+      }
+      if (key === 'Category') {
+        return this.arrayFilter(game.CategoryIds, this.currentFilter.Settings?.Category) || false
+      }
+      if (key === 'Tag') {
+        return this.arrayFilter(game.TagIds, this.currentFilter.Settings?.Tag) || false
+      }
+      if (key === 'Series') {
+        return this.arrayFilter(game.SeriesIds, this.currentFilter.Settings?.Series) || false
+      }
+      if (key === 'Region') {
+        return this.arrayFilter(game.RegionIds, this.currentFilter.Settings?.Region) || false
+      }
+      if (key === 'Source') {
+        return this.idFilter(game.SourceId, this.currentFilter.Settings?.Source) || false
+      }
+      if (key === 'AgeRating') {
+        return this.arrayFilter(game.AgeRatingIds, this.currentFilter.Settings?.AgeRating) || false
+      }
+      if (key === 'Library') {
+        // TODO what is Library?
+        // return this.arrayFilter(game.Library, this.currentFilter.Settings?.Library) || false
+      }
+      if (key === 'Feature') {
+        return this.arrayFilter(game.FeatureIds, this.currentFilter.Settings?.Feature) || false
+      }
+      if (key === 'UserScore') {
+        // TODO
+      }
+      if (key === 'CriticScore') {
+        // TODO
+      }
+      if (key === 'CommunityScore') {
+        // TODO
+      }
+      if (key === 'LastActivity') {
+        // TODO
+      }
+      if (key === 'RecentActivity') {
+        // TODO
+      }
+      if (key === 'Added') {
+        // TODO
+      }
+      if (key === 'Modified') {
+        // TODO
+      }
+      if (key === 'PlayTime') {
+        // TODO
+      }
+      if (key === 'InstallSize') {
+        // TODO
+      }
+      if (key === 'CompletionStatuses') {
+        return this.idFilter(game.CompletionStatusId, this.currentFilter.Settings?.CompletionStatuses) || false
+      }
+
+      // Unknown filter, if AND allow to pass, if OR don't match
+      return this.currentFilter.Settings?.UseAndFilteringStyle || false
     }
   }
 })
