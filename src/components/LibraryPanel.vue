@@ -9,15 +9,14 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { filter, sortBy, reverse } from 'lodash'
 import { useCollectionsStore } from 'stores/collectionsStore'
 import { useFiltersStore } from 'stores/filtersStore'
 import TableView from 'src/components/LibraryViews/TableView.vue'
 import GridView from 'src/components/LibraryViews/GridView.vue'
 import StorageView from 'src/components/LibraryViews/StorageView.vue'
 import { storeToRefs } from 'pinia'
-import { Game } from 'src/types/Game/Game'
 import GameView from './LibraryViews/GameView.vue'
+import { filterGames } from 'src/services/filter'
 
 export default defineComponent({
   name: 'LibraryPanel',
@@ -27,17 +26,13 @@ export default defineComponent({
     const filtersStore = useFiltersStore()
     const { currentFilter, sort, view, game } = storeToRefs(filtersStore)
 
-    const games = computed(() => {
-      let games = filter(collectionsStore.Games, (game: Game) => {
-            const matches = filtersStore.matchesFilter(game)
-            return matches
-        })
-      games = sortBy(games, sort.value?.value ?? 'Name')
-      if (filtersStore.sortDesc) {
-        games = reverse(games)
-      }
-      return games
-    })
+    const games = computed(() => filterGames(
+      collectionsStore.Games,
+      filtersStore.currentFilter,
+      filtersStore.sort,
+      filtersStore.sortDesc,
+      filtersStore.search,
+    ))
 
     return { games, sort, view, currentFilter, game }
   }
