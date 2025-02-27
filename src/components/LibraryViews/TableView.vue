@@ -31,8 +31,8 @@
         <q-btn color="secondary" label="...">
           <q-menu auto-close>
             <q-list style="min-width: 100px">
-              <q-item 
-                v-for="(link, index) in props.row.Links" 
+              <q-item
+                v-for="(link, index) in props.row.Links"
                 :key="`link-${props.row.Id}-${index}`"
                 clickable
                 @click="openLink(link.Url)"
@@ -48,12 +48,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import Cover from 'src/components/Cover.vue'
 import { QTableColumn } from 'quasar';
 import { Game } from 'src/types/Game/Game';
 import { GameField } from 'src/types/Game/GameField';
-import { formatGameField } from 'src/types/Game/GameFieldFormats';
+import { formatGameField } from 'src/services/formatService';
+import { useUIStore } from 'src/stores/uiStore';
+import { sortConfigMap } from 'src/services/sortService';
 
 export default defineComponent({
   name: 'TableView',
@@ -65,7 +67,7 @@ export default defineComponent({
     }
   },
   setup () {
-    
+    const uiStore = useUIStore()
     let columnMap: Partial<{[K in GameField]: string}> = {
       'Name': 'Name',
       'Platforms': 'Platform',
@@ -98,36 +100,49 @@ export default defineComponent({
       'CommunityScore': 'Community Score',
     }
 
-    // TODO custom columns, custom order
-    let columns: QTableColumn[] = [
-      {
-        label: 'Actions',
-        name: 'Actions',
-        field: 'Actions',
-      },
-      {
-        label: 'Cover',
-        name: 'Cover',
-        field: 'Cover',
-      },
-    ]
+    const columns = computed(() => {
 
-    for (const key in columnMap) {
-      const field = key as GameField;
-      columns.push({
-        label: columnMap[field] || '',
-        name: columnMap[field] || '',
-        field: (game: Game) => formatGameField(game, field),
-      })
-    }
+      const sort = uiStore.sort?.value
+      console.log('sort changed', sort, sort ? sortConfigMap[sort] : 'No sort')
 
-    columns = columns.map((item) => ({ 
-      ...item,
-      align: 'left',
-      // style: 'min-width: 200px; max-width: 500px; white-space: normal;',
-      style: 'max-width: 500px; overflow: hidden;',
-      classes: 'game-table-cell',
-    }))
+      // TODO custom columns, custom order
+      let columns: QTableColumn[] = [
+        {
+          label: 'Actions',
+          name: 'Actions',
+          field: 'Actions',
+        },
+        {
+          label: 'Cover',
+          name: 'Cover',
+          field: 'Cover',
+        },
+        {
+          label: 'Sort ' + (sort ? sortConfigMap[sort]?.field || 'Name' : 'Name'),
+          name: 'Sort',
+          field: sort ? sortConfigMap[sort]?.field || 'Name' : 'Name'
+        }
+      ]
+
+      for (const key in columnMap) {
+        const field = key as GameField;
+        columns.push({
+          label: columnMap[field] || '',
+          name: columnMap[field] || '',
+          field: (game: Game) => formatGameField(game, field),
+        })
+      }
+
+      columns = columns.map((item) => ({
+        ...item,
+        align: 'left',
+        // style: 'min-width: 200px; max-width: 500px; white-space: normal;',
+        style: 'max-width: 500px; overflow: hidden;',
+        classes: 'game-table-cell',
+      }))
+
+      return columns
+    })
 
     const openLink = (url: string) => window.open(url, '_blank')
     return { columns, openLink }

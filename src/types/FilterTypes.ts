@@ -1,4 +1,5 @@
 import { GameField } from 'src/types/Game/GameField'
+import { SortType } from './SortTypes'
 
 export type TagFilter = {
   Ids: Array<string> | null,
@@ -49,5 +50,5 @@ export type Filter = {
 
 export type Sort = {
   label: string | null,
-  value: GameField | null,
+  value: SortType | null,
 }

@@ -1,7 +1,7 @@
 import { map } from 'lodash'
-import { Game } from './Game'
-import { GameField } from './GameField'
-import { Tag } from './GameFieldTypes'
+import { Game } from '../types/Game/Game'
+import { GameField } from '../types/Game/GameField'
+import { Tag } from '../types/Game/GameFieldTypes'
 import { format } from 'quasar'
 
 export type GameValueTypeMap = {

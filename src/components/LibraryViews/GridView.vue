@@ -28,7 +28,7 @@ import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
 import { chunk } from 'lodash'
 import Cover from 'src/components/Cover.vue'
 import { Game } from 'src/types/Game/Game';
-import { useFiltersStore } from 'src/stores/filtersStore';
+import { useUIStore } from 'src/stores/uiStore';
 
 export default defineComponent({
   name: 'GridView',
@@ -40,7 +40,7 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const filtersStore = useFiltersStore()
+    const filtersStore = useUIStore()
     const windowSize = ref(1000)
     const rowSize = computed(() => Math.floor(windowSize.value / 130))
     const rowHeight = computed(() => (windowSize.value / rowSize.value) * 2)

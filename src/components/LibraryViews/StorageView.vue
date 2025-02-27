@@ -11,7 +11,8 @@
       >
         <q-card>
           <q-card-section>
-            <pre>{{ JSON.stringify(collectionsStore[type], null, 2) }}</pre>
+            <pre v-if="type === 'Games'">{{ JSON.stringify(collectionsStore[type]?.slice(0, 10), null, 2) }}</pre>
+            <pre v-else>{{ JSON.stringify(collectionsStore[type], null, 2) }}</pre>
           </q-card-section>
         </q-card>
       </q-expansion-item>

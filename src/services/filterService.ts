@@ -1,40 +1,8 @@
-import { filter, intersection, partition, reverse, sortBy } from 'lodash'
-import { Filter, FilterSettings, Sort, TagFilter } from 'src/types/Filters'
+import { filter, intersection } from 'lodash'
+import { Filter, FilterSettings, TagFilter } from 'src/types/FilterTypes'
 import { Game } from 'src/types/Game/Game'
 import { GameField } from 'src/types/Game/GameField'
-import { formatGameField } from 'src/types/Game/GameFieldFormats'
 import { Tag } from 'src/types/Game/GameFieldTypes'
-
-function idFilter(id: string | null, filter: TagFilter | null | undefined): boolean | null {
-  // Match single id style filters, eg Source or CompletionStatus
-  if (!filter) {
-    return null
-  }
-  if (!id) {
-    return false
-  }
-  if (filter.Ids) {
-    return filter.Ids.includes(id)
-  }
-  if (filter.Text) {
-    // TODO implement
-  }
-  return false
-}
-
-function arrayFilter(ids: Array<string> | null, filter: TagFilter | null | undefined): boolean | null {
-  // Check array style filters, eg Platforms or Genres
-  if (!filter) {
-    return null
-  }
-  if (filter.Ids) {
-    return intersection(ids, filter.Ids).length > 0
-  }
-  if (filter.Text) {
-    // TODO implement
-  }
-  return false
-}
 
 type FilterStyle = 'true' | 'false' | 'string' | 'number' | 'id' | 'collection' | 'date' | null;
 
@@ -166,6 +134,37 @@ const filterToFieldMap: Record<keyof FilterSettings, FilterConfig> = {
   },
 }
 
+function idFilter(id: string | null, filter: TagFilter | null | undefined): boolean | null {
+  // Match single id style filters, eg Source or CompletionStatus
+  if (!filter) {
+    return null
+  }
+  if (!id) {
+    return false
+  }
+  if (filter.Ids) {
+    return filter.Ids.includes(id)
+  }
+  if (filter.Text) {
+    // TODO implement
+  }
+  return false
+}
+
+function arrayFilter(ids: Array<string> | null, filter: TagFilter | null | undefined): boolean | null {
+  // Check array style filters, eg Platforms or Genres
+  if (!filter) {
+    return null
+  }
+  if (filter.Ids) {
+    return intersection(ids, filter.Ids).length > 0
+  }
+  if (filter.Text) {
+    // TODO implement
+  }
+  return false
+}
+
 function isStringArray(array: any): array is string[] {
   return Array.isArray(array)
     && typeof array === 'object'
@@ -270,34 +269,35 @@ function matchesFilter(
 
   const keys = Object.keys(currentFilter.Settings) as Array<keyof typeof currentFilter.Settings>;
   const andStyle = currentFilter.Settings?.UseAndFilteringStyle
+  let appliedCondition = false
 
   for (const key of keys) {
     const value = currentFilter.Settings[key]
     if (!value) {
       continue
     }
+    appliedCondition = true
 
     const matches: boolean = matchesCondition(game, currentFilter.Settings, key)
 
     if (andStyle && !matches) {
-        // AND style, stop searching if any condition doesn't match
-        return false
+      // AND style, stop searching if any condition doesn't match
+      return false
     }
     if (!andStyle && matches) {
       // OR style, stop searching if any condition matches
       return true
     }
   }
+  // If no conditions set, always pass
   // If AND and didn't previously fail return true
   // If OR and didn't previously pass return false
-  return andStyle || false
+  return !appliedCondition || andStyle || false
 }
 
 export function filterGames(
   games: Array<Game>,
   currentFilter: Filter,
-  sort: Sort | null,
-  sortDesc: boolean,
   search: string,
 ): Array<Game> {
   games = filter(games, (game: Game) => matchesFilter(game, currentFilter, search))

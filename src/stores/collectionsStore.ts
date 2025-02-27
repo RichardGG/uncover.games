@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { File } from './driveStore'
 import { Game } from 'src/types/Game/Game';
 import { Tag } from 'src/types/Game/GameFieldTypes';
-import { Filter } from './filtersStore';
+import { Filter } from './uiStore';
 
 export const CollectionTypes = [
   'Files',

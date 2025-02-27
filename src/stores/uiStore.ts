@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { Filter, Sort } from 'src/types/Filters'
+import { Filter, Sort } from 'src/types/FilterTypes'
 import { Game } from 'src/types/Game/Game'
+import { SortType } from 'src/types/SortTypes'
 
-export type FiltersState = {
+export type UIState = {
   currentFilter: Filter,
   sort: Sort | null,
   sortDesc: boolean,
@@ -11,8 +12,8 @@ export type FiltersState = {
   game: Game|null,
 }
 
-export const useFiltersStore = defineStore('filtersStore', {
-  state: (): FiltersState => ({
+export const useUIStore = defineStore('uiStore', {
+  state: (): UIState => ({
     currentFilter: {
       Settings: null,
       Id: null,
@@ -23,7 +24,7 @@ export const useFiltersStore = defineStore('filtersStore', {
     },
     sort: {
       label: 'Name',
-      value: 'Name',
+      value: SortType.Name,
     },
     sortDesc: false,
     search: '',

@@ -11,14 +11,15 @@
         </tr>
       </template>
     </table>
+    <pre>{{ JSON.stringify(game) }}</pre>
   </div>
 </template>
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
-import { useFiltersStore } from 'src/stores/filtersStore';
+import { useUIStore } from 'src/stores/uiStore';
 import { GameFields } from 'src/types/Game/GameField';
-import { formatGameField } from 'src/types/Game/GameFieldFormats';
+import { formatGameField } from 'src/services/formatService';
 import { defineComponent } from 'vue'
 import Cover from '../Cover.vue';
 
@@ -27,7 +28,7 @@ export default defineComponent({
   name: 'GameView',
   components: { Cover },
   setup () {
-    const filtersStore = useFiltersStore()
+    const filtersStore = useUIStore()
     const { game } = storeToRefs(filtersStore)
 
     return { game, GameFields, formatGameField }

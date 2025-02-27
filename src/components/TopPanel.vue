@@ -148,8 +148,10 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useCollectionsStore } from 'stores/collectionsStore'
-import { useFiltersStore } from 'stores/filtersStore'
+import { useUIStore } from 'src/stores/uiStore'
 import { storeToRefs } from 'pinia'
+import { map } from 'lodash';
+import { sortTranslations, SortType } from 'src/types/SortTypes';
 
 export default defineComponent({
   name: 'TopPanel',
@@ -158,7 +160,7 @@ export default defineComponent({
   },
 
   setup () {
-    const filtersStore = useFiltersStore()
+    const filtersStore = useUIStore()
     const collectionsStore = useCollectionsStore()
     const { sort, sortDesc, search, view, currentFilter } = storeToRefs(filtersStore)
     const menuOpened = ref({
@@ -167,132 +169,10 @@ export default defineComponent({
       view: false,
     })
 
-    const sortOptions = [
-      {
-        label: 'Age Rating',
-        value: 'AgeRating',
-      },
-      {
-        label: 'Category',
-        value: 'Category',
-      },
-      {
-        label: 'Community Score',
-        value: 'CommunityScore',
-      },
-      {
-        label: 'Completion Status',
-        value: 'CompletionStatus',
-      },
-      {
-        label: 'Critic Score',
-        value: 'CriticScore',
-      },
-      {
-        label: 'Date Added',
-        value: 'DateAdded',
-      },
-      {
-        label: 'Date Modified',
-        value: 'DateModified',
-      },
-      {
-        label: 'Developer',
-        value: 'Developer',
-      },
-      {
-        label: 'Favourite',
-        value: 'Favourite',
-      },
-      {
-        label: 'Feature',
-        value: 'Feature',
-      },
-      {
-        label: 'Genre',
-        value: 'Genre',
-      },
-      {
-        label: 'Hidden',
-        value: 'Hidden',
-      },
-      {
-        label: 'Image, ROM or ISO Path',
-        value: 'Image, ROM or ISO Path',
-      },
-      {
-        label: 'Install Size',
-        value: 'InstallSize',
-      },
-      {
-        label: 'Installation Folder',
-        value: 'InstallationFolder',
-      },
-      {
-        label: 'Installation Status',
-        value: 'InstallationStatus',
-      },
-      {
-        label: 'Last Played',
-        value: 'LastPlayed',
-      },
-      {
-        label: 'Library',
-        value: 'Library',
-      },
-      {
-        label: 'Name',
-        value: 'Name',
-      },
-      {
-        label: 'Platform',
-        value: 'Platform',
-      },
-      {
-        label: 'Play Count',
-        value: 'PlayCount',
-      },
-      {
-        label: 'Publisher',
-        value: 'Publisher',
-      },
-      {
-        label: 'Recent Activity',
-        value: 'RecentActivity',
-      },
-      {
-        label: 'Region',
-        value: 'Region',
-      },
-      {
-        label: 'Release Date',
-        value: 'ReleaseDate',
-      },
-      {
-        label: 'Series',
-        value: 'Series',
-      },
-      {
-        label: 'Source',
-        value: 'Source',
-      },
-      {
-        label: 'Tag',
-        value: 'Tag',
-      },
-      {
-        label: 'Time Played',
-        value: 'TimePlayed',
-      },
-      {
-        label: 'User Score',
-        value: 'UserScore',
-      },
-      {
-        label: 'Version',
-        value: 'Version',
-      },
-    ]
+    const sortOptions = map(sortTranslations, (title: string, sortType: SortType) => ({
+      label: title,
+      value: sortType
+    }))
 
     return {
       sort, sortOptions, sortDesc, search, menuOpened, currentFilter, view, collectionsStore

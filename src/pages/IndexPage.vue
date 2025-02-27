@@ -13,7 +13,7 @@ import { CacheState, CacheStates, useDriveStore } from 'src/stores/driveStore'
 import LibraryPanel from 'src/components/LibraryPanel.vue'
 import { storeToRefs } from 'pinia';
 import { CollectionTypes } from 'src/stores/collectionsStore';
-import { useFiltersStore } from 'src/stores/filtersStore';
+import { useUIStore } from 'src/stores/uiStore';
 
 export type LoadingStatus = {
   loading: boolean,
@@ -25,7 +25,7 @@ export default defineComponent({
   components: { LibraryPanel },
   setup () {
     const driveStore = useDriveStore()
-    const filtersStore = useFiltersStore()
+    const filtersStore = useUIStore()
     onMounted(() => {
       filtersStore.initStore()
       if (!driveStore.token) {
