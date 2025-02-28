@@ -151,7 +151,7 @@ import { useCollectionsStore } from 'stores/collectionsStore'
 import { useUIStore } from 'src/stores/uiStore'
 import { storeToRefs } from 'pinia'
 import { map } from 'lodash';
-import { sortTranslations, SortType } from 'src/types/SortTypes';
+import { sortTranslations, SortOrder } from 'src/types/SortTypes';
 
 export default defineComponent({
   name: 'TopPanel',
@@ -169,7 +169,7 @@ export default defineComponent({
       view: false,
     })
 
-    const sortOptions = map(sortTranslations, (title: string, sortType: SortType) => ({
+    const sortOptions = map(sortTranslations, (title: string, sortType: SortOrder) => ({
       label: title,
       value: sortType
     }))

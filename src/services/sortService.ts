@@ -1,8 +1,6 @@
-import { reverse } from 'lodash';
-import { Sort } from 'src/types/FilterTypes';
 import { Game } from 'src/types/Game/Game';
 import { GameField } from 'src/types/Game/GameField';
-import { SortType } from 'src/types/SortTypes';
+import { SortOrder, Sort } from 'src/types/SortTypes';
 
 type SortStyle = 'string' | 'number' | 'id' | 'collection' | 'date' | 'boolean' | null;
 
@@ -11,128 +9,128 @@ interface SortConfig {
   style: SortStyle;
 }
 
-export const sortConfigMap: Record<SortType, SortConfig> = {
-  [SortType.Name]: {
+export const sortConfigMap: Record<SortOrder, SortConfig> = {
+  [SortOrder.Name]: {
     field: 'Name',
     style: 'string',
   },
-  [SortType.Platforms]: {
+  [SortOrder.Platforms]: {
     field: 'Platforms',
     style: 'collection',
   },
-  [SortType.Library]: {
+  [SortOrder.Library]: {
     field: null, // TODO plugin source
     style: null,
   },
-  [SortType.Categories]: {
+  [SortOrder.Categories]: {
     field: 'Categories',
     style: 'collection',
   },
-  [SortType.LastActivity]: {
+  [SortOrder.LastActivity]: {
     field: 'LastActivity',
     style: 'date',
   },
-  [SortType.Genres]: {
+  [SortOrder.Genres]: {
     field: 'Genres',
     style: 'collection',
   },
-  [SortType.ReleaseDate]: {
+  [SortOrder.ReleaseDate]: {
     field: 'ReleaseDate',
     style: 'date',
   },
-  [SortType.Developers]: {
+  [SortOrder.Developers]: {
     field: 'Developers',
     style: 'collection',
   },
-  [SortType.Publishers]: {
+  [SortOrder.Publishers]: {
     field: 'Publishers',
     style: 'collection',
   },
-  [SortType.Tags]: {
+  [SortOrder.Tags]: {
     field: 'Tags',
     style: 'collection',
   },
-  [SortType.Series]: {
+  [SortOrder.Series]: {
     field: 'Series',
     style: 'collection',
   },
-  [SortType.AgeRatings]: {
+  [SortOrder.AgeRatings]: {
     field: 'AgeRatings',
     style: 'collection',
   },
-  [SortType.Version]: {
+  [SortOrder.Version]: {
     field: 'Version',
     style: 'number',
   },
-  [SortType.Regions]: {
+  [SortOrder.Regions]: {
     field: 'Regions',
     style: 'collection',
   },
-  [SortType.Source]: {
+  [SortOrder.Source]: {
     field: 'Source',
     style: 'collection',
   },
-  [SortType.PlayCount]: {
+  [SortOrder.PlayCount]: {
     field: 'PlayCount',
     style: 'number',
   },
-  [SortType.Playtime]: {
+  [SortOrder.Playtime]: {
     field: 'Playtime',
     style: 'number',
   },
-  [SortType.CompletionStatus]: {
+  [SortOrder.CompletionStatus]: {
     field: 'CompletionStatus',
     style: 'id',
   },
-  [SortType.UserScore]: {
+  [SortOrder.UserScore]: {
     field: 'UserScore',
     style: 'number',
   },
-  [SortType.CriticScore]: {
+  [SortOrder.CriticScore]: {
     field: 'CriticScore',
     style: 'number',
   },
-  [SortType.CommunityScore]: {
+  [SortOrder.CommunityScore]: {
     field: 'CommunityScore',
     style: 'number',
   },
-  [SortType.Added]: {
+  [SortOrder.Added]: {
     field: 'Added',
     style: 'date',
   },
-  [SortType.Modified]: {
+  [SortOrder.Modified]: {
     field: 'Modified',
     style: 'date',
   },
-  [SortType.IsInstalled]: {
+  [SortOrder.IsInstalled]: {
     field: 'IsInstalled',
     style: 'boolean',
   },
-  [SortType.Hidden]: {
+  [SortOrder.Hidden]: {
     field: 'Hidden',
     style: 'boolean',
   },
-  [SortType.Favorite]: {
+  [SortOrder.Favorite]: {
     field: 'Favorite',
     style: 'boolean',
   },
-  [SortType.InstallDirectory]: {
+  [SortOrder.InstallDirectory]: {
     field: 'InstallDirectory',
     style: 'string',
   },
-  [SortType.Features]: {
+  [SortOrder.Features]: {
     field: 'Features',
     style: 'collection',
   },
-  [SortType.InstallSize]: {
+  [SortOrder.InstallSize]: {
     field: 'InstallSize',
     style: 'string',
   },
-  [SortType.RecentActivity]: {
+  [SortOrder.RecentActivity]: {
     field: 'RecentActivity',
     style: 'date',
   },
-  [SortType.RomList]: {
+  [SortOrder.RomList]: {
     field: 'Roms',
     style: 'collection',
   },

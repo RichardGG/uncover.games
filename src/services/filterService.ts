@@ -1,17 +1,17 @@
 import { filter, intersection } from 'lodash'
-import { Filter, FilterSettings, TagFilter } from 'src/types/FilterTypes'
+import { FilterPreset, FilterPresetSettings, TagFilter } from 'src/types/FilterTypes'
 import { Game } from 'src/types/Game/Game'
 import { GameField } from 'src/types/Game/GameField'
 import { Tag } from 'src/types/Game/GameFieldTypes'
 
-type FilterStyle = 'true' | 'false' | 'string' | 'number' | 'id' | 'collection' | 'date' | null;
+type FilterStyle = 'true' | 'false' | 'string' | 'id' | 'collection' | 'score' | 'size' | 'date' | 'time' | null;
 
 interface FilterConfig {
   field: GameField|null;
   style: FilterStyle;
 }
 
-const filterToFieldMap: Record<keyof FilterSettings, FilterConfig> = {
+const filterToFieldMap: Record<keyof FilterPresetSettings, FilterConfig> = {
   UseAndFilteringStyle: {
     field: null,
     style: null,
@@ -94,15 +94,15 @@ const filterToFieldMap: Record<keyof FilterSettings, FilterConfig> = {
   },
   UserScore: {
     field: 'UserScore',
-    style: 'number',
+    style: 'score',
   },
   CriticScore: {
     field: 'CriticScore',
-    style: 'number',
+    style: 'score',
   },
   CommunityScore: {
     field: 'CommunityScore',
-    style: 'number',
+    style: 'score',
   },
   LastActivity: {
     field: 'LastActivity',
@@ -122,11 +122,11 @@ const filterToFieldMap: Record<keyof FilterSettings, FilterConfig> = {
   },
   PlayTime: {
     field: 'Playtime',
-    style: 'number',
+    style: 'time',
   },
   InstallSize: {
     field: 'InstallSize',
-    style: 'number',
+    style: 'size',
   },
   CompletionStatuses: {
     field: 'CompletionStatus',
@@ -191,7 +191,7 @@ function isTag(obj: any): obj is Tag {
   return typeof obj.Id === 'string' && typeof obj.Name === 'string'
 }
 
-function matchesCondition(game: Game, filterSettings: FilterSettings, key: keyof FilterSettings): boolean {
+function matchesCondition(game: Game, filterSettings: FilterPresetSettings, key: keyof FilterPresetSettings): boolean {
 
   const filterConfig = filterToFieldMap[key]
 
@@ -224,7 +224,7 @@ function matchesCondition(game: Game, filterSettings: FilterSettings, key: keyof
     return value.toLowerCase().includes(filter.toLowerCase())
   }
 
-  if (filterConfig.style === 'number') {
+  if (filterConfig.style === 'score') {
     // TODO
   }
 
@@ -252,7 +252,7 @@ function matchesCondition(game: Game, filterSettings: FilterSettings, key: keyof
 
 function matchesFilter(
   game: Game,
-  currentFilter: Filter,
+  currentFilter: FilterPreset,
   search: string,
 ): boolean {
   // Checks if a game matches a filter set
@@ -297,7 +297,7 @@ function matchesFilter(
 
 export function filterGames(
   games: Array<Game>,
-  currentFilter: Filter,
+  currentFilter: FilterPreset,
   search: string,
 ): Array<Game> {
   games = filter(games, (game: Game) => matchesFilter(game, currentFilter, search))

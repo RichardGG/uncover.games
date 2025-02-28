@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { Filter, Sort } from 'src/types/FilterTypes'
+import { FilterPreset } from 'src/types/FilterTypes'
 import { Game } from 'src/types/Game/Game'
-import { SortType } from 'src/types/SortTypes'
+import { SortOrder, Sort } from 'src/types/SortTypes'
 
 export type UIState = {
-  currentFilter: Filter,
+  currentFilter: FilterPreset,
   sort: Sort | null,
   sortDesc: boolean,
   search: string,
@@ -24,7 +24,7 @@ export const useUIStore = defineStore('uiStore', {
     },
     sort: {
       label: 'Name',
-      value: SortType.Name,
+      value: SortOrder.Name,
     },
     sortDesc: false,
     search: '',

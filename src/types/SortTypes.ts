@@ -1,68 +1,74 @@
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L11
-export enum SortType {
-  Name = 0, // Name
-  Platforms = 1, // Platforms
-  Library = 2, // PluginId // Unchangeable field (which plugin)
-  Categories = 3, // Categories
-  LastActivity = 4, // LastActivity
-  Genres = 5, // Genres
-  ReleaseDate = 6, // ReleaseDate
-  Developers = 7, // Developers
-  Publishers = 8, // Publishers
-  Tags = 9, // Tags
-  Series = 10, // Series
-  AgeRatings = 11, // AgeRatings
-  Version = 12, // Version
-  Regions = 13, // Regions
-  Source = 14, // Source // eg Oculus Steam Origin
-  PlayCount = 15, // PlayCount
-  Playtime = 16, // Playtime
-  CompletionStatus = 17, // CompletionStatus
-  UserScore = 18, // UserScore
-  CriticScore = 19, // CriticScore
-  CommunityScore = 20, // CommunityScore
-  Added = 21, // Added
-  Modified = 22, // Modified
-  IsInstalled = 23, // IsInstalled
-  Hidden = 24, // Hidden
-  Favorite = 25, // Favorite
-  InstallDirectory = 26, // InstallDirectory
-  Features = 27, // Features
-  InstallSize = 28, // InstallSize
-  RecentActivity = 29, // RecentActivity
-  RomList = 30, // Roms
+export enum SortOrder {
+  Name = 0,
+  Platforms = 1,
+  Library = 2,
+  Categories = 3,
+  LastActivity = 4,
+  Genres = 5,
+  ReleaseDate = 6,
+  Developers = 7,
+  Publishers = 8,
+  Tags = 9,
+  Series = 10,
+  AgeRatings = 11,
+  Version = 12,
+  Regions = 13,
+  Source = 14,
+  PlayCount = 15,
+  Playtime = 16,
+  CompletionStatus = 17,
+  UserScore = 18,
+  CriticScore = 19,
+  CommunityScore = 20,
+  Added = 21,
+  Modified = 22,
+  IsInstalled = 23,
+  Hidden = 24,
+  Favorite = 25,
+  InstallDirectory = 26,
+  Features = 27,
+  InstallSize = 28,
+  RecentActivity = 29,
+  RomList = 30,
 }
 
-export const sortTranslations: Record<SortType, string> = {
-  [SortType.Name]: 'Name',
-  [SortType.Platforms]: 'Platform',
-  [SortType.Library]: 'Library',
-  [SortType.Categories]: 'Category',
-  [SortType.LastActivity]: 'Last Played',
-  [SortType.Genres]: 'Genre',
-  [SortType.ReleaseDate]: 'Release Date',
-  [SortType.Developers]: 'Developer',
-  [SortType.Publishers]: 'Publisher',
-  [SortType.Tags]: 'Tag',
-  [SortType.Series]: 'Series',
-  [SortType.AgeRatings]: 'Age Rating',
-  [SortType.Version]: 'Version',
-  [SortType.Regions]: 'Region',
-  [SortType.Source]: 'Source',
-  [SortType.PlayCount]: 'Play Count',
-  [SortType.Playtime]: 'Time Played',
-  [SortType.CompletionStatus]: 'Completion Status',
-  [SortType.UserScore]: 'User Score',
-  [SortType.CriticScore]: 'Critic Score',
-  [SortType.CommunityScore]: 'Community Score',
-  [SortType.Added]: 'Date Added',
-  [SortType.Modified]: 'Date Modified',
-  [SortType.IsInstalled]: 'Installation Status',
-  [SortType.Hidden]: 'Hidden',
-  [SortType.Favorite]: 'Favorite',
-  [SortType.InstallDirectory]: 'Installation Folder',
-  [SortType.Features]: 'Feature',
-  [SortType.InstallSize]: 'Install Size',
-  [SortType.RecentActivity]: 'Recent Activity',
-  [SortType.RomList]: 'Image, ROM or ISO Path',
+export const sortTranslations: Record<SortOrder, string> = {
+  [SortOrder.Name]: 'Name',
+  [SortOrder.Platforms]: 'Platform',
+  [SortOrder.Library]: 'Library',
+  [SortOrder.Categories]: 'Category',
+  [SortOrder.LastActivity]: 'Last Played',
+  [SortOrder.Genres]: 'Genre',
+  [SortOrder.ReleaseDate]: 'Release Date',
+  [SortOrder.Developers]: 'Developer',
+  [SortOrder.Publishers]: 'Publisher',
+  [SortOrder.Tags]: 'Tag',
+  [SortOrder.Series]: 'Series',
+  [SortOrder.AgeRatings]: 'Age Rating',
+  [SortOrder.Version]: 'Version',
+  [SortOrder.Regions]: 'Region',
+  [SortOrder.Source]: 'Source',
+  [SortOrder.PlayCount]: 'Play Count',
+  [SortOrder.Playtime]: 'Time Played',
+  [SortOrder.CompletionStatus]: 'Completion Status',
+  [SortOrder.UserScore]: 'User Score',
+  [SortOrder.CriticScore]: 'Critic Score',
+  [SortOrder.CommunityScore]: 'Community Score',
+  [SortOrder.Added]: 'Date Added',
+  [SortOrder.Modified]: 'Date Modified',
+  [SortOrder.IsInstalled]: 'Installation Status',
+  [SortOrder.Hidden]: 'Hidden',
+  [SortOrder.Favorite]: 'Favorite',
+  [SortOrder.InstallDirectory]: 'Installation Folder',
+  [SortOrder.Features]: 'Feature',
+  [SortOrder.InstallSize]: 'Install Size',
+  [SortOrder.RecentActivity]: 'Recent Activity',
+  [SortOrder.RomList]: 'Image, ROM or ISO Path',
+}
+
+// TODO this is the wrong thing to use, probably should just use SortOrder directly and translate after
+export type Sort = {
+  label: string | null,
+  value: SortOrder | null,
 }
