@@ -1,7 +1,8 @@
 https://github.com/JosefNemec/Playnite
 
 -- PRIORITIES --
-Confirm Sort Options etc
+Review type names etc to match Playnite
+Review services
 Group By
 Anything that can be done UI agnostic
 Consider localization https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/Localization/LocSource.xaml
