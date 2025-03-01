@@ -9,17 +9,17 @@
       </div>
     </q-page>
   </template>
-  
+
   <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useDriveStore } from 'stores/driveStore'
   import { useRoute, useRouter } from 'vue-router'
-  
+  import { useGoogleAuthStore } from 'src/stores/googleAuthStore';
+
   export default defineComponent({
     name: 'IndexPage',
     components: { },
     setup () {
-      const driveStore = useDriveStore()
+      const googleAuthStore = useGoogleAuthStore()
       const route = useRoute()
       const router = useRouter()
       let error = null
@@ -29,16 +29,15 @@
       const token = url.searchParams.get('access_token')
 
       if (token) {
-        driveStore.saveToken(token)
+        googleAuthStore.saveToken(token)
         router.push({ name: 'home' })
       } else {
         error = 'No access token provided'
       }
 
-      const retry = () => driveStore.startAuth()
+      const retry = () => googleAuthStore.startAuth()
 
       return { error, retry }
     }
   })
   </script>
-  

@@ -67,7 +67,7 @@
             >
               <q-list>
                 <q-item
-                  v-for="filter in collectionsStore.FilterPresets"
+                  v-for="filter in collectionsStore.collections.FilterPresets"
                   :key="filter.Name + ''"
                   clickable
                   @click=" () => currentFilter = filter"
@@ -147,7 +147,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useCollectionsStore } from 'stores/collectionsStore'
+import { useCollectionsStore } from 'src/stores/collectionsStore'
 import { useUIStore } from 'src/stores/uiStore'
 import { storeToRefs } from 'pinia'
 import { map } from 'lodash';

@@ -13,11 +13,12 @@
     </div>
   </div>
 </template>
-  
+
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { useDriveStore } from 'src/stores/driveStore'
-  
+  import { useGoogleAuthStore } from 'src/stores/googleAuthStore';
+
   export default defineComponent({
     name: 'CoverImage',
     components: { },
@@ -36,14 +37,16 @@
       },
     },
     setup (props) {
+      const driveStore = useDriveStore()
+      const googleAuthStore = useGoogleAuthStore()
+
       const url = ref('')
       const rotationX = ref(0)
       const rotationY = ref(0)
       const hovering = ref(false)
-      const driveStore = useDriveStore()
 
       if (props.fileName){
-        driveStore.initImage(props.fileName).then((dataUri) => {
+        driveStore.getImage(googleAuthStore.getToken(), props.fileName).then((dataUri) => {
           if (dataUri) {
             url.value = dataUri
           }

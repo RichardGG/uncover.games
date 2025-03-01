@@ -32,7 +32,7 @@ export const useUIStore = defineStore('uiStore', {
     game: null,
   }),
   actions: {
-    initStore() {
+    init() {
       // Load current state from local storage
       const filterJson = window.localStorage.getItem('currentFilter')
       if (filterJson) {
@@ -51,6 +51,7 @@ export const useUIStore = defineStore('uiStore', {
         this.view = JSON.parse(viewJson)
       }
 
+      // On state change, update local storage
       this.$subscribe((mutation, state) => {
         window.localStorage.setItem('currentFilter', JSON.stringify(state.currentFilter))
         window.localStorage.setItem('sort', JSON.stringify(state.sort))

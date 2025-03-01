@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useCollectionsStore } from 'stores/collectionsStore'
+import { useCollectionsStore } from 'src/stores/collectionsStore'
 import { useUIStore } from 'src/stores/uiStore'
 import TableView from 'src/components/LibraryViews/TableView.vue'
 import GridView from 'src/components/LibraryViews/GridView.vue'
@@ -28,7 +28,7 @@ export default defineComponent({
     const { currentFilter, sort, view, game } = storeToRefs(uiStore)
 
     const games = computed(() => {
-      let games = collectionsStore.Games
+      let games = collectionsStore.collections.Games
       games = filterGames(games, uiStore.currentFilter, uiStore.search)
       games = sortGames(games, uiStore.sort, uiStore.sortDesc)
       return games

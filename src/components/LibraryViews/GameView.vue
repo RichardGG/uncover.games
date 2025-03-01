@@ -39,12 +39,15 @@ import { formatGameField } from 'src/services/formatService';
 import { computed, defineComponent, ref, watch } from 'vue'
 import Cover from '../Cover.vue';
 import { useDriveStore } from 'src/stores/driveStore';
+import { getYouTubeVideoId } from 'src/services/youtubeService';
+import { useGoogleAuthStore } from 'src/stores/googleAuthStore';
 
 
 export default defineComponent({
   name: 'GameView',
   components: { Cover },
   setup () {
+    const googleAuthStore = useGoogleAuthStore()
     const filtersStore = useUIStore()
     const driveStore = useDriveStore()
     const { game } = storeToRefs(filtersStore)
@@ -56,7 +59,7 @@ export default defineComponent({
       () => game.value?.Name,
       (name) => {
         if (name) {
-          driveStore.getYouTubeVideoId(`${name} trailer}`)
+          getYouTubeVideoId(googleAuthStore.getToken(), `${name} trailer}`)
             .then((id: string|null) => {videoId.value = id || ''})
         }
       },
@@ -67,7 +70,7 @@ export default defineComponent({
       () => game.value?.CoverImage,
       (fileName) => {
         if (fileName){
-            driveStore.initImage(fileName).then((dataUri) => {
+            driveStore.getImage(googleAuthStore.getToken(), fileName).then((dataUri) => {
               if (dataUri) {
                 bgUrl.value = dataUri
               }
