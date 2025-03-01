@@ -34,7 +34,6 @@ export default defineComponent({
       return games
     })
 
-
     return { games, sort, view, currentFilter, game }
   }
 })

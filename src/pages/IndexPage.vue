@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted, watch } from 'vue'
 import { useDriveStore } from 'src/stores/driveStore'
 import LibraryPanel from 'src/components/LibraryPanel.vue'
 import { storeToRefs } from 'pinia';
@@ -30,12 +30,13 @@ export default defineComponent({
     const uiStore = useUIStore()
     const collectionsStore = useCollectionsStore()
 
+    const { files } = storeToRefs(driveStore)
+
     onMounted(() => {
       const googleApiToken: string = googleAuthStore.getToken()
+      watch(files, () => collectionsStore.init(googleApiToken))
       uiStore.init()
       driveStore.init(googleApiToken)
-      // Note: collectionsStore init uses driveStore
-      collectionsStore.init(googleApiToken)
     })
 
     const { loadingMessage } = storeToRefs(collectionsStore)

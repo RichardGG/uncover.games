@@ -84,13 +84,14 @@ export const useCollectionsStore = defineStore('collectionsStore', {
 
         const metadata = driveStore.getFileMetadata(`${collectionType}.json`)
         if (!metadata) {
+          console.error(`No file in Google Drive for ${collectionType}`)
           // Couldn't find file
-          return
+          continue
         }
 
         if (! needsRefresh(metadata.modifiedTime, cachedResponse)) {
           this.statuses[collectionType] = { state: 'done' }
-          return
+          continue
         }
 
         try {
@@ -102,6 +103,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
           })
         } catch (e) {
           // TODO should we do something if the request fails
+          console.error(`Failed to download ${collectionType} file from Google Drive`)
         }
       }
     }

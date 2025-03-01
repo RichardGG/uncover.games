@@ -23,24 +23,25 @@ export const useDriveStore = defineStore('drive', {
 
   actions: {
     async init(googleApiToken: string) {
-      return new Promise(async () => {
-        // Fetch from cache
-        this.status.state = 'loading-cache'
-        const cachedResponse = await getCachedData('files', 'allFiles')
-        if (cachedResponse) {
-          // Store the cached files
-          this.files = await cachedResponse.json()
-        }
+      // Fetch from cache
+      this.status.state = 'loading-cache'
+      const cachedResponse = await getCachedData('files', 'allFiles')
+      if (cachedResponse) {
+        // Store the cached files
+        this.files = await cachedResponse.json()
+      }
 
-        // Store the fetched files
-        this.status.state = 'downloading'
-        const files = await fetchFilesList(googleApiToken)
+      this.status.state = 'downloading'
+      const files = await fetchFilesList(googleApiToken)
 
-        this.status.state = 'done'
+      // Store the fetched files
+      this.files = files
 
-        // Cache the fetched files
-        setCachedData('files', 'allFiles', JSON.stringify(files))
-      })
+      this.status.state = 'done'
+
+      // Cache the fetched files
+      setCachedData('files', 'allFiles', JSON.stringify(files))
+
     },
 
     getFileMetadata(name: string): FileMetadata|undefined {
