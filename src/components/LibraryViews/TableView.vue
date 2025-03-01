@@ -15,7 +15,7 @@
     </template>
     <template #body-cell-Cover="props">
       <q-td>
-        <Cover :width="30" :file-name="props.row.CoverImage" />
+        <Cover :width="30" :file-name="props.row.CoverImage"  @click="() => uiStore.game = props.row" />
       </q-td>
     </template>
     <template #body-cell="props">
@@ -144,7 +144,7 @@ export default defineComponent({
     })
 
     const openLink = (url: string) => window.open(url, '_blank')
-    return { columns, openLink }
+    return { columns, openLink, uiStore }
   }
 })
 </script>

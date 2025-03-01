@@ -8,6 +8,7 @@ Anything that can be done UI agnostic
 Consider localization https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/Localization/LocSource.xaml
 Link to steam reviews https://store.steampowered.com/app/2208570/Dark_Hours/#app_reviews_hash
 Optional YouTube scope
+sanitize-html https://www.npmjs.com/package/sanitize-html
 
 -- LATER --
 Filter panel

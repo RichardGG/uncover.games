@@ -1,16 +1,20 @@
 <template>
   <div v-if="game" style="width: 100%;" @click="() => game = null">
-    <iframe
-      v-if="videoId"
-      id="ytplayer"
-      style="margin: 20px"
-      type="text/html"
-      :width="videoWidth"
-      :height="videoHeight"
-      :src="`https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&controls=0&playsinline=1&`"
-      frameborder="0"
-    ></iframe>
+    <img
+:src="bgUrl" style="position: absolute; width: 100%; height: 100vh; object-fit: cover; filter: blur(20px); transform: scale(1.1); mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+">
     <div style="padding: 20px; z-index: 100; position: relative; margin-top: 20px;">
+      <iframe
+        v-if="videoId"
+        id="ytplayer"
+        style="margin: 20px"
+        type="text/html"
+        :width="videoWidth"
+        :height="videoHeight"
+        :src="`https://www.youtube.com/embed/${videoId}`"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
       <Cover :title="game.Name" :file-name="game.CoverImage" :width="200" />
       <h2>{{formatGameField(game, 'Name') }}</h2>
       <div v-html="formatGameField(game, 'Description')" />
@@ -47,6 +51,7 @@ export default defineComponent({
     const videoId = ref('')
     const videoWidth = computed(() => window.innerWidth < 600 ? window.innerWidth - 40 : 600)
     const videoHeight = computed(() => videoWidth.value * (9/16))
+    const bgUrl = ref('')
     watch(
       () => game.value?.Name,
       (name) => {
@@ -58,7 +63,21 @@ export default defineComponent({
       { immediate: true },
     )
 
-    return { game, GameFields, formatGameField, videoId, videoWidth, videoHeight }
+    watch(
+      () => game.value?.CoverImage,
+      (fileName) => {
+        if (fileName){
+            driveStore.initImage(fileName).then((dataUri) => {
+              if (dataUri) {
+                bgUrl.value = dataUri
+              }
+            })
+          }
+      },
+      { immediate: true },
+    )
+
+    return { game, GameFields, formatGameField, videoId, videoWidth, videoHeight, bgUrl }
   }
 })
 </script>
