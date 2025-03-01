@@ -59,5 +59,3 @@ Source
 Tag
 Time Played
 User Score
-
-'true' | 'false' | 'string' | 'id' | 'collection' | 'score' | 'size' | 'date' | 'time' | null

@@ -11,8 +11,10 @@ Browse your games!
 
 ### Stores
 
-- collectionsStore - Holds the data from Playnite, ⚠️ fetches from cacheService/driveStore
-- driveStore - Holds the list of files from Google Drive, ⚠️ fetches from driveService
+- collectionsStore - Holds the data from Playnite
+  - ⚠️ fetches from cacheService/driveStore
+- driveStore - Holds the list of files from Google Drive
+  - ⚠️ fetches from driveService
 - googleAuthStore - Holds the API token used for Google APIs
 - uiStore - Holds the current UI state, remembers via LocalStorage
 
@@ -20,7 +22,8 @@ Browse your games!
 
 - cacheService - Logic for reading from the cache
 - driveService - Logic for fetching files from Google Drive
-- filterService - Logic for filtering games, ⚠️ uses groupService
+- filterService - Logic for filtering games
+  - ⚠️ uses groupService
 - formatService - Logic for formatting game fields
 - groupService - Logic for grouping games
 - sortService - Logic for sorting games
