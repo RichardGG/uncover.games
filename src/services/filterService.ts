@@ -300,22 +300,8 @@ export function filterGames(
   currentFilter: FilterPreset,
   search: string,
 ): Array<Game> {
-  games = filter(games, (game: Game) => matchesFilter(game, currentFilter, search))
-
-  // const sortType: GameField = sort?.value ?? 'Name'
-
-  // const partitioned = partition(games, (game: Game) => formatGameField(game, sortType))
-  // console.log(sortType)
-
-  // games = sortBy(games, sortType)
-
-  // TODO need to map sort fields to gamefields
-  // games = sortBy(partitioned[0],  (game: Game) => {
-  //     return formatGameField(game, sortType)
-  //   })
-  // if (sortDesc) {
-  //   games = reverse(games)
-  // }
-  return games
-  // return [...games, ...partitioned[1]]
+  return filter(
+    games,
+    (game: Game) => matchesFilter(game, currentFilter, search)
+  )
 }

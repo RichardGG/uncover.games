@@ -8,11 +8,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue'
-import { CacheState, CacheStates, useDriveStore } from 'src/stores/driveStore'
+import { defineComponent, onMounted } from 'vue'
+import { useDriveStore } from 'src/stores/driveStore'
 import LibraryPanel from 'src/components/LibraryPanel.vue'
 import { storeToRefs } from 'pinia';
-import { CollectionTypes } from 'src/stores/collectionsStore';
 import { useUIStore } from 'src/stores/uiStore';
 
 export type LoadingStatus = {
@@ -25,49 +24,17 @@ export default defineComponent({
   components: { LibraryPanel },
   setup () {
     const driveStore = useDriveStore()
-    const filtersStore = useUIStore()
+    const uiStore = useUIStore()
+
     onMounted(() => {
-      filtersStore.initStore()
-      if (!driveStore.token) {
-        driveStore.startAuth()
-        return
-      }
+      uiStore.initStore()
       driveStore.initGamesStore()
     })
 
-    const { states } = storeToRefs(driveStore)
-    const cachesLoading = computed(() => {
-      const caches:Array<string> = []
-      CollectionTypes.forEach((type:keyof CacheStates) => {
-        const state:CacheState = states.value[type]
-        if (state && state.state === 'loading-cache') {
-          caches.push(type)
-        }
-      })
-      return caches
-    })
-    const filesDownloading = computed(() => {
-      const files:Array<string> = []
-      CollectionTypes.forEach((type:keyof CacheStates) => {
-        const state:CacheState = states.value[type]
-        if (state && state.state === 'downloading') {
-          files.push(type)
-        }
-      })
-      return files
-    })
-    const loadingMessage = computed(() => {
-      if (cachesLoading.value.length) {
-        return 'Loading caches'
-      }
-      if (filesDownloading.value.length) {
-        return 'Downloading files'
-      }
-      return null
-    })
+    const { loadingMessage } = storeToRefs(driveStore)
 
     return {
-      loadingMessage, states
+      loadingMessage
     }
   }
 })

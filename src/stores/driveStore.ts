@@ -29,6 +29,21 @@ export type ListResponse = {
   files: Array<File>,
 }
 
+export type YouTubeIdData = {
+  kind: string,
+  videoId: string,
+}
+
+export type YouTubeItemData = {
+  etag: string,
+  id: YouTubeIdData,
+  kind: string,
+}
+
+export type YouTubeSearchResponse = {
+  items: Array<YouTubeItemData>,
+}
+
 export interface ProgressUpdate { (progress: number): void }
 
 const DRIVE_BASE_URL = 'https://www.googleapis.com/drive/v3/files'
@@ -53,7 +68,7 @@ export const useDriveStore = defineStore('drive', {
         + '?client_id=' + process.env.DRIVE_CLIENT_ID
         + '&redirect_uri=' + process.env.BASE_URL + '/website/callback'
         + '&response_type=token'
-        + '&scope=https://www.googleapis.com/auth/drive.appdata'
+        + '&scope=https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/youtube.readonly'
 
         window.location.href = url
     },
@@ -121,7 +136,7 @@ export const useDriveStore = defineStore('drive', {
         if (response.nextPageToken) {
           return await this.fetchFiles(files, response.nextPageToken)
         }
-        
+
         // Final page, return the entire list of files
         return files
       })
@@ -139,12 +154,11 @@ export const useDriveStore = defineStore('drive', {
       const file = find(collectionsStore.Files, { name: fileName?.replace('\\', '_') } )
 
       if (!file) {
-        console.log('could not find file')
         return new Promise((resolve) => resolve(false))
       }
 
       const cachedResponse = await this.getCachedData('Images', fileName)
-      
+
       // Return the cached data if it's still valid
       if (cachedResponse && !this.needsRefresh(file, cachedResponse)) {
         return new Promise(async (resolve) => resolve(await cachedResponse.text()))
@@ -183,7 +197,7 @@ export const useDriveStore = defineStore('drive', {
           // Couldn't find file
           return
         }
-        
+
         // Check if the cached data is old
         if (this.needsRefresh(metadata, cachedResponse)) {
           try {
@@ -226,8 +240,67 @@ export const useDriveStore = defineStore('drive', {
       })
     },
 
+    async getYouTubeVideoId(searchTerm:string)
+    {
+      // https://developers.google.com/youtube/v3/docs/search/list
+      return axios.get('https://www.googleapis.com/youtube/v3/search', {
+        params: {
+          q: searchTerm,
+          type: 'video',
+          videoEmbeddable: true,
+          part: 'id'
+        },
+        headers: {
+          Authorization: 'Bearer ' + this.token
+        },
+      }).then(({ data }) => {
+        const response:YouTubeSearchResponse = data
+        console.log('id', response.items[0]?.id?.videoId, response.items, response)
+        return response.items[0]?.id?.videoId
+    })
+    },
+
     initGamesStore() {
+      if (!this.token) {
+        this.startAuth()
+        return
+      }
       this.initFiles()
     },
+  },
+  getters: {
+    cachesLoading(state) {
+      const states:CacheStates = state.states
+      const caches:Array<string> = []
+      CollectionTypes.forEach((type:keyof CacheStates) => {
+        const state:CacheState = states[type]
+        if (state && state.state === 'loading-cache') {
+          caches.push(type)
+        }
+      })
+      return caches
+    },
+
+    filesDownloading(state) {
+      const states:CacheStates = state.states
+      const files:Array<string> = []
+      CollectionTypes.forEach((type:keyof CacheStates) => {
+        const state:CacheState = states[type]
+        if (state && state.state === 'downloading') {
+          files.push(type)
+        }
+      })
+      return files
+    },
+
+    loadingMessage(state) {
+      if (this.cachesLoading.length) {
+        return 'Loading caches'
+      }
+      if (this.filesDownloading.length) {
+        return 'Downloading files'
+      }
+      return null
+    }
   }
 })

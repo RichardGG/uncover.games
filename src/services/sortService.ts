@@ -156,7 +156,6 @@ function compareGames(sortField: GameField, sortStyle: SortStyle, sortDesc: bool
     if (typeof b[sortField] !== 'string') {
       return 0
     }
-    console.log('actual sort')
     return a[sortField].localeCompare(b[sortField])
   }
   if (sortStyle === 'number') {
@@ -169,7 +168,6 @@ function compareGames(sortField: GameField, sortStyle: SortStyle, sortDesc: bool
     // TODO how?
   }
   if (sortStyle === 'date') {
-    console.log('compare', a[sortField], b[sortField])
     if (typeof a[sortField] !== 'string') {
       return 0
     }

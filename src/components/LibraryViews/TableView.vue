@@ -103,7 +103,6 @@ export default defineComponent({
     const columns = computed(() => {
 
       const sort = uiStore.sort?.value
-      console.log('sort changed', sort, sort ? sortConfigMap[sort] : 'No sort')
 
       // TODO custom columns, custom order
       let columns: QTableColumn[] = [

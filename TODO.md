@@ -6,12 +6,21 @@ Review services
 Group By
 Anything that can be done UI agnostic
 Consider localization https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/Localization/LocSource.xaml
+Link to steam reviews https://store.steampowered.com/app/2208570/Dark_Hours/#app_reviews_hash
+Optional YouTube scope
 
 -- LATER --
 Filter panel
 Cover should be automatic width, remove animation stuff for now
 PrimeVue + Tailwind v4 (wait for update, see https://primevue.org/tailwind/#tailwind-theme)
 Consider human sorting with numbers https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/SortableNameConverter.cs#L8
+
+-- DESKTOP --
+-- Plugins (Library) --
+https://api.playnite.link/docs/api/Playnite.SDK.IPlayniteAPI.html
+https://api.playnite.link/docs/api/Playnite.SDK.Plugins.LibraryPlugin.html
+IPlayniteAPI.Addons.Plugins
+if LibraryPlugin > Name
 
 -- NOTES --
 Group By
