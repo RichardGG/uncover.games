@@ -136,7 +136,8 @@ export const sortConfigMap: Record<SortOrder, SortConfig> = {
   },
 }
 
-function compareGames(sortField: GameField, sortStyle: SortStyle, sortDesc: boolean, a: Game, b: Game): number {
+function compareGames(sortField: GameField, sortStyle: SortStyle, sortDesc: boolean, a: Game, b: Game): number
+{
   if (!sortField) {
     return 0
   }

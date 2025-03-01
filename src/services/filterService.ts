@@ -1,8 +1,9 @@
 import { filter, intersection } from 'lodash'
-import { FilterPreset, FilterPresetSettings, TagFilter } from 'src/types/FilterTypes'
+import { FilterPreset, FilterPresetSettings, InstallSizeGroup, PastTimeSegment, PlaytimeCategory, ScoreGroup, TagFilter } from 'src/types/FilterTypes'
 import { Game } from 'src/types/Game/Game'
 import { GameField } from 'src/types/Game/GameField'
 import { Tag } from 'src/types/Game/GameFieldTypes'
+import { getInstallSizeGroup, getPastTimeSegment, getPlaytimeCategory, getScoreGroup } from './groupService'
 
 type FilterStyle = 'true' | 'false' | 'string' | 'id' | 'collection' | 'score' | 'size' | 'date' | 'time' | null;
 
@@ -134,7 +135,8 @@ const filterToFieldMap: Record<keyof FilterPresetSettings, FilterConfig> = {
   },
 }
 
-function idFilter(id: string | null, filter: TagFilter | null | undefined): boolean | null {
+function idFilter(id: string | null, filter: TagFilter | null | undefined): boolean | null
+{
   // Match single id style filters, eg Source or CompletionStatus
   if (!filter) {
     return null
@@ -151,7 +153,8 @@ function idFilter(id: string | null, filter: TagFilter | null | undefined): bool
   return false
 }
 
-function arrayFilter(ids: Array<string> | null, filter: TagFilter | null | undefined): boolean | null {
+function arrayFilter(ids: Array<string> | null, filter: TagFilter | null | undefined): boolean | null
+{
   // Check array style filters, eg Platforms or Genres
   if (!filter) {
     return null
@@ -165,14 +168,16 @@ function arrayFilter(ids: Array<string> | null, filter: TagFilter | null | undef
   return false
 }
 
-function isStringArray(array: any): array is string[] {
+function isStringArray(array: any): array is string[]
+{
   return Array.isArray(array)
     && typeof array === 'object'
     && typeof array[0] === 'string'
     && array.every((item: any) => typeof item === 'string')
 }
 
-function isTagFilter(obj: any): obj is TagFilter {
+function isTagFilter(obj: any): obj is TagFilter
+{
   if (typeof obj !== 'object' || !('Ids' in obj) || !('Text' in obj)) {
     return false
   }
@@ -184,18 +189,19 @@ function isTagFilter(obj: any): obj is TagFilter {
   return validIds || validText
 }
 
-function isTag(obj: any): obj is Tag {
+function isTag(obj: any): obj is Tag
+{
   if (typeof obj !== 'object' || !('Id' in obj) || !('Name' in obj)) {
     return false
   }
   return typeof obj.Id === 'string' && typeof obj.Name === 'string'
 }
 
-function matchesCondition(game: Game, filterSettings: FilterPresetSettings, key: keyof FilterPresetSettings): boolean {
-
+function matchesCondition(game: Game, filterSettings: FilterPresetSettings, key: keyof FilterPresetSettings): boolean
+{
   const filterConfig = filterToFieldMap[key]
 
-  // Unknown filter, if AND allow to pass, if OR don't match
+  // For unknown filters, if AND: allow to pass, if OR: don't match
   const fallback = filterSettings?.UseAndFilteringStyle || false
 
   if (!filterConfig.style || !filterConfig.field)
@@ -224,10 +230,6 @@ function matchesCondition(game: Game, filterSettings: FilterPresetSettings, key:
     return value.toLowerCase().includes(filter.toLowerCase())
   }
 
-  if (filterConfig.style === 'score') {
-    // TODO
-  }
-
   if (filterConfig.style === 'id') {
     if (!isTag(value) || !value.Id || !isTagFilter(filter)) {
       // Unexpected type
@@ -243,8 +245,42 @@ function matchesCondition(game: Game, filterSettings: FilterPresetSettings, key:
     return arrayFilter(value, filter) || false
   }
 
+  if (filterConfig.style === 'score') {
+    if (typeof filter !== 'number' || !(filter in ScoreGroup)) {
+      // Unexpected type
+      return fallback
+    }
+    if (filter === ScoreGroup.None) {
+      return value === null
+    } else if (value === null) {
+      return false
+    }
+    if (typeof value !== 'number') {
+      // Unexpected type
+      return fallback
+    }
+    return getScoreGroup(value) === filter
+  }
+
+  if (filterConfig.style === 'size') {
+    if (typeof value !== 'number' || typeof filter !== 'number' || !(filter in InstallSizeGroup)) {
+      return fallback
+    }
+    return getInstallSizeGroup(value) === filter
+  }
+
   if (filterConfig.style === 'date') {
-    // TODO
+    if (typeof value !== 'string' || typeof filter !== 'number' || !(filter in PastTimeSegment)) {
+      return fallback
+    }
+    return getPastTimeSegment(value) === filter
+  }
+
+  if (filterConfig.style === 'time') {
+    if (typeof value !== 'number' || typeof filter !== 'number' || !(filter in PlaytimeCategory)) {
+      return fallback
+    }
+    return getPlaytimeCategory(value) === filter
   }
 
   return fallback

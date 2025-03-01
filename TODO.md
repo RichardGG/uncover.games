@@ -1,30 +1,37 @@
 https://github.com/JosefNemec/Playnite
 
--- PRIORITIES --
+### PRIORITIES
+
 Review type names etc to match Playnite
+Install linter
+Filter panel
 Group By
-Anything that can be done UI agnostic
-Consider localization https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/Localization/LocSource.xaml
+Start planning two way sync
 Link to steam reviews https://store.steampowered.com/app/2208570/Dark_Hours/#app_reviews_hash
 Optional YouTube scope
 sanitize-html https://www.npmjs.com/package/sanitize-html
-GameFieldTypes feels a bit weird
+Other video results (list, tabs like reviews/playthroughs)
 
--- LATER --
-Filter panel
+### LATER
+
 Cover should be automatic width, remove animation stuff for now
 PrimeVue + Tailwind v4 (wait for update, see https://primevue.org/tailwind/#tailwind-theme)
 Consider human sorting with numbers https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/SortableNameConverter.cs#L8
+Consider localization https://github.com/JosefNemec/Playnite/blob/master/source/Playnite/Localization/LocSource.xaml
 
--- DESKTOP --
--- Plugins (Library) --
+## DESKTOP
+
+### Plugins (Library)
+
 https://api.playnite.link/docs/api/Playnite.SDK.IPlayniteAPI.html
 https://api.playnite.link/docs/api/Playnite.SDK.Plugins.LibraryPlugin.html
 IPlayniteAPI.Addons.Plugins
 if LibraryPlugin > Name
 
--- NOTES --
-Group By
+## NOTES
+
+### Group By
+
 Age Rating
 Category
 Community Score
@@ -52,3 +59,5 @@ Source
 Tag
 Time Played
 User Score
+
+'true' | 'false' | 'string' | 'id' | 'collection' | 'score' | 'size' | 'date' | 'time' | null

@@ -1,3 +1,5 @@
+// TODO consider using enum
+// https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L19
 export const GameFields = [
   'BackgroundImage',
   'Description',
@@ -84,4 +86,4 @@ export const GameFields = [
   'Name',
 ] as const
 
-export type GameField = typeof GameFields[number]; 
+export type GameField = typeof GameFields[number];

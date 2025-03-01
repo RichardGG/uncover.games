@@ -16,7 +16,8 @@ export type ListResponse = {
   files: Array<FileMetadata>,
 }
 
-export function getDriveFile(apiToken: string, fileId: string, responseType: ResponseType|undefined = undefined) {
+export function getDriveFile(apiToken: string, fileId: string, responseType: ResponseType|undefined = undefined)
+{
   return axios.get(`${DRIVE_BASE_URL}/${fileId}`, {
       params: {
         alt: 'media'
@@ -28,7 +29,8 @@ export function getDriveFile(apiToken: string, fileId: string, responseType: Res
     })
 }
 
-export function fetchFilesList(apiToken: string, files:Array<FileMetadata> = [], pageToken:string|null = null): Promise<Array<FileMetadata>> {
+export function fetchFilesList(apiToken: string, files:Array<FileMetadata> = [], pageToken:string|null = null): Promise<Array<FileMetadata>>
+{
   // Loads all pages of files
   return axios.get(DRIVE_BASE_URL, {
     params: {
