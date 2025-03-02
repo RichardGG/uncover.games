@@ -1,3 +1,3 @@
 export type LoadingStatus = {
-  state: 'pending'|'loading-cache'|'downloading'|'done'
-}
+  state: 'pending' | 'loading-cache' | 'downloading' | 'done';
+};

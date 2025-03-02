@@ -11,16 +11,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import TopPanel from 'src/components/TopPanel.vue'
+import { defineComponent } from 'vue';
+import TopPanel from 'src/components/TopPanel.vue';
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: { TopPanel },
 
-  setup () {
-    return {}
-  }
-})
+  setup() {
+    return {};
+  },
+});
 </script>

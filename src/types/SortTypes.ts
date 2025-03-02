@@ -65,10 +65,10 @@ export const sortTranslations: Record<SortOrder, string> = {
   [SortOrder.InstallSize]: 'Install Size',
   [SortOrder.RecentActivity]: 'Recent Activity',
   [SortOrder.RomList]: 'Image, ROM or ISO Path',
-}
+};
 
 // TODO this is the wrong thing to use, probably should just use SortOrder directly and translate after
 export type Sort = {
-  label: string | null,
-  value: SortOrder | null,
-}
+  label: string | null;
+  value: SortOrder | null;
+};

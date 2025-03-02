@@ -2,10 +2,17 @@ import { Game } from 'src/types/Game/Game';
 import { GameField } from 'src/types/Game/GameField';
 import { SortOrder, Sort } from 'src/types/SortTypes';
 
-type SortStyle = 'string' | 'number' | 'id' | 'collection' | 'date' | 'boolean' | null;
+type SortStyle =
+  | 'string'
+  | 'number'
+  | 'id'
+  | 'collection'
+  | 'date'
+  | 'boolean'
+  | null;
 
 interface SortConfig {
-  field: GameField|null;
+  field: GameField | null;
   style: SortStyle;
 }
 
@@ -134,33 +141,38 @@ export const sortConfigMap: Record<SortOrder, SortConfig> = {
     field: 'Roms',
     style: 'collection',
   },
-}
+};
 
-function compareGames(sortField: GameField, sortStyle: SortStyle, sortDesc: boolean, a: Game, b: Game): number
-{
+function compareGames(
+  sortField: GameField,
+  sortStyle: SortStyle,
+  sortDesc: boolean,
+  a: Game,
+  b: Game
+): number {
   if (!sortField) {
-    return 0
+    return 0;
   }
 
   // TODO confirm if need to swap these
   if (a[sortField] === null) {
-    return sortDesc ? -1 : 1
+    return sortDesc ? -1 : 1;
   }
   if (b[sortField] === null) {
-    return sortDesc ? 1 : -1
+    return sortDesc ? 1 : -1;
   }
 
   if (sortStyle === 'string') {
     if (typeof a[sortField] !== 'string') {
-      return 0
+      return 0;
     }
     if (typeof b[sortField] !== 'string') {
-      return 0
+      return 0;
     }
-    return a[sortField].localeCompare(b[sortField])
+    return a[sortField].localeCompare(b[sortField]);
   }
   if (sortStyle === 'number') {
-    return a[sortField] > b[sortField] ? 1 : -1
+    return a[sortField] > b[sortField] ? 1 : -1;
   }
   if (sortStyle === 'id') {
     // TODO need to evaluate the id
@@ -170,56 +182,56 @@ function compareGames(sortField: GameField, sortStyle: SortStyle, sortDesc: bool
   }
   if (sortStyle === 'date') {
     if (typeof a[sortField] !== 'string') {
-      return 0
+      return 0;
     }
     if (typeof b[sortField] !== 'string') {
-      return 0
+      return 0;
     }
-    return Date.parse(a[sortField]) > Date.parse(b[sortField]) ? 1 : -1
+    return Date.parse(a[sortField]) > Date.parse(b[sortField]) ? 1 : -1;
   }
   if (sortStyle === 'boolean') {
-    return a[sortField] > b[sortField] ? 1 : -1
+    return a[sortField] > b[sortField] ? 1 : -1;
   }
 
   // Unsupported sort
-  return 0
+  return 0;
 }
 
 export function sortGames(
   games: Array<Game>,
   sort: Sort | null,
-  sortDesc: boolean,
+  sortDesc: boolean
 ): Array<Game> {
   if (!sort) {
-    return games
+    return games;
   }
 
-  const sortType = sort.value
+  const sortType = sort.value;
   if (!sortType) {
-    return games
+    return games;
   }
 
-  const sortConfig = sortConfigMap[sortType]
+  const sortConfig = sortConfigMap[sortType];
   if (!sortConfig) {
-    return games
+    return games;
   }
 
-  const sortStyle = sortConfig.style
-  const sortField = sortConfig.field
+  const sortStyle = sortConfig.style;
+  const sortField = sortConfig.field;
 
   if (!sortStyle) {
     // Not supported (consider using Name?)
-    return games
+    return games;
   }
   if (!sortField) {
-    return games
+    return games;
   }
 
   return games.sort((a: Game, b: Game) => {
-    const result = compareGames(sortField, sortStyle, sortDesc, a, b)
+    const result = compareGames(sortField, sortStyle, sortDesc, a, b);
     if (sortDesc) {
-      return result * -1
+      return result * -1;
     }
-    return result
-  })
+    return result;
+  });
 }

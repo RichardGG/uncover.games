@@ -1,12 +1,24 @@
-import { map } from 'lodash'
-import { Game } from '../types/Game/Game'
-import { GameField } from '../types/Game/GameField'
-import { Tag } from '../types/Game/GameFieldTypes'
-import { format } from 'quasar'
+import { map } from 'lodash';
+import { Game } from '../types/Game/Game';
+import { GameField } from '../types/Game/GameField';
+import { Tag } from '../types/Game/GameFieldTypes';
+import { format } from 'quasar';
 
 export type GameValueTypeMap = {
-  [K in GameField]: 'text' | 'number' | 'bool' | 'object' | 'collection' | 'date' | 'duration' | 'image' | 'size' | 'score' | 'releasedate' | 'unsupported';
-}
+  [K in GameField]:
+    | 'text'
+    | 'number'
+    | 'bool'
+    | 'object'
+    | 'collection'
+    | 'date'
+    | 'duration'
+    | 'image'
+    | 'size'
+    | 'score'
+    | 'releasedate'
+    | 'unsupported';
+};
 
 export const GameValueTypes: GameValueTypeMap = {
   Description: 'text',
@@ -96,7 +108,6 @@ export const GameValueTypes: GameValueTypeMap = {
   CommunityScoreGroup: 'unsupported',
   CriticScoreGroup: 'unsupported',
 
-
   IncludeLibraryPluginAction: 'unsupported',
   GameActions: 'unsupported',
   OverrideInstallState: 'unsupported',
@@ -110,59 +121,59 @@ export const GameValueTypes: GameValueTypeMap = {
   PlaytimeCategory: 'unsupported',
   InstallSizeGroup: 'unsupported',
   InstallationStatus: 'unsupported',
-}
+};
 
 export const formatGameField = (game: Game, field: GameField): string => {
   if (GameValueTypes[field] === 'text' && typeof game[field] === 'string') {
-    return game[field] || ''
+    return game[field] || '';
   }
 
   if (GameValueTypes[field] === 'collection' && Array.isArray(game[field])) {
-    return map(game[field], 'Name').join(', ')
+    return map(game[field], 'Name').join(', ');
   }
 
   if (GameValueTypes[field] === 'object' && typeof game[field] === 'object') {
     const fieldObject = game[field] as Tag;
-    return fieldObject?.Name || ''
+    return fieldObject?.Name || '';
   }
 
   if (GameValueTypes[field] === 'date' && typeof game[field] === 'string') {
-    return game[field]
+    return game[field];
   }
 
   if (GameValueTypes[field] === 'duration' && typeof game[field] === 'number') {
-    const seconds = game[field]
+    const seconds = game[field];
     if (seconds < 60) {
-      return `${seconds} seconds`
+      return `${seconds} seconds`;
     }
-    const minutes = Math.floor(seconds / 60)
+    const minutes = Math.floor(seconds / 60);
     if (minutes < 60) {
-      return `${minutes} minutes`
+      return `${minutes} minutes`;
     }
-    const hours = Math.floor(minutes / 60)
-    return `${hours}h ${minutes % 60}m`
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ${minutes % 60}m`;
   }
 
   if (GameValueTypes[field] === 'size' && typeof game[field] === 'number') {
-    return format.humanStorageSize(game[field])
+    return format.humanStorageSize(game[field]);
   }
 
   if (GameValueTypes[field] === 'bool') {
-    return game[field] ? 'Yes' : 'No'
+    return game[field] ? 'Yes' : 'No';
   }
 
   if (GameValueTypes[field] === 'score' || GameValueTypes[field] === 'number') {
-    return (game[field] || '') + ''
+    return (game[field] || '') + '';
   }
 
   if (
-    GameValueTypes[field] === 'releasedate'
-    && typeof game[field] === 'object'
-    && game[field] !== null
-    && 'ReleaseDate' in game[field]
+    GameValueTypes[field] === 'releasedate' &&
+    typeof game[field] === 'object' &&
+    game[field] !== null &&
+    'ReleaseDate' in game[field]
   ) {
-    return game[field].ReleaseDate + ''
+    return game[field].ReleaseDate + '';
   }
 
-  return ''
-}
+  return '';
+};

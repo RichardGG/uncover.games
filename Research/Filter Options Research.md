@@ -1,7 +1,6 @@
 Filter Options Research
 Comparing list of filter options to parameters
 
-
 -- UI OPTIONS --
 Category
 Completion Status
@@ -22,7 +21,6 @@ Release Year
 Series
 Tag
 Time Played
-
 
 -- PARAMETERS --
 Added
@@ -55,7 +53,6 @@ Tag
 UseAndFilteringStyle
 UserScore
 Version
-
 
 -- MISSING --
 Added

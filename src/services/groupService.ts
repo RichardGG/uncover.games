@@ -1,9 +1,13 @@
 import dayjs from 'dayjs';
-import { InstallSizeGroup, PastTimeSegment, PlaytimeCategory, ScoreGroup } from 'src/types/FilterTypes';
+import {
+  InstallSizeGroup,
+  PastTimeSegment,
+  PlaytimeCategory,
+  ScoreGroup,
+} from 'src/types/FilterTypes';
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L1597
-export function getScoreGroup(score: number): ScoreGroup
-{
+export function getScoreGroup(score: number): ScoreGroup {
   if (score >= 0 && score < 10) {
     return ScoreGroup.O0x;
   }
@@ -38,37 +42,42 @@ export function getScoreGroup(score: number): ScoreGroup
 }
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L2367
-export function getNameGroup(name: string): string
-{
+export function getNameGroup(name: string): string {
   // TODO consider transforming name into sorting name
-  return name.toUpperCase().trim().charAt(0)
+  return name.toUpperCase().trim().charAt(0);
 }
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L2384
-export function getInstallSizeGroup(installSize: number): InstallSizeGroup
-{
+export function getInstallSizeGroup(installSize: number): InstallSizeGroup {
   if (installSize == null || installSize == 0) {
     return InstallSizeGroup.None;
   }
-  if (installSize <= 0x6400000) { //100MB
+  if (installSize <= 0x6400000) {
+    //100MB
     return InstallSizeGroup.S0_0MB_100MB;
   }
-  if (installSize <= 0x40000000) { //1GB
+  if (installSize <= 0x40000000) {
+    //1GB
     return InstallSizeGroup.S1_100MB_1GB;
   }
-  if (installSize <= 0x140000000) { //5GB
+  if (installSize <= 0x140000000) {
+    //5GB
     return InstallSizeGroup.S2_1GB_5GB;
   }
-  if (installSize <= 0x280000000) { //10GB
+  if (installSize <= 0x280000000) {
+    //10GB
     return InstallSizeGroup.S3_5GB_10GB;
   }
-  if (installSize <= 0x500000000) { //20GB
+  if (installSize <= 0x500000000) {
+    //20GB
     return InstallSizeGroup.S4_10GB_20GB;
   }
-  if (installSize <= 0xA00000000) { //40GB
+  if (installSize <= 0xa00000000) {
+    //40GB
     return InstallSizeGroup.S5_20GB_40GB;
   }
-  if (installSize <= 0x1900000000) { //100GB
+  if (installSize <= 0x1900000000) {
+    //100GB
     return InstallSizeGroup.S6_40GB_100GB;
   }
 
@@ -76,17 +85,15 @@ export function getInstallSizeGroup(installSize: number): InstallSizeGroup
 }
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L2441
-export function getInstallDriveGroup(path: string): string
-{
+export function getInstallDriveGroup(path: string): string {
   // The first letter is likely the install drive
-  return getNameGroup(path)
+  return getNameGroup(path);
 }
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L1531
-export function getPastTimeSegment(dateString: string): PastTimeSegment
-{
-  const date = dayjs(dateString)
-  const now = dayjs()
+export function getPastTimeSegment(dateString: string): PastTimeSegment {
+  const date = dayjs(dateString);
+  const now = dayjs();
   if (!date) {
     return PastTimeSegment.Never;
   }
@@ -100,7 +107,7 @@ export function getPastTimeSegment(dateString: string): PastTimeSegment
     return PastTimeSegment.PastWeek;
   }
   if (date.isAfter(now.subtract(31, 'day'))) {
-  return PastTimeSegment.PastMonth;
+    return PastTimeSegment.PastMonth;
   }
   if (date.isAfter(now.subtract(365, 'day'))) {
     return PastTimeSegment.PastYear;
@@ -110,10 +117,8 @@ export function getPastTimeSegment(dateString: string): PastTimeSegment
 }
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L1492C9-L1524C10
-export function getPlaytimeCategory(seconds: number): PlaytimeCategory
-{
-  if (seconds == 0)
-  {
+export function getPlaytimeCategory(seconds: number): PlaytimeCategory {
+  if (seconds == 0) {
     return PlaytimeCategory.NotPlayed;
   }
 

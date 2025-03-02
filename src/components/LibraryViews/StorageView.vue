@@ -11,8 +11,16 @@
       >
         <q-card>
           <q-card-section>
-            <pre v-if="type === 'Games'">{{ JSON.stringify(collectionsStore.collections[type]?.slice(0, 10), null, 2) }}</pre>
-            <pre v-else>{{ JSON.stringify(collectionsStore.collections[type], null, 2) }}</pre>
+            <pre v-if="type === 'Games'">{{
+              JSON.stringify(
+                collectionsStore.collections[type]?.slice(0, 10),
+                null,
+                2
+              )
+            }}</pre>
+            <pre v-else>{{
+              JSON.stringify(collectionsStore.collections[type], null, 2)
+            }}</pre>
           </q-card-section>
         </q-card>
       </q-expansion-item>
@@ -21,15 +29,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useCollectionsStore, CollectionTypes } from 'src/stores/collectionsStore'
+import { defineComponent } from 'vue';
+import {
+  useCollectionsStore,
+  CollectionTypes,
+} from 'src/stores/collectionsStore';
 
 export default defineComponent({
   name: 'StorageView',
-  setup () {
-    const collectionsStore = useCollectionsStore()
+  setup() {
+    const collectionsStore = useCollectionsStore();
 
-    return { collectionsStore, CollectionTypes }
-  }
-})
+    return { collectionsStore, CollectionTypes };
+  },
+});
 </script>

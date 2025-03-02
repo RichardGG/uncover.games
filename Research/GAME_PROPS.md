@@ -1,4 +1,5 @@
 # Basic Info
+
 Name
 Description
 CommunityScore
@@ -15,11 +16,13 @@ Favorite
 Notes
 
 # Images
+
 BackgroundImage
 CoverImage
 Icon
 
 # Tags etc
+
 AgeRatings
 Categories
 Developers
@@ -32,11 +35,13 @@ Series
 Tags
 
 # Playtime
+
 PlayCount
 Playtime
 PlaytimeCategory
 
 # Dates (Added Maybe useful?)
+
 Added
 AddedSegment
 Modified
@@ -47,6 +52,7 @@ RecentActivity
 RecentActivitySegment
 
 # Installation
+
 LastSizeScanDate
 InstallationStatus
 OverrideInstallState
@@ -55,6 +61,7 @@ InstallSize
 InstallSizeGroup
 
 # Meta and Game State
+
 IsCustomGame
 IsInstalled
 IsInstalling
@@ -75,6 +82,7 @@ SortingName
 Version
 
 # Ids (not useful)
+
 AgeRatingIds
 CategoryIds
 DeveloperIds
@@ -92,6 +100,7 @@ PluginId
 SourceId
 
 # Score metadata (Not useful?)
+
 CriticScoreGroup
 CriticScoreRating
 CommunityScoreGroup

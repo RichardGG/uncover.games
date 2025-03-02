@@ -84,6 +84,6 @@ export const GameFields = [
   'InstallationStatus',
   'Id',
   'Name',
-] as const
+] as const;
 
-export type GameField = typeof GameFields[number];
+export type GameField = (typeof GameFields)[number];

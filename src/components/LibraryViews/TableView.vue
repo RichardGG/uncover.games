@@ -15,13 +15,22 @@
     </template>
     <template #body-cell-Cover="props">
       <q-td>
-        <Cover :width="30" :file-name="props.row.CoverImage"  @click="() => uiStore.game = props.row" />
+        <Cover
+          :width="30"
+          :file-name="props.row.CoverImage"
+          @click="() => (uiStore.game = props.row)"
+        />
       </q-td>
     </template>
     <template #body-cell="props">
       <q-td :props="props">
         {{ props.value }}
-        <q-tooltip v-if="props.value" anchor="bottom left" self="top left" :offset="[-10, -10]">
+        <q-tooltip
+          v-if="props.value"
+          anchor="bottom left"
+          self="top left"
+          :offset="[-10, -10]"
+        >
           {{ props.value }}
         </q-tooltip>
       </q-td>
@@ -48,8 +57,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-import Cover from 'src/components/Cover.vue'
+import { computed, defineComponent } from 'vue';
+import Cover from 'src/components/Cover.vue';
 import { QTableColumn } from 'quasar';
 import { Game } from 'src/types/Game/Game';
 import { GameField } from 'src/types/Game/GameField';
@@ -64,45 +73,44 @@ export default defineComponent({
     games: {
       type: Array<Game>,
       default: [],
-    }
+    },
   },
-  setup () {
-    const uiStore = useUIStore()
-    let columnMap: Partial<{[K in GameField]: string}> = {
-      'Name': 'Name',
-      'Platforms': 'Platform',
+  setup() {
+    const uiStore = useUIStore();
+    let columnMap: Partial<{ [K in GameField]: string }> = {
+      Name: 'Name',
+      Platforms: 'Platform',
       // 'Library': 'Library', IDK
-      'Developers': 'Developer',
-      'Publishers': 'Publisher',
-      'ReleaseDate': 'Release Date',
-      'Genres': 'Genre',
-      'Categories': 'Category',
-      'Features': 'Features',
-      'Tags': 'Tag',
-      'IsInstalled': 'Installed',
-      'InstallDirectory': 'Installation Folder',
-      'InstallSize': 'Install Size',
-      'Roms': 'Image, ROM, or ISO Path',
-      'LastActivity': 'Last Played',
-      'RecentActivity': 'Recent Activity',
-      'Playtime': 'Time Played',
-      'PlayCount': 'Play Count',
-      'CompletionStatus': 'Completion Status',
-      'Series': 'Series',
-      'Version': 'Version',
-      'AgeRatings': 'Age Rating',
-      'Regions': 'Region',
-      'Source': 'Source',
-      'Added': 'Added',
-      'Modified': 'Modified',
-      'UserScore': 'User Score',
-      'CriticScore': 'Critic Score',
-      'CommunityScore': 'Community Score',
-    }
+      Developers: 'Developer',
+      Publishers: 'Publisher',
+      ReleaseDate: 'Release Date',
+      Genres: 'Genre',
+      Categories: 'Category',
+      Features: 'Features',
+      Tags: 'Tag',
+      IsInstalled: 'Installed',
+      InstallDirectory: 'Installation Folder',
+      InstallSize: 'Install Size',
+      Roms: 'Image, ROM, or ISO Path',
+      LastActivity: 'Last Played',
+      RecentActivity: 'Recent Activity',
+      Playtime: 'Time Played',
+      PlayCount: 'Play Count',
+      CompletionStatus: 'Completion Status',
+      Series: 'Series',
+      Version: 'Version',
+      AgeRatings: 'Age Rating',
+      Regions: 'Region',
+      Source: 'Source',
+      Added: 'Added',
+      Modified: 'Modified',
+      UserScore: 'User Score',
+      CriticScore: 'Critic Score',
+      CommunityScore: 'Community Score',
+    };
 
     const columns = computed(() => {
-
-      const sort = uiStore.sort?.value
+      const sort = uiStore.sort?.value;
 
       // TODO custom columns, custom order
       let columns: QTableColumn[] = [
@@ -117,11 +125,12 @@ export default defineComponent({
           field: 'Cover',
         },
         {
-          label: 'Sort ' + (sort ? sortConfigMap[sort]?.field || 'Name' : 'Name'),
+          label:
+            'Sort ' + (sort ? sortConfigMap[sort]?.field || 'Name' : 'Name'),
           name: 'Sort',
-          field: sort ? sortConfigMap[sort]?.field || 'Name' : 'Name'
-        }
-      ]
+          field: sort ? sortConfigMap[sort]?.field || 'Name' : 'Name',
+        },
+      ];
 
       for (const key in columnMap) {
         const field = key as GameField;
@@ -129,7 +138,7 @@ export default defineComponent({
           label: columnMap[field] || '',
           name: columnMap[field] || '',
           field: (game: Game) => formatGameField(game, field),
-        })
+        });
       }
 
       columns = columns.map((item) => ({
@@ -138,19 +147,18 @@ export default defineComponent({
         // style: 'min-width: 200px; max-width: 500px; white-space: normal;',
         style: 'max-width: 500px; overflow: hidden;',
         classes: 'game-table-cell',
-      }))
+      }));
 
-      return columns
-    })
+      return columns;
+    });
 
-    const openLink = (url: string) => window.open(url, '_blank')
-    return { columns, openLink, uiStore }
-  }
-})
+    const openLink = (url: string) => window.open(url, '_blank');
+    return { columns, openLink, uiStore };
+  },
+});
 </script>
 
 <style>
-  .game-table-cell:hover {
-
-  }
+.game-table-cell:hover {
+}
 </style>

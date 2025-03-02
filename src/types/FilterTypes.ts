@@ -1,51 +1,51 @@
 export type TagFilter = {
-  Ids: Array<string> | null,
-  Text: string | null,
-}
+  Ids: Array<string> | null;
+  Text: string | null;
+};
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L83
 export type FilterPresetSettings = {
-  UseAndFilteringStyle: boolean,
-  IsInstalled: boolean,
-  IsUnInstalled: boolean,
-  Hidden: boolean,
-  Favorite: boolean,
-  Name: TagFilter | null,
-  Version: TagFilter | null,
-  ReleaseYear: TagFilter | null,
-  Genre: TagFilter | null,
-  Platform: TagFilter | null,
-  Publisher: TagFilter | null,
-  Developer: TagFilter | null,
-  Category: TagFilter | null,
-  Tag: TagFilter | null,
-  Series: TagFilter | null,
-  Region: TagFilter | null,
-  Source: TagFilter | null,
-  AgeRating: TagFilter | null,
-  Library: TagFilter | null,
-  Feature: TagFilter | null,
-  UserScore: TagFilter | null,
-  CriticScore: TagFilter | null,
-  CommunityScore: TagFilter | null,
-  LastActivity: TagFilter | null,
-  RecentActivity: TagFilter | null,
-  Added: TagFilter | null,
-  Modified: TagFilter | null,
-  PlayTime: TagFilter | null,
-  InstallSize: TagFilter | null,
-  CompletionStatuses: TagFilter | null,
-}
+  UseAndFilteringStyle: boolean;
+  IsInstalled: boolean;
+  IsUnInstalled: boolean;
+  Hidden: boolean;
+  Favorite: boolean;
+  Name: TagFilter | null;
+  Version: TagFilter | null;
+  ReleaseYear: TagFilter | null;
+  Genre: TagFilter | null;
+  Platform: TagFilter | null;
+  Publisher: TagFilter | null;
+  Developer: TagFilter | null;
+  Category: TagFilter | null;
+  Tag: TagFilter | null;
+  Series: TagFilter | null;
+  Region: TagFilter | null;
+  Source: TagFilter | null;
+  AgeRating: TagFilter | null;
+  Library: TagFilter | null;
+  Feature: TagFilter | null;
+  UserScore: TagFilter | null;
+  CriticScore: TagFilter | null;
+  CommunityScore: TagFilter | null;
+  LastActivity: TagFilter | null;
+  RecentActivity: TagFilter | null;
+  Added: TagFilter | null;
+  Modified: TagFilter | null;
+  PlayTime: TagFilter | null;
+  InstallSize: TagFilter | null;
+  CompletionStatuses: TagFilter | null;
+};
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L243
 export type FilterPreset = {
-  Settings: FilterPresetSettings | null,
-  Id: string | null,
-  Name: string | null,
-  GroupingOrder: number | null, // TODO should be an enum from export?
-  SortingOrder: number | null, // TODO should be an enum from export?
-  SortingOrderDirection: number | null, // TODO should be an enum from export?
-}
+  Settings: FilterPresetSettings | null;
+  Id: string | null;
+  Name: string | null;
+  GroupingOrder: number | null; // TODO should be an enum from export?
+  SortingOrder: number | null; // TODO should be an enum from export?
+  SortingOrderDirection: number | null; // TODO should be an enum from export?
+};
 
 // TODO consider if we want the options here or set against type
 // TODO consider if we want the type here or just in filterService
@@ -84,8 +84,8 @@ export const filterTranslations: Record<keyof FilterPresetSettings, string> = {
   Modified: 'Date Modified',
   PlayTime: 'Time Played',
   InstallSize: 'Install Size',
-  CompletionStatuses: 'Completion Status'
-}
+  CompletionStatuses: 'Completion Status',
+};
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/PastTimeSegment.cs
 export enum PastTimeSegment {
@@ -105,8 +105,8 @@ export const pastTimeSegmentTranslations: Record<PastTimeSegment, string> = {
   [PastTimeSegment.PastMonth]: 'In past 31 days',
   [PastTimeSegment.PastYear]: 'In past 365 days',
   [PastTimeSegment.MoreThenYear]: 'More than 365 days ago',
-  [PastTimeSegment.Never]: 'Never'
-}
+  [PastTimeSegment.Never]: 'Never',
+};
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/ScoreGroup.cs
 export enum ScoreGroup {
@@ -135,7 +135,7 @@ export const scoreGroupTranslations: Record<ScoreGroup, string> = {
   [ScoreGroup.O8x]: '8x',
   [ScoreGroup.O9x]: '9x',
   [ScoreGroup.None]: 'None',
-}
+};
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/InstallSizeGroup.cs
 export enum InstallSizeGroup {
@@ -160,7 +160,7 @@ export const installSizeGroupTranslations: Record<InstallSizeGroup, string> = {
   [InstallSizeGroup.S5_20GB_40GB]: '20GB to 40GB',
   [InstallSizeGroup.S6_40GB_100GB]: '40GB to 100GB',
   [InstallSizeGroup.S7_100GBPlus]: '100GB or more',
-}
+};
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/PlaytimeCategory.cs
 export enum PlaytimeCategory {
@@ -181,4 +181,4 @@ export const playtimeCategoryTranslations: Record<PlaytimeCategory, string> = {
   [PlaytimeCategory.O100_500]: '100 to 500 hours',
   [PlaytimeCategory.O500_1000]: '500 to 1000 hours',
   [PlaytimeCategory.O1000plus]: 'Over 1000 hours',
-}
+};
