@@ -1,3 +1,5 @@
+import { CollectionsData } from 'src/stores/collectionsStore';
+
 export type TagFilter = {
   Ids: Array<string> | null;
   Text: string | null;
@@ -85,6 +87,42 @@ export const filterTranslations: Record<keyof FilterPresetSettings, string> = {
   PlayTime: 'Time Played',
   InstallSize: 'Install Size',
   CompletionStatuses: 'Completion Status',
+};
+
+export const filterOptionLists: Record<
+  keyof FilterPresetSettings,
+  keyof CollectionsData | null
+> = {
+  UseAndFilteringStyle: null,
+  IsInstalled: null,
+  IsUnInstalled: null,
+  Hidden: null,
+  Favorite: null,
+  Name: null,
+  Version: null,
+  ReleaseYear: null,
+  Genre: 'Genres',
+  Platform: 'Platforms',
+  Publisher: 'Companies',
+  Developer: 'Companies',
+  Category: 'Categories',
+  Tag: 'Tags',
+  Series: 'Series',
+  Region: 'Regions',
+  Source: 'Sources',
+  AgeRating: 'AgeRatings',
+  Library: null,
+  Feature: 'Features',
+  UserScore: null,
+  CriticScore: null,
+  CommunityScore: null,
+  LastActivity: null,
+  RecentActivity: null,
+  Added: null,
+  Modified: null,
+  PlayTime: null,
+  InstallSize: null,
+  CompletionStatuses: 'CompletionStatuses',
 };
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/PastTimeSegment.cs

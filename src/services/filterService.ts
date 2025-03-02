@@ -35,7 +35,10 @@ interface FilterConfig {
   style: FilterStyle;
 }
 
-const filterToFieldMap: Record<keyof FilterPresetSettings, FilterConfig> = {
+export const filterToFieldMap: Record<
+  keyof FilterPresetSettings,
+  FilterConfig
+> = {
   UseAndFilteringStyle: {
     field: null,
     style: null,

@@ -146,6 +146,16 @@
                   </q-item-section>
                   <q-item-section> Table </q-item-section>
                 </q-item>
+                <q-item clickable @click="() => (view = 'filter')">
+                  <q-item-section avatar>
+                    <q-icon
+                      v-if="view === 'filter'"
+                      color="primary"
+                      name="check"
+                    />
+                  </q-item-section>
+                  <q-item-section> Filter Edit </q-item-section>
+                </q-item>
                 <q-item clickable @click="() => (view = 'storage')">
                   <q-item-section avatar>
                     <q-icon
