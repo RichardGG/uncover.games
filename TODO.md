@@ -3,13 +3,11 @@ https://github.com/JosefNemec/Playnite
 ### PRIORITIES
 
 Review type names etc to match Playnite
-Install linter
 Filter panel
 Group By
 Start planning two way sync
 Link to steam reviews https://store.steampowered.com/app/2208570/Dark_Hours/#app_reviews_hash
 Optional YouTube scope
-sanitize-html https://www.npmjs.com/package/sanitize-html
 Other video results (list, tabs like reviews/playthroughs)
 
 ### LATER

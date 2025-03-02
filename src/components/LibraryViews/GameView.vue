@@ -32,7 +32,7 @@
       ></iframe>
       <Cover :title="game.Name" :file-name="game.CoverImage" :width="200" />
       <h2>{{ formatGameField(game, 'Name') }}</h2>
-      <div v-html="formatGameField(game, 'Description')" />
+      <div v-html="description" />
       <table>
         <template v-for="field in GameFields" :key="field">
           <tr
@@ -55,6 +55,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
+import * as sanitizeHtml from 'sanitize-html';
 import { useUIStore } from 'src/stores/uiStore';
 import { GameFields } from 'src/types/Game/GameField';
 import { formatGameField } from 'src/services/formatService';
@@ -69,15 +70,22 @@ export default defineComponent({
   components: { Cover },
   setup() {
     const googleAuthStore = useGoogleAuthStore();
-    const filtersStore = useUIStore();
+    const uiStore = useUIStore();
     const driveStore = useDriveStore();
-    const { game } = storeToRefs(filtersStore);
+    const { game } = storeToRefs(uiStore);
     const videoId = ref('');
+    const bgUrl = ref('');
     const videoWidth = computed(() =>
       window.innerWidth < 600 ? window.innerWidth - 40 : 600
     );
     const videoHeight = computed(() => videoWidth.value * (9 / 16));
-    const bgUrl = ref('');
+    const description = sanitizeHtml(
+      formatGameField(game.value, 'Description'),
+      {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+      }
+    );
+
     watch(
       () => game.value?.Name,
       (name) => {
@@ -117,6 +125,7 @@ export default defineComponent({
       videoWidth,
       videoHeight,
       bgUrl,
+      description,
     };
   },
 });
