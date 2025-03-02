@@ -29,9 +29,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { filterToFieldMap } from 'src/services/filterService';
 import {
+  emptyFilter,
   filterOptionLists,
   FilterPresetSettings,
   filterTranslations,
@@ -51,6 +52,7 @@ import {
 } from 'src/stores/collectionsStore';
 import { storeToRefs } from 'pinia';
 import { Tag } from 'src/types/Game/GameFieldTypes';
+import { useUIStore } from 'src/stores/uiStore';
 
 export default defineComponent({
   name: 'FilterView',
@@ -58,41 +60,13 @@ export default defineComponent({
   props: {},
   setup(props) {
     const collectionsStore = useCollectionsStore();
+    const uiStore = useUIStore();
     const { collections } = storeToRefs(collectionsStore);
+    const { currentFilter } = storeToRefs(uiStore);
 
-    // TODO load in current settings
-    const filterSettings = ref<FilterPresetSettings>({
-      UseAndFilteringStyle: false,
-      IsInstalled: false,
-      IsUnInstalled: false,
-      Hidden: false,
-      Favorite: false,
-      Name: null,
-      Version: null,
-      ReleaseYear: null,
-      Genre: null,
-      Platform: null,
-      Publisher: null,
-      Developer: null,
-      Category: null,
-      Tag: null,
-      Series: null,
-      Region: null,
-      Source: null,
-      AgeRating: null,
-      Library: null,
-      Feature: null,
-      UserScore: null,
-      CriticScore: null,
-      CommunityScore: null,
-      LastActivity: null,
-      RecentActivity: null,
-      Added: null,
-      Modified: null,
-      PlayTime: null,
-      InstallSize: null,
-      CompletionStatuses: null,
-    });
+    const filterSettings = ref<FilterPresetSettings>(
+      currentFilter.value?.Settings || emptyFilter
+    );
 
     // TODO move to service
     const fields = computed(() => {
@@ -171,6 +145,13 @@ export default defineComponent({
           options: options,
         };
       });
+    });
+
+    // TODO watch filterSettings, on change update currentFilter and set Id to null
+    // TODO add a Name field for filter, indicate when unsaved (no Id)
+
+    watch(currentFilter, (filter) => {
+      filterSettings.value = filter.Settings || emptyFilter;
     });
 
     return { fields, filterSettings };

@@ -39,6 +39,39 @@ export type FilterPresetSettings = {
   CompletionStatuses: TagFilter | null;
 };
 
+export const emptyFilter: FilterPresetSettings = {
+  UseAndFilteringStyle: false,
+  IsInstalled: false,
+  IsUnInstalled: false,
+  Hidden: false,
+  Favorite: false,
+  Name: null,
+  Version: null,
+  ReleaseYear: null,
+  Genre: null,
+  Platform: null,
+  Publisher: null,
+  Developer: null,
+  Category: null,
+  Tag: null,
+  Series: null,
+  Region: null,
+  Source: null,
+  AgeRating: null,
+  Library: null,
+  Feature: null,
+  UserScore: null,
+  CriticScore: null,
+  CommunityScore: null,
+  LastActivity: null,
+  RecentActivity: null,
+  Added: null,
+  Modified: null,
+  PlayTime: null,
+  InstallSize: null,
+  CompletionStatuses: null,
+};
+
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L243
 export type FilterPreset = {
   Settings: FilterPresetSettings | null;
