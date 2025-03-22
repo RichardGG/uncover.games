@@ -34,7 +34,7 @@ import { filterToFieldMap } from 'src/services/filterService';
 import {
   emptyFilter,
   filterOptionLists,
-  FilterPresetSettings,
+  FilterSettings,
   filterTranslations,
   InstallSizeGroup,
   installSizeGroupTranslations,
@@ -64,14 +64,14 @@ export default defineComponent({
     const { collections } = storeToRefs(collectionsStore);
     const { currentFilter } = storeToRefs(uiStore);
 
-    const filterSettings = ref<FilterPresetSettings>(
+    const filterSettings = ref<FilterSettings>(
       currentFilter.value?.Settings || emptyFilter
     );
 
     // TODO move to service
     const fields = computed(() => {
       return Object.keys(filterToFieldMap).map((keyString: string) => {
-        const key = keyString as keyof FilterPresetSettings;
+        const key = keyString as keyof FilterSettings;
         const style = filterToFieldMap[key].style;
         let options = null;
         if (style === 'id' || style === 'collection') {

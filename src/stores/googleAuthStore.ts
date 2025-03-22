@@ -31,7 +31,7 @@ export const useGoogleAuthStore = defineStore('googleAuth', {
     getToken(): string {
       if (!this.token) {
         this.startAuth();
-        throw Error('No token available');
+        throw Error('No token available, redirecting to Google Auth');
       }
       return this.token;
     },

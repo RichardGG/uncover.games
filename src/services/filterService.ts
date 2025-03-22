@@ -17,6 +17,7 @@ import {
   getPlaytimeCategory,
   getScoreGroup,
 } from './groupService';
+import dayjs from 'dayjs';
 
 type FilterStyle =
   | 'true'
@@ -28,6 +29,7 @@ type FilterStyle =
   | 'size'
   | 'date'
   | 'time'
+  | 'year'
   | null;
 
 interface FilterConfig {
@@ -69,7 +71,7 @@ export const filterToFieldMap: Record<
   },
   ReleaseYear: {
     field: 'ReleaseYear',
-    style: 'date',
+    style: 'year',
   },
   Genre: {
     field: 'Genres',
@@ -161,6 +163,11 @@ export const filterToFieldMap: Record<
   },
 };
 
+// TODO filter types (dropdown)
+
+// Single value field
+// IsFilterMatchingSingle (OR) https://github.com/JosefNemec/Playnite/blob/0d6ecf6e0aa1f613c05411a8a1f94b4ba13ded6e/source/Playnite/Database/GameDatabase_Filters.cs#L208
+// IsFilterMatchingSingleOnly (AND) https://github.com/JosefNemec/Playnite/blob/0d6ecf6e0aa1f613c05411a8a1f94b4ba13ded6e/source/Playnite/Database/GameDatabase_Filters.cs#L119C22-L119C48
 function idFilter(
   id: string | null,
   filter: TagFilter | null | undefined
@@ -181,6 +188,9 @@ function idFilter(
   return false;
 }
 
+// Collection value field
+// IsFilterMatching (OR) https://github.com/JosefNemec/Playnite/blob/0d6ecf6e0aa1f613c05411a8a1f94b4ba13ded6e/source/Playnite/Database/GameDatabase_Filters.cs#L75
+// IsFilterMatchingList (AND) https://github.com/JosefNemec/Playnite/blob/0d6ecf6e0aa1f613c05411a8a1f94b4ba13ded6e/source/Playnite/Database/GameDatabase_Filters.cs#L162C22-L162C42
 function arrayFilter(
   ids: Array<string> | null,
   filter: TagFilter | null | undefined
@@ -234,8 +244,8 @@ function matchesCondition(
 ): boolean {
   const filterConfig = filterToFieldMap[key];
 
-  // For unknown filters, if AND: allow to pass, if OR: don't match
-  const fallback = filterSettings?.UseAndFilteringStyle || false;
+  // For unknown filters, allow to pass
+  const fallback = true;
 
   if (!filterConfig.style || !filterConfig.field) {
     // Unsupported filter
@@ -327,6 +337,13 @@ function matchesCondition(
     return getPlaytimeCategory(value) === filter;
   }
 
+  if (filterConfig.style === 'year') {
+    if (typeof value !== 'string' || typeof filter !== 'number') {
+      return fallback;
+    }
+    return dayjs(value).year === filter;
+  }
+
   return fallback;
 }
 
@@ -336,6 +353,8 @@ function matchesFilter(
   search: string
 ): boolean {
   // Checks if a game matches a filter set
+
+  // TODO Installed/Uninstalled should be handled slightly differntly
 
   // Return early if using quick search and it doesn't match
   if (
@@ -353,7 +372,6 @@ function matchesFilter(
   const keys = Object.keys(currentFilter.Settings) as Array<
     keyof typeof currentFilter.Settings
   >;
-  const andStyle = currentFilter.Settings?.UseAndFilteringStyle;
   let appliedCondition = false;
 
   for (const key of keys) {
@@ -369,19 +387,15 @@ function matchesFilter(
       key
     );
 
-    if (andStyle && !matches) {
-      // AND style, stop searching if any condition doesn't match
+    if (!matches) {
+      // Stop searching if any condition doesn't match
       return false;
-    }
-    if (!andStyle && matches) {
-      // OR style, stop searching if any condition matches
-      return true;
     }
   }
   // If no conditions set, always pass
   // If AND and didn't previously fail return true
   // If OR and didn't previously pass return false
-  return !appliedCondition || andStyle || false;
+  return !appliedCondition || false;
 }
 
 export function filterGames(

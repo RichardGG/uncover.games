@@ -12,9 +12,9 @@ export type FilterPresetSettings = {
   IsUnInstalled: boolean;
   Hidden: boolean;
   Favorite: boolean;
-  Name: TagFilter | null;
+  Name: string | null;
   Version: TagFilter | null;
-  ReleaseYear: TagFilter | null;
+  ReleaseYear: number | null;
   Genre: TagFilter | null;
   Platform: TagFilter | null;
   Publisher: TagFilter | null;
@@ -39,7 +39,54 @@ export type FilterPresetSettings = {
   CompletionStatuses: TagFilter | null;
 };
 
-export const emptyFilter: FilterPresetSettings = {
+// TODO consider removing nulls
+export type IdItemFilterItemProperties = {
+  Ids: Array<string> | null;
+  Text: string | null;
+};
+
+export type EnumFilterItemProperties = {
+  Values: Array<number> | null;
+};
+
+export type StringFilterItemProperties = {
+  Values: Array<string> | null;
+};
+
+export type FilterSettings = {
+  Name: string | null;
+  Genre: IdItemFilterItemProperties | null;
+  Platform: IdItemFilterItemProperties | null;
+  ReleaseYear: StringFilterItemProperties | null;
+  Version: string | null;
+  Publisher: IdItemFilterItemProperties | null;
+  Developer: IdItemFilterItemProperties | null;
+  Category: IdItemFilterItemProperties | null;
+  Tag: IdItemFilterItemProperties | null;
+  Series: IdItemFilterItemProperties | null;
+  Region: IdItemFilterItemProperties | null;
+  Source: IdItemFilterItemProperties | null;
+  AgeRating: IdItemFilterItemProperties | null;
+  UseAndFilteringStyle: boolean | null;
+  IsInstalled: boolean | null;
+  IsUnInstalled: boolean | null;
+  Hidden: boolean | null;
+  Favorite: boolean | null;
+  Library: IdItemFilterItemProperties | null;
+  CompletionStatuses: IdItemFilterItemProperties | null;
+  UserScore: EnumFilterItemProperties | null;
+  CriticScore: EnumFilterItemProperties | null;
+  CommunityScore: EnumFilterItemProperties | null;
+  LastActivity: EnumFilterItemProperties | null;
+  RecentActivity: EnumFilterItemProperties | null;
+  Added: EnumFilterItemProperties | null;
+  Modified: EnumFilterItemProperties | null;
+  PlayTime: EnumFilterItemProperties | null;
+  InstallSize: EnumFilterItemProperties | null;
+  Feature: IdItemFilterItemProperties | null;
+};
+
+export const emptyFilter: FilterSettings = {
   UseAndFilteringStyle: false,
   IsInstalled: false,
   IsUnInstalled: false,
@@ -74,7 +121,7 @@ export const emptyFilter: FilterPresetSettings = {
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L243
 export type FilterPreset = {
-  Settings: FilterPresetSettings | null;
+  Settings: FilterSettings | null;
   Id: string | null;
   Name: string | null;
   GroupingOrder: number | null; // TODO should be an enum from export?
@@ -89,7 +136,7 @@ interface FilterOptionConfig {
   options: [];
 }
 
-export const filterTranslations: Record<keyof FilterPresetSettings, string> = {
+export const filterTranslations: Record<keyof FilterSettings, string> = {
   UseAndFilteringStyle: 'Match all Filters',
   IsInstalled: 'Installed',
   IsUnInstalled: 'Not Installed',
@@ -123,7 +170,7 @@ export const filterTranslations: Record<keyof FilterPresetSettings, string> = {
 };
 
 export const filterOptionLists: Record<
-  keyof FilterPresetSettings,
+  keyof FilterSettings,
   keyof CollectionsData | null
 > = {
   UseAndFilteringStyle: null,

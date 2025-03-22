@@ -20,6 +20,7 @@ import { storeToRefs } from 'pinia';
 import GameView from './LibraryViews/GameView.vue';
 import { filterGames } from 'src/services/filterService';
 import { sortGames } from 'src/services/sortService';
+import { GetFilteredGames } from 'src/services/newFilterService';
 
 export default defineComponent({
   name: 'LibraryPanel',
@@ -31,8 +32,16 @@ export default defineComponent({
 
     const games = computed(() => {
       let games = collectionsStore.collections.Games;
-      games = filterGames(games, uiStore.currentFilter, uiStore.search);
-      games = sortGames(games, uiStore.sort, uiStore.sortDesc);
+      if (!games) {
+        return;
+      }
+      if (uiStore.currentFilter?.Settings) {
+        console.log('getting filtered games', games[0]);
+        games = GetFilteredGames(games, uiStore.currentFilter.Settings, false);
+        console.log('done', games);
+      }
+      // games = filterGames(games, uiStore.currentFilter, uiStore.search);
+      // games = sortGames(games, uiStore.sort, uiStore.sortDesc);
       return games;
     });
 
