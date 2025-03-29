@@ -1,0 +1,97 @@
+<script setup lang="ts">
+import { ref, onMounted, watch, nextTick } from 'vue'
+import { storeToRefs } from 'pinia'
+import { Button } from 'primevue'
+import { PhLockSimple, PhLockSimpleOpen } from '@phosphor-icons/vue'
+import BottomSheet from '@douxcode/vue-spring-bottom-sheet'
+import '@douxcode/vue-spring-bottom-sheet/dist/style.css'
+import { useAppStore } from '../../stores/appStore.ts'
+import GameDetails from '../views/GameDetails.vue'
+import CustomFilters from '../views/CustomFilters.vue'
+
+const appStore = useAppStore()
+const { gameOpen, customFilterOpen } = storeToRefs(appStore)
+
+const gameSheet = ref<InstanceType<typeof BottomSheet>>()
+const customFilterSheet = ref<InstanceType<typeof BottomSheet>>()
+const maxSheetHeight = ref(0)
+const lockSheet = ref(false)
+
+watch(gameOpen, (val) => {
+  if (val) {
+    gameSheet.value?.open()
+  } else {
+    gameSheet.value?.close()
+  }
+})
+
+watch(customFilterOpen, (val) => {
+  if (val) {
+    customFilterSheet.value?.open()
+  } else {
+    customFilterSheet.value?.close()
+  }
+})
+
+onMounted(() => {
+  if (gameOpen.value) {
+    customFilterOpen.value = false
+    nextTick(function () {
+      gameSheet.value?.open()
+    })
+  } else if (customFilterOpen.value) {
+    nextTick(function () {
+      customFilterSheet.value?.open()
+    })
+  }
+})
+</script>
+
+<template>
+  <BottomSheet
+    ref="gameSheet"
+    :snap-points="[300, maxSheetHeight]"
+    :expand-on-content-drag="!lockSheet"
+    :blocking="false"
+    @max-height="(n) => (maxSheetHeight = n)"
+    @closed="gameOpen = false"
+  >
+    <template #header>
+      <div class="h-1" />
+      <Button
+        size="small"
+        severity="secondary"
+        :text="!lockSheet"
+        class="!absolute -top-0.5 right-1 bg-black/0! border-0!"
+        @click="lockSheet = !lockSheet"
+      >
+        <template #icon>
+          <PhLockSimple class="shrink-0" :size="18" v-if="lockSheet" />
+          <PhLockSimpleOpen class="shrink-0" :size="18" v-else />
+        </template>
+      </Button>
+    </template>
+    <div class="-mt-[1vh]">
+      <GameDetails />
+    </div>
+  </BottomSheet>
+
+  <BottomSheet
+    ref="customFilterSheet"
+    :snap-points="[300, maxSheetHeight]"
+    @max-height="(n) => (maxSheetHeight = n)"
+    @closed="customFilterOpen = false"
+  >
+    <div class="-mt-[1vh]">
+      <CustomFilters />
+    </div>
+  </BottomSheet>
+</template>
+
+<style lang="css">
+:root {
+  --vsbs-background: var(--p-content-background);
+  --vsbs-handle-background: var(--p-content-border-color);
+  --vsbs-padding-x: 0px;
+}
+</style>
