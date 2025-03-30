@@ -11,6 +11,12 @@ import MobileBottomSheet from './components/panels/MobileBottomSheet.vue'
 
 const appStore = useAppStore()
 const { isMobile } = storeToRefs(appStore)
+
+window.addEventListener('popstate', () => {
+  appStore.loadFromUrl()
+})
+
+appStore.loadFromUrl()
 </script>
 
 <template>

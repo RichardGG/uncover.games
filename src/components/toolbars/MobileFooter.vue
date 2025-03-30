@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
 import { Button } from 'primevue'
-import SavedFilters from '../menus/SavedFilters.vue'
+import SavedFilters from '../menus/SavedFiltersMenu.vue'
 import {
   PhBookmarksSimple,
   PhFunnel,
@@ -11,11 +11,15 @@ import {
 } from '@phosphor-icons/vue'
 import { useAppStore } from '../../stores/appStore.ts'
 import { storeToRefs } from 'pinia'
+import LayoutMenu from '../menus/LayoutMenu.vue'
+import SortMenu from '../menus/SortMenu.vue'
 
 const appStore = useAppStore()
 const { customFilterOpen } = storeToRefs(appStore)
 
 const savedFiltersMenu = useTemplateRef('saved-filters-menu')
+const layoutMenu = useTemplateRef('layout-menu')
+const sortMenu = useTemplateRef('sort-menu')
 </script>
 
 <template>
@@ -28,7 +32,6 @@ const savedFiltersMenu = useTemplateRef('saved-filters-menu')
       severity="secondary"
       text
       class="w-1/5 mx-2 h-14 text-[14px]!"
-      size="small"
       @click="customFilterOpen = true"
     >
       <template #icon>
@@ -41,12 +44,13 @@ const savedFiltersMenu = useTemplateRef('saved-filters-menu')
       severity="secondary"
       text
       class="w-1/5 mx-2 h-14 text-[14px]!"
-      size="small"
+      @click="sortMenu?.menu?.toggle($event)"
     >
       <template #icon>
         <PhSortAscending :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
+    <SortMenu ref="sort-menu" />
     <Button
       label="Saved"
       icon-pos="top"
@@ -66,7 +70,6 @@ const savedFiltersMenu = useTemplateRef('saved-filters-menu')
       severity="secondary"
       text
       class="w-1/5 mx-2 h-14 text-[14px]!"
-      size="small"
     >
       <template #icon>
         <PhStack :size="24" class="shrink-0 -mb-2" />
@@ -78,11 +81,12 @@ const savedFiltersMenu = useTemplateRef('saved-filters-menu')
       severity="secondary"
       text
       class="w-1/5 mx-2 h-14 text-[14px]!"
-      size="small"
+      @click="layoutMenu?.menu?.toggle($event)"
     >
       <template #icon>
         <PhLayout :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
+    <LayoutMenu ref="layout-menu" />
   </div>
 </template>

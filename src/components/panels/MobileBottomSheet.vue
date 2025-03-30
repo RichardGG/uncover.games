@@ -16,28 +16,49 @@ const gameSheet = ref<InstanceType<typeof BottomSheet>>()
 const customFilterSheet = ref<InstanceType<typeof BottomSheet>>()
 const maxSheetHeight = ref(0)
 const lockSheet = ref(false)
+const isGameSheetOpen = ref(false)
 
 watch(gameOpen, (val) => {
-  if (val) {
-    gameSheet.value?.open()
+  if (val !== null) {
+    if (!isGameSheetOpen.value) {
+      openGameSheet()
+    }
   } else {
-    gameSheet.value?.close()
+    if (isGameSheetOpen.value) {
+      closeGameSheet()
+    }
   }
 })
 
 watch(customFilterOpen, (val) => {
-  if (val) {
+  if (val !== null) {
     customFilterSheet.value?.open()
   } else {
     customFilterSheet.value?.close()
   }
 })
 
+const openGameSheet = () => {
+  gameSheet.value?.open()
+
+  // opened event doesn't seem to work
+  isGameSheetOpen.value = true
+}
+
+const closeGameSheet = () => {
+  gameSheet.value?.close()
+}
+
+const onGameSheetClosed = () => {
+  isGameSheetOpen.value = false
+  appStore.setGame(null)
+}
+
 onMounted(() => {
   if (gameOpen.value) {
     customFilterOpen.value = false
     nextTick(function () {
-      gameSheet.value?.open()
+      openGameSheet()
     })
   } else if (customFilterOpen.value) {
     nextTick(function () {
@@ -54,7 +75,7 @@ onMounted(() => {
     :expand-on-content-drag="!lockSheet"
     :blocking="false"
     @max-height="(n) => (maxSheetHeight = n)"
-    @closed="gameOpen = false"
+    @closed="onGameSheetClosed"
   >
     <template #header>
       <div class="h-1" />

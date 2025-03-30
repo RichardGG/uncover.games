@@ -9,20 +9,25 @@ import {
   InputIcon,
 } from 'primevue'
 import { storeToRefs } from 'pinia'
-import SavedFilters from '../menus/SavedFilters.vue'
+import SavedFilters from '../menus/SavedFiltersMenu.vue'
 import { useAppStore } from '../../stores/appStore.ts'
 import { useTemplateRef } from 'vue'
+import LayoutMenu from '../menus/LayoutMenu.vue'
+import SortMenu from '../menus/SortMenu.vue'
+import BrandControls from '../controls/BrandControls.vue'
+import UserControls from '../controls/UserControls.vue'
 
 const appStore = useAppStore()
 const { customFilterOpen } = storeToRefs(appStore)
 const savedFiltersMenu = useTemplateRef('saved-filters-menu')
+const layoutMenu = useTemplateRef('layout-menu')
+const sortMenu = useTemplateRef('sort-menu')
 </script>
 
 <template>
   <Toolbar class="m-4 mb-0">
     <template #start>
-      <i class="pi pi-discord mx-2 text-4xl!"></i>
-      <div class="mx-4">Uncover.Games</div>
+      <BrandControls />
       <Button
         v-tooltip.bottom="'Custom filter'"
         icon="pi pi-filter"
@@ -46,7 +51,9 @@ const savedFiltersMenu = useTemplateRef('saved-filters-menu')
         icon="pi pi-sort-alt"
         severity="secondary"
         text
+        @click="sortMenu?.menu?.toggle($event)"
       />
+      <SortMenu ref="sort-menu" />
       <Button
         v-tooltip.bottom="'Group by'"
         icon="pi pi-tags"
@@ -54,23 +61,16 @@ const savedFiltersMenu = useTemplateRef('saved-filters-menu')
         text
       />
       <Button
-        v-tooltip.bottom="'View'"
+        v-tooltip.bottom="'Layout'"
         icon="pi pi-objects-column"
         severity="secondary"
         text
+        @click="layoutMenu?.menu?.toggle($event)"
       />
+      <LayoutMenu ref="layout-menu" />
     </template>
     <template #end>
-      <IconField class="mr-6">
-        <InputIcon class="pi pi-search" />
-        <InputText type="text" />
-      </IconField>
-      <OverlayBadge class="mr-5">
-        <i
-          class="pi pi-bell text-xl! text-(--p-button-text-secondary-color)!"
-        />
-      </OverlayBadge>
-      <Avatar icon="pi pi-user" class="mr-2" shape="circle" />
+      <UserControls />
     </template>
   </Toolbar>
 </template>

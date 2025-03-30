@@ -12,19 +12,12 @@ const { isMobile, gameOpen, customFilterOpen, gameExpanded } =
   storeToRefs(appStore)
 </script>
 <template>
-  <div
-    class="h-full flex flex-col shrink border-0 rounded-0"
-    :class="{ 'p-4': !isMobile }"
-  >
+  <div class="h-full flex flex-col shrink border-0 rounded-0 p-4">
     <div
-      class="border border-(--p-content-border-color) h-full flex rounded-lg"
-      :class="{
-        'border-0!': isMobile,
-      }"
+      class="border border-(--p-content-border-color) h-full flex rounded-lg overflow-hidden"
     >
       <div
         v-if="!isMobile && customFilterOpen && !gameExpanded"
-        :min-size="20"
         class="flex flex-col w-100 shrink-0 border-r border-(--p-content-border-color)"
       >
         <div
@@ -47,19 +40,15 @@ const { isMobile, gameOpen, customFilterOpen, gameExpanded } =
       </div>
       <Splitter class="w-full border-0!" :gutter-size="1">
         <SplitterPanel
-          v-if="!gameExpanded || !gameOpen"
+          v-if="!gameExpanded || gameOpen === null"
           :min-size="20"
           class="relative w-full h-full"
-          :class="{
-            'pt-4 pl-4': !isMobile,
-            'pt-1 pl-1': isMobile,
-          }"
           :size="50"
         >
           <GamesView />
         </SplitterPanel>
         <SplitterPanel
-          v-if="gameOpen && !isMobile"
+          v-if="gameOpen !== null && !isMobile"
           :min-size="20"
           class="relative w-100 shrink-0 border-l border-(--p-content-border-color)"
           :size="50"
@@ -69,16 +58,16 @@ const { isMobile, gameOpen, customFilterOpen, gameExpanded } =
           >
             <div>
               <Button
-                @click="gameOpen = false"
                 icon="pi pi-times"
                 severity="secondary"
                 text
+                @click="appStore.setGame(null)"
               />
               <Button
-                @click="gameExpanded = !gameExpanded"
                 icon="pi pi-expand"
                 severity="secondary"
                 text
+                @click="gameExpanded = !gameExpanded"
               />
             </div>
             <div>

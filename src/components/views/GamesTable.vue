@@ -236,11 +236,13 @@ const games = ref([
 <template>
   <div class="w-full h-full relative">
     <DataTable
+      v-model:selection="gameOpen"
+      selection-mode="single"
       :value="games"
-      @row-click="gameOpen = true"
       scrollable
-      scrollHeight="flex"
+      scroll-height="flex"
       class="absolute! w-full!"
+      table-class="pb-[40vh]"
     >
       <Column
         field="name"
