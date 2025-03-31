@@ -11,12 +11,12 @@ defineExpose({ menu })
     <SelectButton :options="['Ascending', 'Descending']" />
     <ul class="list-none p-0 m-0 flex flex-col w-52">
       <li
-        class="flex items-center gap-2 px-2 rounded-md h-8 hover:bg-highlight-emphasis cursor-pointer rounded-border"
+        class="flex items-center gap-2 px-2 rounded-md h-8 hover:bg-highlight-emphasis cursor-pointer"
       >
         <span class="font-medium">Name</span>
       </li>
       <li
-        class="flex items-center gap-2 px-2 rounded-md h-8 hover:bg-highlight-emphasis cursor-pointer rounded-border"
+        class="flex items-center gap-2 px-2 rounded-md h-8 hover:bg-highlight-emphasis cursor-pointer"
       >
         <span class="font-medium">Score</span>
       </li>

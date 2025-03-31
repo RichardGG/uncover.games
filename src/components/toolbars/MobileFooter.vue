@@ -3,11 +3,11 @@ import { useTemplateRef } from 'vue'
 import { Button } from 'primevue'
 import SavedFilters from '../menus/SavedFiltersMenu.vue'
 import {
-  PhBookmarksSimple,
-  PhFunnel,
-  PhLayout,
-  PhSortAscending,
-  PhStack,
+  PhArrowDown,
+  PhBookmarkSimple,
+  PhSquaresFour,
+  PhStackSimple,
+  PhToggleLeft,
 } from '@phosphor-icons/vue'
 import { useAppStore } from '../../stores/appStore.ts'
 import { storeToRefs } from 'pinia'
@@ -35,7 +35,7 @@ const sortMenu = useTemplateRef('sort-menu')
       @click="customFilterOpen = true"
     >
       <template #icon>
-        <PhFunnel :size="24" class="shrink-0 -mb-2" />
+        <PhToggleLeft :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
     <Button
@@ -47,7 +47,7 @@ const sortMenu = useTemplateRef('sort-menu')
       @click="sortMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhSortAscending :size="24" class="shrink-0 -mb-2" />
+        <PhArrowDown :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
     <SortMenu ref="sort-menu" />
@@ -60,7 +60,7 @@ const sortMenu = useTemplateRef('sort-menu')
       @click="savedFiltersMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhBookmarksSimple :size="24" class="shrink-0 -mb-2" />
+        <PhBookmarkSimple :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
     <SavedFilters ref="saved-filters-menu" />
@@ -72,7 +72,7 @@ const sortMenu = useTemplateRef('sort-menu')
       class="w-1/5 mx-2 h-14 text-[14px]!"
     >
       <template #icon>
-        <PhStack :size="24" class="shrink-0 -mb-2" />
+        <PhStackSimple :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
     <Button
@@ -84,7 +84,7 @@ const sortMenu = useTemplateRef('sort-menu')
       @click="layoutMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhLayout :size="24" class="shrink-0 -mb-2" />
+        <PhSquaresFour :size="24" class="shrink-0 -mb-2" />
       </template>
     </Button>
     <LayoutMenu ref="layout-menu" />

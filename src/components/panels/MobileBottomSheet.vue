@@ -87,8 +87,8 @@ onMounted(() => {
         @click="lockSheet = !lockSheet"
       >
         <template #icon>
-          <PhLockSimple class="shrink-0" :size="18" v-if="lockSheet" />
-          <PhLockSimpleOpen class="shrink-0" :size="18" v-else />
+          <PhLockSimple v-if="lockSheet" class="shrink-0" :size="18" />
+          <PhLockSimpleOpen v-else class="shrink-0" :size="18" />
         </template>
       </Button>
     </template>

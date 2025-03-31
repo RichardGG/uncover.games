@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { IconField, InputIcon, InputText, OverlayBadge, Avatar } from 'primevue'
+</script>
 <template>
   <div class="flex items-center">
     <IconField class="mr-6">

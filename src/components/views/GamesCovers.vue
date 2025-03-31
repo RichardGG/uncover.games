@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
+import { VirtualScroller } from 'primevue'
 import type { Ref } from 'vue'
 import GameCover from '@/components/elements/GameCover.vue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '../../stores/appStore.ts'
+import { useCollectionsStore } from '@/stores/collectionsStore.ts'
 
 const appStore = useAppStore()
 const {
@@ -15,11 +17,11 @@ const {
   isMobile,
 } = storeToRefs(appStore)
 const coversPanel = useTemplateRef('covers-panel')
-const { width } = useElementSize(coversPanel)
+const { width, height } = useElementSize(coversPanel)
+const sizingArea = useTemplateRef('sizing-area')
+const { height: imageHeight } = useElementSize(sizingArea)
 
-type Game = {
-  image: string
-}
+const collectionsStore = useCollectionsStore()
 
 const chunk = <T,>(arr: T[], chunkSize: number): T[][] => {
   if (chunkSize <= 0) {
@@ -35,18 +37,10 @@ const chunk = <T,>(arr: T[], chunkSize: number): T[][] => {
   return chunks
 }
 
-const games: Ref<Game[]> = ref([])
-const rows = computed(() => chunk(games.value, coversPerRow.value))
+const rows = computed(() =>
+  chunk(collectionsStore.collections.Games || [], coversPerRow.value)
+)
 const flipEmoji: Ref<boolean> = ref(false)
-
-for (let i = 0; i < 50; i++) {
-  games.value[i] = {
-    image:
-      i % 2
-        ? 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/220/header.jpg?t=1737139959'
-        : 'https://upload.wikimedia.org/wikipedia/en/2/25/Half-Life_2_cover.jpg',
-  }
-}
 
 const setPreferredCoverSize = () => {
   preferredCoverSize.value = width.value / coversPerRow.value
@@ -64,46 +58,72 @@ watch(lastSelectedCoversPerRow, () => {
   setPreferredCoverSize()
 })
 
-// TODO this doesn't work
-// nextTick(() => setPreferredCoverSize())
+onMounted(() => {
+  setPreferredCoverSize()
+})
 </script>
 <template>
-  <div class="relative h-full w-full" ref="covers-panel">
-    <div class="absolute h-full w-full overflow-y-scroll">
-      <div
-        v-for="(row, index) in rows"
-        :key="`row-${index}`"
-        class="flex justify-around md:my-2 my-1 mx-1"
-      >
-        <div
-          v-for="(game, gameIndex) in row"
-          :key="`game-${gameIndex}`"
-          class="w-full rounded-2xl border-4 md:mx-1 mx-0.5 overflow-hidden border-primary transition-colors cursor-pointer"
-          :class="{
-            'border-transparent': gameOpen !== index * coversPerRow + gameIndex,
-          }"
-        >
-          <GameCover
-            :url="game.image"
-            class="w-full"
-            @click="appStore.setGame(index * coversPerRow + gameIndex)"
-          />
-        </div>
-        <div
-          v-for="n in coversPerRow - row.length"
-          :key="n"
-          class="w-full mx-1"
-        ></div>
-      </div>
-      <div v-if="isMobile" class="h-[40vh] flex justify-center items-center">
-        <div
-          class="text-5xl transition-transform"
-          :class="flipEmoji ? '-scale-x-100' : ''"
-          @click="flipEmoji = !flipEmoji"
-        >
-          🗿
-        </div>
-      </div>
+  <div ref="covers-panel" class="relative h-full w-full">
+    <div
+      ref="sizing-area"
+      class="absolute top-0 left-0 w-full min-h-10 flex z-10 bg-amber-500 pointer-events-none opacity-0"
+    >
+      <GameCover
+        v-for="i in coversPerRow"
+        :key="collectionsStore.collections.Games?.[i].Id"
+        :file-name="collectionsStore.collections.Games?.[i].CoverImage"
+        class="w-full"
+      />
     </div>
+    <!-- <VirtualScroller :items="items" :itemSize="50" class="border border-surface-200 dark:border-surface-700 rounded" style="width: 200px; height: 200px"> -->
+    <VirtualScroller
+      :items="rows"
+      class="h-full w-full"
+      :item-size="imageHeight"
+      :scroll-height="`${height}px`"
+    >
+      <template v-slot:item="{ item, options }">
+        <div
+          class="flex justify-around md:my-2 my-1 mx-1"
+          :style="`height: ${imageHeight}px`"
+        >
+          <div
+            v-for="(game, gameIndex) in item"
+            :key="`game-${gameIndex}`"
+            class="relative w-full rounded-2xl border-4 md:mx-1 mx-0.5 overflow-hidden border-primary transition-colors cursor-pointer"
+            :class="{
+              'border-transparent':
+                gameOpen !== options.index * coversPerRow + gameIndex,
+            }"
+          >
+            <div class="absolute top-0 left-0 z-10 bg-black p-4">
+              {{ options.index * coversPerRow + gameIndex }} - {{ game.Name }} -
+              {{ game.CoverImage }}
+            </div>
+            <GameCover
+              :file-name="game.CoverImage"
+              class="w-full"
+              @click="
+                appStore.setGame(options.index * coversPerRow + gameIndex)
+              "
+            />
+          </div>
+          <div
+            v-for="n in coversPerRow - item.length"
+            :key="n"
+            class="w-full mx-1 border-4 border-transparent"
+          ></div>
+        </div>
+        <!-- <div v-if="isMobile" class="h-[40vh] flex justify-center items-center">
+          <div
+            class="text-5xl transition-transform"
+            :class="flipEmoji ? '-scale-x-100' : ''"
+            @click="flipEmoji = !flipEmoji"
+          >
+            🗿
+          </div>
+        </div> -->
+      </template>
+    </VirtualScroller>
   </div>
 </template>
