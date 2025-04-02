@@ -7,6 +7,7 @@ import GameCover from '@/components/elements/GameCover.vue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '../../stores/appStore.ts'
 import { useCollectionsStore } from '@/stores/collectionsStore.ts'
+import { nextTick } from 'process'
 
 const appStore = useAppStore()
 const {
@@ -20,6 +21,7 @@ const coversPanel = useTemplateRef('covers-panel')
 const { width, height } = useElementSize(coversPanel)
 const sizingArea = useTemplateRef('sizing-area')
 const { height: imageHeight } = useElementSize(sizingArea)
+const virtualScroller = useTemplateRef('virtual-scroller')
 
 const collectionsStore = useCollectionsStore()
 
@@ -52,6 +54,13 @@ watch(width, (val) => {
   }
   const newSize = Math.round(val / preferredCoverSize.value)
   coversPerRow.value = newSize > 0 ? newSize : 1
+  console.log('width change', gameOpen.value)
+  // nextTick(() => {
+  if (gameOpen.value) {
+    const row = gameOpen.value / coversPerRow.value
+    virtualScroller.value?.scrollToIndex(row)
+  }
+  // })
 })
 
 watch(lastSelectedCoversPerRow, () => {
@@ -75,12 +84,13 @@ onMounted(() => {
         class="w-full"
       />
     </div>
-    <!-- <VirtualScroller :items="items" :itemSize="50" class="border border-surface-200 dark:border-surface-700 rounded" style="width: 200px; height: 200px"> -->
     <VirtualScroller
+      ref="virtual-scroller"
       :items="rows"
       class="h-full w-full"
       :item-size="imageHeight"
       :scroll-height="`${height}px`"
+      :delay="50"
     >
       <template v-slot:item="{ item, options }">
         <div
@@ -96,10 +106,10 @@ onMounted(() => {
                 gameOpen !== options.index * coversPerRow + gameIndex,
             }"
           >
-            <div class="absolute top-0 left-0 z-10 bg-black p-4">
+            <!-- <div class="absolute top-0 left-0 z-10 bg-black p-4">
               {{ options.index * coversPerRow + gameIndex }} - {{ game.Name }} -
               {{ game.CoverImage }}
-            </div>
+            </div> -->
             <GameCover
               :file-name="game.CoverImage"
               class="w-full"

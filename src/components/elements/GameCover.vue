@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useDriveStore } from '@/stores/driveStore'
 import { useGoogleAuthStore } from '@/stores/googleAuthStore'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   fileName: {
@@ -16,15 +16,28 @@ const googleAuthStore = useGoogleAuthStore()
 
 const url = ref('')
 
-if (props.fileName) {
-  driveStore
-    .getImage(googleAuthStore.getToken(), props.fileName)
-    .then((dataUri: string) => {
-      if (dataUri) {
-        url.value = dataUri
-      }
-    })
+const fetchImage = () => {
+  url.value = ''
+  if (props.fileName) {
+    driveStore
+      .getImage(googleAuthStore.getToken(), props.fileName)
+      .then((dataUri: string) => {
+        if (dataUri) {
+          url.value = dataUri
+        }
+      })
+  }
 }
+
+watch(
+  () => props.fileName,
+  (newName, oldName) => {
+    if (newName !== oldName) {
+      fetchImage()
+    }
+  },
+  { immediate: true }
+)
 
 const cyrb53 = (str: string, seed = 0) => {
   let h1 = 0xdeadbeef ^ seed,
@@ -49,14 +62,14 @@ const cyrb53 = (str: string, seed = 0) => {
   >
     <div
       :style="`background-image: url(${url})`"
-      class="absolute bg-[length:100%_100%] -inset-4 blur-lg"
+      class="absolute bg-[length:100%_100%] -inset-4 blur-lg bg-primary-100/10"
     />
-    <div
+    <!-- <div
       class="absolute inset-0 bg-black/50 flex flex-col justify-end items-end p-4 z-10"
     >
       <div>{{ fileName }}</div>
       <div>{{ cyrb53(url) }}</div>
-    </div>
-    <img :src="url" class="relative" />
+    </div> -->
+    <img v-if="url" :src="url" class="relative" />
   </div>
 </template>

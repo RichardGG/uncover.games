@@ -22,6 +22,11 @@
     - Consider changing row count to zoom buttons
 - ~List?~ (redundant, just a simplified table)
 
+## Playnite
+
+- Export colours or low resolution cover as json
+- Look into less jank virtual scrollers...
+
 ## Mobile
 
 - Filters sheet ✅

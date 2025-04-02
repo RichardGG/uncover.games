@@ -30,19 +30,22 @@ const collectionsStore = useCollectionsStore()
 const { files } = storeToRefs(driveStore)
 
 onMounted(() => {
-  const url = new URL(
-    window.location.hash.replace(/^#/g, '?'),
-    import.meta.env.VITE_BASE_URL
-  )
-  const token = url.searchParams.get('access_token')
+  if (window.location.pathname.startsWith('/website/callback')) {
+    const url = new URL(
+      window.location.hash.replace(/^#/g, '?'),
+      import.meta.env.VITE_BASE_URL
+    )
+    const token = url.searchParams.get('access_token')
+    // TODO consider remembering page on return
+    window.history.replaceState({}, '', '/')
 
-  if (token) {
-    googleAuthStore.saveToken(token)
+    if (token) {
+      googleAuthStore.saveToken(token)
+    }
   }
 
   const googleApiToken: string = googleAuthStore.getToken()
   watch(files, () => collectionsStore.init(googleApiToken))
-  // uiStore.init();
   driveStore.init(googleApiToken)
 })
 </script>
