@@ -38,7 +38,7 @@ const { isMobile, gameOpen, customFilterOpen, gameExpanded } =
           </ScrollPanel>
         </div>
       </div>
-      <Splitter class="w-full border-0!" :gutter-size="1">
+      <Splitter class="w-full border-0!" :gutter-size="8">
         <SplitterPanel
           v-if="!gameExpanded || gameOpen === null"
           :min-size="20"
