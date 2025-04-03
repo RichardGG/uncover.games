@@ -41,6 +41,9 @@ export const useAppStore = defineStore('appStore', {
     isMobile: () => width.value < 768,
     games: (state) => {
       const collectionsStore = useCollectionsStore()
+      if (!collectionsStore.collections?.Games?.length) {
+        return []
+      }
       return GetFilteredGames(
         collectionsStore.collections?.Games,
         state.currentFilter.Settings,
