@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { useWindowSize } from '@vueuse/core'
 import { nextTick } from 'vue'
+import type { Game } from '@/types/Game/Game'
 
 export type AppState = {
-  gameOpen: number | null
+  gameOpen: Game | null
   customFilterOpen: boolean
   gameExpanded: boolean
   preferredCoverSize: number
@@ -43,22 +44,18 @@ export const useAppStore = defineStore('appStore', {
       // General rule, only pushState when navigating deeper, when switching within the same view: replaceState
       let path = '/'
       if (this.gameOpen !== null) {
-        path = `/game/${this.gameOpen}`
+        path = `/game/${this.gameOpen.Id}`
       }
       if (push) {
-        console.log('pushing state')
         nextTick(() => window.history.pushState({}, '', path))
       } else {
-        console.log('replacing state')
         window.history.replaceState({}, '', path)
       }
     },
-    setGame(game: number | null) {
+    setGame(game: Game | null) {
       // Push to history if game isn't currently open
       const push = this.gameOpen === null
       this.gameOpen = game
-
-      console.log('shouldPush', push, game)
 
       if (this.gameOpen === null) {
         // Remove game from history when closing game details

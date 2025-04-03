@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { IconField, InputIcon, InputText, OverlayBadge, Avatar } from 'primevue'
+import { useAppStore } from '@/stores/appStore'
+import { storeToRefs } from 'pinia'
+const appStore = useAppStore()
+const { isMobile } = storeToRefs(appStore)
 </script>
 <template>
   <div class="flex items-center">
-    <IconField class="mr-6">
+    <IconField v-if="!isMobile" class="mr-6">
       <InputIcon class="pi pi-search" />
       <InputText type="text" />
     </IconField>

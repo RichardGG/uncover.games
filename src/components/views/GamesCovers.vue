@@ -48,10 +48,9 @@ const scrollToGame = () => {
   if (gameOpen.value) {
     nextTick(() => {
       document
-        .getElementById(`game-cover-${gameOpen.value}`)
+        .getElementById(`game-cover-${gameOpen.value?.Id}`)
         ?.scrollIntoView({ behavior: 'instant', block: 'center' })
     })
-    // virtualScroller.value?.scrollToIndex(row)
   }
 }
 
@@ -75,7 +74,8 @@ watch(lastSelectedCoversPerRow, () => {
 })
 
 onMounted(() => {
-  setPreferredCoverSize()
+  // TODO maybe we don't want this?
+  // setPreferredCoverSize()
 })
 </script>
 <template>
@@ -89,17 +89,16 @@ onMounted(() => {
         <div class="flex justify-around md:my-2 my-1 mx-1">
           <div
             v-for="(game, gameIndex) in item"
-            :id="`game-cover-${index * coversPerRow + gameIndex}`"
+            :id="`game-cover-${game?.Id}`"
             :key="`game-${gameIndex}`"
             class="relative w-full rounded-2xl border-4 md:mx-1 mx-0.5 overflow-hidden border-primary transition-colors cursor-pointer"
             :class="{
-              'border-transparent':
-                gameOpen !== index * coversPerRow + gameIndex,
+              'border-transparent': gameOpen?.Id !== game?.Id,
             }"
             :style="`height: ${(width / coversPerRow) * 1.4}px;`"
           >
             <div
-              class="absolute inset-0 flex items-center justify-center text-center p-4"
+              class="absolute inset-0 flex items-center justify-center text-center p-4 bg-gray-500/10"
             >
               {{ game.Name }}
             </div>
@@ -107,7 +106,7 @@ onMounted(() => {
               v-if="isVisible"
               :file-name="game.CoverImage"
               class="w-full"
-              @click="appStore.setGame(index * coversPerRow + gameIndex)"
+              @click="appStore.setGame(game)"
             />
           </div>
           <div
