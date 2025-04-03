@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import { useWindowSize } from '@vueuse/core'
 import { nextTick } from 'vue'
 import type { Game } from '@/types/Game/Game'
+import type { FilterPreset } from '@/types/FilterTypes'
+import { useCollectionsStore } from '@/stores/collectionsStore'
+import { GetFilteredGames } from '@/services/filterService'
 
 export type AppState = {
   gameOpen: Game | null
@@ -11,6 +14,7 @@ export type AppState = {
   coversPerRow: number
   lastSelectedCoversPerRow: number
   layout: 'table' | 'covers'
+  currentFilter: FilterPreset
 }
 
 const { width } = useWindowSize()
@@ -24,9 +28,25 @@ export const useAppStore = defineStore('appStore', {
     coversPerRow: 4,
     lastSelectedCoversPerRow: 4,
     layout: 'covers',
+    currentFilter: {
+      Settings: null,
+      Id: null,
+      Name: null,
+      GroupingOrder: null,
+      SortingOrder: null,
+      SortingOrderDirection: null,
+    },
   }),
   getters: {
     isMobile: () => width.value < 768,
+    games: (state) => {
+      const collectionsStore = useCollectionsStore()
+      return GetFilteredGames(
+        collectionsStore.collections?.Games,
+        state.currentFilter.Settings,
+        false
+      )
+    },
   },
   actions: {
     loadFromUrl() {

@@ -15,11 +15,10 @@ const {
   coversPerRow,
   lastSelectedCoversPerRow,
   isMobile,
+  games,
 } = storeToRefs(appStore)
 const coversPanel = useTemplateRef('covers-panel')
 const { width } = useElementSize(coversPanel)
-
-const collectionsStore = useCollectionsStore()
 
 const chunk = <T,>(arr: T[], chunkSize: number): T[][] => {
   if (chunkSize <= 0) {
@@ -35,9 +34,7 @@ const chunk = <T,>(arr: T[], chunkSize: number): T[][] => {
   return chunks
 }
 
-const rows = computed(() =>
-  chunk(collectionsStore.collections.Games || [], coversPerRow.value)
-)
+const rows = computed(() => chunk(games.value || [], coversPerRow.value))
 const flipEmoji: Ref<boolean> = ref(false)
 
 const setPreferredCoverSize = () => {

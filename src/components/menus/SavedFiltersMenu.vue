@@ -1,28 +1,29 @@
 <script setup lang="ts">
-import { Menu } from 'primevue'
-import { ref, defineExpose, useTemplateRef } from 'vue'
+import { Popover } from 'primevue'
+import { defineExpose, useTemplateRef } from 'vue'
+import { storeToRefs } from 'pinia'
+
+import { useCollectionsStore } from '@/stores/collectionsStore'
+import { useAppStore } from '@/stores/appStore'
+const collectionsStore = useCollectionsStore()
+const appStore = useAppStore()
+const { currentFilter } = storeToRefs(appStore)
 
 const menu = useTemplateRef('saved-filters-menu')
 
 defineExpose({ menu })
-
-const savedFilters = ref([
-  {
-    label: 'Done',
-  },
-  {
-    label: 'Play Next',
-  },
-  {
-    label: 'VR',
-  },
-])
 </script>
 <template>
-  <Menu
-    ref="saved-filters-menu"
-    id="saved_filters_menu"
-    :model="savedFilters"
-    :popup="true"
-  />
+  <Popover ref="saved-filters-menu">
+    <div
+      v-for="filter in collectionsStore.collections.FilterPresets"
+      :key="filter.Id"
+      :class="{
+        'bg-primary': currentFilter?.Id === filter.Id,
+      }"
+      @click="currentFilter = filter"
+    >
+      {{ filter.Name }}
+    </div>
+  </Popover>
 </template>

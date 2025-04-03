@@ -8,7 +8,7 @@ import { formatGameField } from '@/services/formatService'
 
 const appStore = useAppStore()
 const collectionsStore = useCollectionsStore()
-const { isMobile, gameOpen } = storeToRefs(appStore)
+const { isMobile, gameOpen, games } = storeToRefs(appStore)
 
 type Game = {
   code: string
@@ -39,10 +39,15 @@ watch(selectedGame, (selected: Game | null) => {
     <DataTable
       v-model:selection="selectedGame"
       selection-mode="single"
-      :value="collectionsStore.collections?.Games"
+      :value="games"
       scrollable
       scroll-height="flex"
-      :virtual-scroller-options="{ itemSize: 44 }"
+      :virtual-scroller-options="{
+        itemSize: 44,
+        numToleratedItems: 30,
+        showLoader: true,
+        showSpacer: false,
+      }"
       class="absolute! w-full! text-nowrap!"
       :table-class="isMobile ? 'pb-[40vh]' : ''"
     >
