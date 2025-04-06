@@ -1,6 +1,6 @@
-import { Game } from 'src/types/Game/Game';
-import { GameField } from 'src/types/Game/GameField';
-import { SortOrder, Sort } from 'src/types/SortTypes';
+import type { Game } from '@/types/Game/Game';
+import type { GameField } from '@/types/Game/GameField';
+import { SortOrder, type Sort } from '@/types/SortTypes';
 
 type SortStyle =
   | 'string'

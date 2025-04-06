@@ -34,12 +34,6 @@ export async function getYouTubeVideoId(
     })
     .then(({ data }) => {
       const response: YouTubeSearchResponse = data;
-      console.log(
-        'id',
-        response.items[0]?.id?.videoId,
-        response.items,
-        response
-      );
       return response.items[0]?.id?.videoId;
     });
 }

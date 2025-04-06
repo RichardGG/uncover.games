@@ -16,9 +16,9 @@ export const useGoogleAuthStore = defineStore('googleAuth', {
       const url =
         'https://accounts.google.com/o/oauth2/v2/auth' +
         '?client_id=' +
-        process.env.DRIVE_CLIENT_ID +
+        import.meta.env.VITE_DRIVE_CLIENT_ID +
         '&redirect_uri=' +
-        process.env.BASE_URL +
+        import.meta.env.VITE_BASE_URL +
         '/website/callback' +
         '&response_type=token' +
         '&scope=https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/youtube.readonly';

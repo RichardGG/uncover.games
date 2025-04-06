@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia';
-import { Game } from 'src/types/Game/Game';
-import { Tag } from 'src/types/Game/GameFieldTypes';
-import { FilterPreset } from 'src/types/FilterTypes';
-import { FileMetadata, getDriveFile } from 'src/services/driveService';
-import { LoadingStatus } from 'src/types/LoadingStatusTypes';
+import type { Game } from '@/types/Game/Game';
+import type { Tag } from '@/types/Game/GameFieldTypes';
+import type { FilterPreset } from '@/types/FilterTypes';
+import { type FileMetadata, getDriveFile } from '@/services/driveService';
+import type { LoadingStatus } from '@/types/LoadingStatusTypes';
 import {
   getCachedData,
   needsRefresh,
   setCachedData,
-} from 'src/services/cacheService';
+} from '@/services/cacheService';
 import { useDriveStore } from './driveStore';
 
 export const CollectionTypes = [
@@ -109,7 +109,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
             this.collections[collectionType] = data;
             this.statuses[collectionType] = { state: 'done' };
           });
-        } catch (e) {
+        } catch {
           // TODO should we do something if the request fails
           console.error(
             `Failed to download ${collectionType} file from Google Drive`

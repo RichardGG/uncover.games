@@ -1,8 +1,8 @@
-import { map } from 'lodash';
-import { Game } from '../types/Game/Game';
-import { GameField } from '../types/Game/GameField';
-import { Tag } from '../types/Game/GameFieldTypes';
-import { format } from 'quasar';
+// import { map } from 'lodash';
+import type { Game } from '../types/Game/Game';
+import type { GameField } from '../types/Game/GameField';
+import type { Tag } from '../types/Game/GameFieldTypes';
+// import { format } from 'quasar';
 
 export type GameValueTypeMap = {
   [K in GameField]:
@@ -129,7 +129,7 @@ export const formatGameField = (game: Game, field: GameField): string => {
   }
 
   if (GameValueTypes[field] === 'collection' && Array.isArray(game[field])) {
-    return map(game[field], 'Name').join(', ');
+    return game[field].map((field) => field.Name).join(', ');
   }
 
   if (GameValueTypes[field] === 'object' && typeof game[field] === 'object') {
@@ -155,7 +155,7 @@ export const formatGameField = (game: Game, field: GameField): string => {
   }
 
   if (GameValueTypes[field] === 'size' && typeof game[field] === 'number') {
-    return format.humanStorageSize(game[field]);
+    return `${game[field]}b`; // TODO human size
   }
 
   if (GameValueTypes[field] === 'bool') {
