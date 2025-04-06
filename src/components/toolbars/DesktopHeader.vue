@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  Toolbar,
-  Button,
-  Avatar,
-  OverlayBadge,
-  IconField,
-  InputText,
-  InputIcon,
-} from 'primevue'
+import { Toolbar, Button } from 'primevue'
 import { storeToRefs } from 'pinia'
 import SavedFilters from '../menus/SavedFiltersMenu.vue'
 import { useAppStore } from '../../stores/appStore.ts'

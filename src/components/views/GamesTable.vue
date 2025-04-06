@@ -3,11 +3,9 @@ import { ref, watch, type Ref } from 'vue'
 import { DataTable, Column } from 'primevue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '../../stores/appStore.ts'
-import { useCollectionsStore } from '@/stores/collectionsStore.ts'
 import { formatGameField } from '@/services/formatService'
 
 const appStore = useAppStore()
-const collectionsStore = useCollectionsStore()
 const { isMobile, gameOpen, games } = storeToRefs(appStore)
 
 type Game = {

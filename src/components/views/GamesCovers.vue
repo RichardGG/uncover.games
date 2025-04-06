@@ -6,7 +6,6 @@ import type { Ref } from 'vue'
 import GameCover from '@/components/elements/GameCover.vue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '../../stores/appStore.ts'
-import { useCollectionsStore } from '@/stores/collectionsStore.ts'
 
 const appStore = useAppStore()
 const {
@@ -79,8 +78,8 @@ onMounted(() => {
   <div ref="covers-panel" class="relative h-full w-full">
     <div class="absolute h-full w-full overflow-y-scroll">
       <UseElementVisibility
-        v-slot="{ isVisible }"
         v-for="(item, index) in rows"
+        v-slot="{ isVisible }"
         :key="`row-${index}`"
       >
         <div class="flex justify-around md:my-2 my-1 mx-1">
