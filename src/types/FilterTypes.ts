@@ -1,4 +1,4 @@
-import { CollectionsData } from 'src/stores/collectionsStore';
+import type { CollectionsData } from '@/stores/collectionsStore';
 
 export type TagFilter = {
   Ids: Array<string> | null;
@@ -131,10 +131,10 @@ export type FilterPreset = {
 
 // TODO consider if we want the options here or set against type
 // TODO consider if we want the type here or just in filterService
-interface FilterOptionConfig {
-  description: string;
-  options: [];
-}
+// interface FilterOptionConfig {
+//   description: string;
+//   options: [];
+// }
 
 export const filterTranslations: Record<keyof FilterSettings, string> = {
   UseAndFilteringStyle: 'Match all Filters',

@@ -4,7 +4,7 @@ import {
   PastTimeSegment,
   PlaytimeCategory,
   ScoreGroup,
-} from 'src/types/FilterTypes';
+} from '@/types/FilterTypes';
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/Game.cs#L1597
 export function getScoreGroup(score: number): ScoreGroup {

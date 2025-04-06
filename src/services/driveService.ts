@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ResponseType } from 'axios';
+import type { ResponseType } from 'axios';
 
 const DRIVE_BASE_URL = 'https://www.googleapis.com/drive/v3/files';
 

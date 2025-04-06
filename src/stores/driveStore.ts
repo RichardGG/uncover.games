@@ -3,14 +3,13 @@ import {
   getCachedData,
   needsRefresh,
   setCachedData,
-} from 'src/services/cacheService';
+} from '@/services/cacheService';
 import {
+  type FileMetadata,
   fetchFilesList,
-  FileMetadata,
   getDriveFile,
-} from 'src/services/driveService';
-import { LoadingStatus } from 'src/types/LoadingStatusTypes';
-import { find } from 'lodash';
+} from '@/services/driveService';
+import type { LoadingStatus } from '@/types/LoadingStatusTypes';
 
 export type DriveState = {
   files: Array<FileMetadata>;
@@ -54,14 +53,16 @@ export const useDriveStore = defineStore('drive', {
     },
 
     getFileMetadata(name: string): FileMetadata | undefined {
-      return find(this.files, { name });
+      return this.files.find((file) => file.name === name);
     },
 
     async getImage(
       googleApiToken: string,
       fileName: string
     ): Promise<false | string> {
-      const file = find(this.files, { name: fileName?.replace('\\', '_') });
+      const file = this.files.find(
+        (file) => file.name === fileName?.replace('\\', '_')
+      );
 
       if (!file) {
         return new Promise((resolve) => resolve(false));
@@ -71,8 +72,10 @@ export const useDriveStore = defineStore('drive', {
 
       // Return the cached data if it's still valid
       if (cachedResponse && !needsRefresh(file.modifiedTime, cachedResponse)) {
-        return new Promise(async (resolve) =>
-          resolve(await cachedResponse.text())
+        return new Promise((resolve) =>
+          cachedResponse.text().then((result) => {
+            resolve(result);
+          })
         );
       }
 
@@ -92,7 +95,7 @@ export const useDriveStore = defineStore('drive', {
           );
         setCachedData('Images', fileName, dataUri);
         return new Promise((resolve) => resolve(dataUri));
-      } catch (e) {
+      } catch {
         return new Promise((resolve) => resolve(false));
       }
     },
