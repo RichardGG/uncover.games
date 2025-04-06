@@ -4,16 +4,10 @@ import { Column, DataTable } from 'primevue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/stores/appStore.ts'
 import { formatGameField } from '@/services/formatService'
+import type { Game } from '@/types/Game/Game'
 
 const appStore = useAppStore()
 const { isMobile, gameOpen, games } = storeToRefs(appStore)
-
-type Game = {
-  code: string
-  name: string
-  category: string
-  quantity: number
-}
 
 const selectedGame: Ref<Game | null> = ref(null)
 

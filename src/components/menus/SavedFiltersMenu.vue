@@ -16,8 +16,8 @@ defineExpose({ menu })
 <template>
   <Popover ref="saved-filters-menu">
     <div
-      v-for="filter in collectionsStore.collections.FilterPresets"
-      :key="filter.Id"
+      v-for="(filter, index) in collectionsStore.collections.FilterPresets"
+      :key="filter.Id || index"
       :class="{
         'bg-primary': currentFilter?.Id === filter.Id,
       }"

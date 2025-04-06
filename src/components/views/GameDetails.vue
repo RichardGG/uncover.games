@@ -88,7 +88,6 @@ watch(
         v-if="videoId"
         id="ytplayer"
         style="margin: 20px"
-        type="text/html"
         :width="videoWidth"
         :height="videoHeight"
         :src="`https://www.youtube.com/embed/${videoId}`"
@@ -96,9 +95,7 @@ watch(
         allowfullscreen
       />
       <GameCover
-        :title="gameOpen.Name"
-        :file-name="gameOpen.CoverImage"
-        :width="200"
+        :file-name="gameOpen.CoverImage || undefined"
       />
       <h2>{{ formatGameField(gameOpen, 'Name') }}</h2>
       <div v-html="description" />

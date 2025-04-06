@@ -103,7 +103,7 @@ onMounted(() => {
             </div>
             <GameCover
               v-if="isVisible"
-              :file-name="game.CoverImage"
+              :file-name="game.CoverImage || undefined"
               class="w-full"
               @click="appStore.setGame(game)"
             />

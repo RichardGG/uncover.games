@@ -20,15 +20,15 @@ const sortMenu = useTemplateRef('sort-menu')
   <Toolbar class="m-4 mb-0">
     <template #start>
       <BrandControls />
+      <!-- v-tooltip.bottom="'Custom filter'" -->
       <Button
-        v-tooltip.bottom="'Custom filter'"
         icon="pi pi-filter"
         severity="secondary"
         text
         @click="customFilterOpen = !customFilterOpen"
       />
+      <!-- v-tooltip.bottom="'Saved filters'" -->
       <Button
-        v-tooltip.bottom="'Saved filters'"
         icon="pi pi-bookmark"
         severity="secondary"
         text
@@ -38,22 +38,22 @@ const sortMenu = useTemplateRef('sort-menu')
         @click="savedFiltersMenu?.menu?.toggle($event)"
       />
       <SavedFilters ref="saved-filters-menu" />
+      <!-- v-tooltip.bottom="'Sort by'" -->
       <Button
-        v-tooltip.bottom="'Sort by'"
         icon="pi pi-sort-alt"
         severity="secondary"
         text
         @click="sortMenu?.menu?.toggle($event)"
       />
       <SortMenu ref="sort-menu" />
+      <!-- v-tooltip.bottom="'Group by'" -->
       <Button
-        v-tooltip.bottom="'Group by'"
         icon="pi pi-tags"
         severity="secondary"
         text
       />
+      <!-- v-tooltip.bottom="'Layout'" -->
       <Button
-        v-tooltip.bottom="'Layout'"
         icon="pi pi-objects-column"
         severity="secondary"
         text

@@ -21,7 +21,7 @@ const fetchImage = () => {
   if (props.fileName) {
     driveStore
       .getImage(googleAuthStore.getToken(), props.fileName)
-      .then((dataUri: string) => {
+      .then((dataUri: string|false) => {
         if (dataUri) {
           url.value = dataUri
         }

@@ -121,7 +121,11 @@ export const GameValueTypes: GameValueTypeMap = {
   InstallationStatus: 'unsupported',
 }
 
-export const formatGameField = (game: Game, field: GameField): string => {
+export const formatGameField = (game: Game|null, field: GameField): string => {
+  if (! game) {
+    return ''
+  }
+
   if (GameValueTypes[field] === 'text' && typeof game[field] === 'string') {
     return game[field] || ''
   }

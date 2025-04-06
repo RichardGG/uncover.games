@@ -53,9 +53,12 @@ function GetGameMatchesFilter(
 
 export function GetFilteredGames(
   games: Array<Game>,
-  filterSettings: FilterSettings,
+  filterSettings: FilterSettings|null,
   useFuzzyNameMatch: boolean
 ): Array<Game> {
+  if (!filterSettings) {
+    return games
+  }
   const filteredGames: Array<Game> = []
   for (const game of games) {
     if (GetGameMatchesFilter(game, filterSettings, useFuzzyNameMatch)) {

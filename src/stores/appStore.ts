@@ -54,11 +54,12 @@ export const useAppStore = defineStore('appStore', {
   actions: {
     loadFromUrl() {
       const matches: string[] | null =
-        window.location.pathname.match(/^\/game\/([0-9]*)/)
+        window.location.pathname.match(/^\/game\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/)
       if (matches) {
         // We will open a game route, but we should make sure the view without the game is loaded initially
         window.history.replaceState({}, '', '/')
-        this.setGame(parseInt(matches[1]))
+        // this.setGame(this.gamesatches[1])
+        // TODO we will need to wait until the games are loaded, maybe set the uuid in the store
       } else {
         this.gameOpen = null
       }
