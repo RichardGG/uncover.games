@@ -46,11 +46,11 @@ jobs:
         envkey_VITE_DRIVE_CLIENT_ID: ${{ secrets.DRIVE_CLIENT_ID }}
         fail_on_empty: true
     - run: npm run build
-    - run: cp dist/spa/index.html dist/spa/404.html
+    - run: cp dist/index.html dist/404.html
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: ./dist/spa
+        path: ./dist
 
   # Deployment job
   deploy:
