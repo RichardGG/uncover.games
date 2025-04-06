@@ -17,6 +17,7 @@
     "@vueuse/core": "^13.0.0",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
+    "pinia": "^3.0.1",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.2",
     "sanitize-html": "^2.15.0",

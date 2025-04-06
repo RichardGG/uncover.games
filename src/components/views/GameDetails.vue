@@ -31,11 +31,12 @@ watch(
   () => gameOpen.value?.Name,
   (name) => {
     if (name) {
-      getYouTubeVideoId(googleAuthStore.getToken(), `${name} trailer}`).then(
-        (id: string | null) => {
-          videoId.value = id || ''
-        }
-      )
+      getYouTubeVideoId(
+        googleAuthStore.getToken(),
+        `${name} game trailer}`
+      ).then((id: string | null) => {
+        videoId.value = id || ''
+      })
     }
   },
   { immediate: true }

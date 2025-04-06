@@ -1,19 +1,19 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export type YouTubeIdData = {
-  kind: string;
-  videoId: string;
-};
+  kind: string
+  videoId: string
+}
 
 export type YouTubeItemData = {
-  etag: string;
-  id: YouTubeIdData;
-  kind: string;
-};
+  etag: string
+  id: YouTubeIdData
+  kind: string
+}
 
 export type YouTubeSearchResponse = {
-  items: Array<YouTubeItemData>;
-};
+  items: Array<YouTubeItemData>
+}
 
 export async function getYouTubeVideoId(
   googleApiToken: string,
@@ -27,13 +27,14 @@ export async function getYouTubeVideoId(
         type: 'video',
         videoEmbeddable: true,
         part: 'id',
+        safeSearch: 'strict',
       },
       headers: {
         Authorization: 'Bearer ' + googleApiToken,
       },
     })
     .then(({ data }) => {
-      const response: YouTubeSearchResponse = data;
-      return response.items[0]?.id?.videoId;
-    });
+      const response: YouTubeSearchResponse = data
+      return response.items[0]?.id?.videoId
+    })
 }
