@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import GamesCovers from '@/components/views/GamesCovers.vue'
 import GamesTable from '@/components/views/GamesTable.vue'
 import { useAppStore } from '@/stores/appStore.ts'
-import { storeToRefs } from 'pinia'
 
 const appStore = useAppStore()
 const { layout } = storeToRefs(appStore)

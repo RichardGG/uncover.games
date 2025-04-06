@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import MobileHeader from '@/components/toolbars/MobileHeader.vue'
-import MobileFooter from '@/components/toolbars/MobileFooter.vue'
-import DesktopHeader from '@/components/toolbars/DesktopHeader.vue'
-import GamesView from '@/components/views/GamesView.vue'
-import DesktopSplitPanels from '@/components/panels/DesktopSplitPanels.vue'
-
-import { useAppStore } from '@/stores/appStore'
-import { storeToRefs } from 'pinia'
-import MobileBottomSheet from '@/components/panels/MobileBottomSheet.vue'
-import { useGoogleAuthStore } from '@/stores/googleAuthStore'
-import { useDriveStore } from '@/stores/driveStore'
-import { useCollectionsStore } from '@/stores/collectionsStore'
 import { onMounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import DesktopHeader from '@/components/toolbars/DesktopHeader.vue'
+import DesktopSplitPanels from '@/components/panels/DesktopSplitPanels.vue'
+import GamesView from '@/components/views/GamesView.vue'
+import MobileBottomSheet from '@/components/panels/MobileBottomSheet.vue'
+import MobileFooter from '@/components/toolbars/MobileFooter.vue'
+import MobileHeader from '@/components/toolbars/MobileHeader.vue'
+import { useAppStore } from '@/stores/appStore'
+import { useCollectionsStore } from '@/stores/collectionsStore'
+import { useDriveStore } from '@/stores/driveStore'
+import { useGoogleAuthStore } from '@/stores/googleAuthStore'
 
 const appStore = useAppStore()
 const { isMobile } = storeToRefs(appStore)

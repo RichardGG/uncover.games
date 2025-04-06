@@ -2,9 +2,9 @@
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
 import { UseElementVisibility } from '@vueuse/components'
+import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
 import GameCover from '@/components/elements/GameCover.vue'
-import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/stores/appStore.ts'
 
 const appStore = useAppStore()
@@ -75,7 +75,10 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div ref="covers-panel" class="relative h-full w-full">
+  <div
+    ref="covers-panel"
+    class="relative h-full w-full"
+  >
     <div class="absolute h-full w-full overflow-y-scroll">
       <UseElementVisibility
         v-for="(item, index) in rows"
@@ -109,10 +112,13 @@ onMounted(() => {
             v-for="n in coversPerRow - item.length"
             :key="n"
             class="w-full mx-1 border-4 border-transparent"
-          ></div>
+          />
         </div>
       </UseElementVisibility>
-      <div v-if="isMobile" class="h-[40vh] flex justify-center items-center">
+      <div
+        v-if="isMobile"
+        class="h-[40vh] flex justify-center items-center"
+      >
         <div
           class="text-5xl transition-transform"
           :class="flipEmoji ? '-scale-x-100' : ''"

@@ -38,7 +38,10 @@ const { isMobile, gameOpen, customFilterOpen, gameExpanded } =
           </ScrollPanel>
         </div>
       </div>
-      <Splitter class="w-full border-0!" :gutter-size="8">
+      <Splitter
+        class="w-full border-0!"
+        :gutter-size="8"
+      >
         <SplitterPanel
           v-if="!gameExpanded || gameOpen === null"
           :min-size="20"
@@ -71,7 +74,11 @@ const { isMobile, gameOpen, customFilterOpen, gameExpanded } =
               />
             </div>
             <div>
-              <Button icon="pi pi-ellipsis-h" severity="secondary" text />
+              <Button
+                icon="pi pi-ellipsis-h"
+                severity="secondary"
+                text
+              />
             </div>
           </div>
           <ScrollPanel class="absolute h-full w-full">

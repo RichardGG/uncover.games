@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { PhLockSimple, PhLockSimpleOpen } from '@phosphor-icons/vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Button } from 'primevue'
-import { PhLockSimple, PhLockSimpleOpen } from '@phosphor-icons/vue'
 import BottomSheet from '@douxcode/vue-spring-bottom-sheet'
 import '@douxcode/vue-spring-bottom-sheet/dist/style.css'
 import { useAppStore } from '@/stores/appStore.ts'
@@ -87,8 +87,16 @@ onMounted(() => {
         @click="lockSheet = !lockSheet"
       >
         <template #icon>
-          <PhLockSimple v-if="lockSheet" class="shrink-0" :size="18" />
-          <PhLockSimpleOpen v-else class="shrink-0" :size="18" />
+          <PhLockSimple
+            v-if="lockSheet"
+            class="shrink-0"
+            :size="18"
+          />
+          <PhLockSimpleOpen
+            v-else
+            class="shrink-0"
+            :size="18"
+          />
         </template>
       </Button>
     </template>

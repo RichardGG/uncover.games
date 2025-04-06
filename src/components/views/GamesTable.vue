@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue'
-import { DataTable, Column } from 'primevue'
+import { type Ref, ref, watch } from 'vue'
+import { Column, DataTable } from 'primevue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/stores/appStore.ts'
 import { formatGameField } from '@/services/formatService'
@@ -55,142 +55,277 @@ watch(selectedGame, (selected: Game | null) => {
         frozen
         class="border-r!"
         :class="isMobile ? 'min-w-[45vw]' : 'min-w-80'"
-      ></Column>
-      <Column field="Platforms" header="Platform"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Platforms')
-        }}</template></Column
+      />
+      <Column
+        field="Platforms"
+        header="Platform"
       >
-      <Column field="Developers" header="Developer"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Developers')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Platforms')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Developers"
+        header="Developer"
       >
-      <Column field="Publishers" header="Publisher"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Publishers')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Developers')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Publishers"
+        header="Publisher"
       >
-      <Column field="ReleaseDate" header="Release Date"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'ReleaseDate')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Publishers')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="ReleaseDate"
+        header="Release Date"
       >
-      <Column field="Genres" header="Genre"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Genres')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'ReleaseDate')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Genres"
+        header="Genre"
       >
-      <Column field="Categories" header="Category"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Categories')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Genres')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Categories"
+        header="Category"
       >
-      <Column field="Features" header="Features"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Features')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Categories')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Features"
+        header="Features"
       >
-      <Column field="Tags" header="Tag"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Tags')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Features')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Tags"
+        header="Tag"
       >
-      <Column field="IsInstalled" header="Installed"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'IsInstalled')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Tags')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="IsInstalled"
+        header="Installed"
       >
-      <Column field="InstallDirectory" header="Installation Folder"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'InstallDirectory')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'IsInstalled')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="InstallDirectory"
+        header="Installation Folder"
       >
-      <Column field="InstallSize" header="Install Size"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'InstallSize')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'InstallDirectory')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="InstallSize"
+        header="Install Size"
       >
-      <Column field="Roms" header="Image, ROM, or ISO Path"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Roms')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'InstallSize')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Roms"
+        header="Image, ROM, or ISO Path"
       >
-      <Column field="LastActivity" header="Last Played"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'LastActivity')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Roms')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="LastActivity"
+        header="Last Played"
       >
-      <Column field="RecentActivity" header="Recent Activity"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'RecentActivity')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'LastActivity')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="RecentActivity"
+        header="Recent Activity"
       >
-      <Column field="Playtime" header="Time Played"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Playtime')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'RecentActivity')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Playtime"
+        header="Time Played"
       >
-      <Column field="PlayCount" header="Play Count"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'PlayCount')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Playtime')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="PlayCount"
+        header="Play Count"
       >
-      <Column field="CompletionStatus" header="Completion Status"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'CompletionStatus')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'PlayCount')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="CompletionStatus"
+        header="Completion Status"
       >
-      <Column field="Series" header="Series"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Series')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'CompletionStatus')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Series"
+        header="Series"
       >
-      <Column field="Version" header="Version"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Version')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Series')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Version"
+        header="Version"
       >
-      <Column field="AgeRatings" header="Age Rating"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'AgeRatings')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Version')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="AgeRatings"
+        header="Age Rating"
       >
-      <Column field="Regions" header="Region"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Regions')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'AgeRatings')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Regions"
+        header="Region"
       >
-      <Column field="Source" header="Source"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Source')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Regions')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Source"
+        header="Source"
       >
-      <Column field="Added" header="Added"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Added')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Source')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Added"
+        header="Added"
       >
-      <Column field="Modified" header="Modified"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'Modified')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Added')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="Modified"
+        header="Modified"
       >
-      <Column field="UserScore" header="User Score"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'UserScore')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'Modified')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="UserScore"
+        header="User Score"
       >
-      <Column field="CriticScore" header="Critic Score"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'CriticScore')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'UserScore')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="CriticScore"
+        header="Critic Score"
       >
-      <Column field="CommunityScore" header="Community Score"
-        ><template #body="slotProps">{{
-          formatGameField(slotProps.data, 'CommunityScore')
-        }}</template></Column
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'CriticScore')
+          }}
+        </template>
+      </Column>
+      <Column
+        field="CommunityScore"
+        header="Community Score"
       >
+        <template #body="slotProps">
+          {{
+            formatGameField(slotProps.data, 'CommunityScore')
+          }}
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>

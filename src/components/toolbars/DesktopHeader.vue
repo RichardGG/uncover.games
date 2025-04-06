@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Toolbar, Button } from 'primevue'
+import { Button, Toolbar } from 'primevue'
 import { storeToRefs } from 'pinia'
+import { useTemplateRef } from 'vue'
 import SavedFilters from '@/components/menus/SavedFiltersMenu.vue'
 import { useAppStore } from '@/stores/appStore.ts'
-import { useTemplateRef } from 'vue'
 import LayoutMenu from '@/components/menus/LayoutMenu.vue'
 import SortMenu from '@/components/menus/SortMenu.vue'
 import BrandControls from '@/components/controls/BrandControls.vue'

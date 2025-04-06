@@ -1,16 +1,18 @@
 import eslint from '@eslint/js'
-import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
-import typescriptEslint from 'typescript-eslint'
+import importPlugin from 'eslint-plugin-import'
+import tseslint from 'typescript-eslint'
 
-export default typescriptEslint.config(
+export default tseslint.config(
   { ignores: ['*.d.ts', '**/coverage', '**/dist'] },
   {
     extends: [
       eslint.configs.recommended,
-      ...typescriptEslint.configs.recommended,
+      ...tseslint.configs.recommended,
       ...eslintPluginVue.configs['flat/recommended'],
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
     ],
     files: ['**/*.{ts,vue}'],
     languageOptions: {
@@ -18,12 +20,21 @@ export default typescriptEslint.config(
       sourceType: 'module',
       globals: globals.browser,
       parserOptions: {
-        parser: typescriptEslint.parser,
+        parser: tseslint.parser,
       },
     },
     rules: {
-      // your rules
+      'import/order': [
+        'error',
+        {
+        },
+      ],
     },
-  },
-  eslintConfigPrettier
+    settings: {
+      'import/resolver': {
+        typescript: {},
+      },
+      'import/core-modules': ['@phosphor-icons/vue'],
+    },
+  }
 )

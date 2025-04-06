@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useDriveStore } from '@/stores/driveStore'
 import { useGoogleAuthStore } from '@/stores/googleAuthStore'
-import { ref, watch } from 'vue'
 
 const props = defineProps({
   fileName: {
@@ -48,6 +48,10 @@ watch(
       :style="`background-image: url(${url})`"
       class="absolute bg-[length:100%_100%] -inset-4 blur-lg"
     />
-    <img v-if="url" :src="url" class="relative" />
+    <img
+      v-if="url"
+      :src="url"
+      class="relative"
+    >
   </div>
 </template>

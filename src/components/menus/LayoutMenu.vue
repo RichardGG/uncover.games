@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { Popover, InputNumber } from 'primevue'
-import { useAppStore } from '@/stores/appStore'
-import { useTemplateRef } from 'vue'
 import { PhMinus, PhPlus } from '@phosphor-icons/vue'
+import { storeToRefs } from 'pinia'
+import { InputNumber, Popover } from 'primevue'
+import { useTemplateRef } from 'vue'
+import { useAppStore } from '@/stores/appStore'
 
 const appStore = useAppStore()
 const { lastSelectedCoversPerRow, coversPerRow, layout } = storeToRefs(appStore)
@@ -32,7 +32,10 @@ const changeRowSize = () => {
         @click="layout = 'covers'"
       >
         <span class="font-medium">Covers</span>
-        <div v-if="layout === 'covers'" class="ml-4">
+        <div
+          v-if="layout === 'covers'"
+          class="ml-4"
+        >
           <InputNumber
             v-model="coversPerRow"
             show-buttons
