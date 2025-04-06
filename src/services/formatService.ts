@@ -1,8 +1,6 @@
-// import { map } from 'lodash';
-import type { Game } from '../types/Game/Game';
-import type { GameField } from '../types/Game/GameField';
-import type { Tag } from '../types/Game/GameFieldTypes';
-// import { format } from 'quasar';
+import type { Game } from '@/types/Game/Game'
+import type { GameField } from '@/types/Game/GameField'
+import type { Tag } from '@/types/Game/GameFieldTypes'
 
 export type GameValueTypeMap = {
   [K in GameField]:
@@ -17,8 +15,8 @@ export type GameValueTypeMap = {
     | 'size'
     | 'score'
     | 'releasedate'
-    | 'unsupported';
-};
+    | 'unsupported'
+}
 
 export const GameValueTypes: GameValueTypeMap = {
   Description: 'text',
@@ -121,49 +119,49 @@ export const GameValueTypes: GameValueTypeMap = {
   PlaytimeCategory: 'unsupported',
   InstallSizeGroup: 'unsupported',
   InstallationStatus: 'unsupported',
-};
+}
 
 export const formatGameField = (game: Game, field: GameField): string => {
   if (GameValueTypes[field] === 'text' && typeof game[field] === 'string') {
-    return game[field] || '';
+    return game[field] || ''
   }
 
   if (GameValueTypes[field] === 'collection' && Array.isArray(game[field])) {
-    return game[field].map((field) => field.Name).join(', ');
+    return game[field].map((field) => field.Name).join(', ')
   }
 
   if (GameValueTypes[field] === 'object' && typeof game[field] === 'object') {
-    const fieldObject = game[field] as Tag;
-    return fieldObject?.Name || '';
+    const fieldObject = game[field] as Tag
+    return fieldObject?.Name || ''
   }
 
   if (GameValueTypes[field] === 'date' && typeof game[field] === 'string') {
-    return game[field];
+    return game[field]
   }
 
   if (GameValueTypes[field] === 'duration' && typeof game[field] === 'number') {
-    const seconds = game[field];
+    const seconds = game[field]
     if (seconds < 60) {
-      return `${seconds} seconds`;
+      return `${seconds} seconds`
     }
-    const minutes = Math.floor(seconds / 60);
+    const minutes = Math.floor(seconds / 60)
     if (minutes < 60) {
-      return `${minutes} minutes`;
+      return `${minutes} minutes`
     }
-    const hours = Math.floor(minutes / 60);
-    return `${hours}h ${minutes % 60}m`;
+    const hours = Math.floor(minutes / 60)
+    return `${hours}h ${minutes % 60}m`
   }
 
   if (GameValueTypes[field] === 'size' && typeof game[field] === 'number') {
-    return `${game[field]}b`; // TODO human size
+    return `${game[field]}b` // TODO human size
   }
 
   if (GameValueTypes[field] === 'bool') {
-    return game[field] ? 'Yes' : 'No';
+    return game[field] ? 'Yes' : 'No'
   }
 
   if (GameValueTypes[field] === 'score' || GameValueTypes[field] === 'number') {
-    return (game[field] || '') + '';
+    return (game[field] || '') + ''
   }
 
   if (
@@ -172,8 +170,8 @@ export const formatGameField = (game: Game, field: GameField): string => {
     game[field] !== null &&
     'ReleaseDate' in game[field]
   ) {
-    return game[field].ReleaseDate + '';
+    return game[field].ReleaseDate + ''
   }
 
-  return '';
-};
+  return ''
+}

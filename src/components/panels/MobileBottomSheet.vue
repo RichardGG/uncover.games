@@ -5,9 +5,9 @@ import { Button } from 'primevue'
 import { PhLockSimple, PhLockSimpleOpen } from '@phosphor-icons/vue'
 import BottomSheet from '@douxcode/vue-spring-bottom-sheet'
 import '@douxcode/vue-spring-bottom-sheet/dist/style.css'
-import { useAppStore } from '../../stores/appStore.ts'
-import GameDetails from '../views/GameDetails.vue'
-import CustomFilters from '../views/CustomFilters.vue'
+import { useAppStore } from '@/stores/appStore.ts'
+import GameDetails from '@/components/views/GameDetails.vue'
+import CustomFilters from '@/components/views/CustomFilters.vue'
 
 const appStore = useAppStore()
 const { gameOpen, customFilterOpen } = storeToRefs(appStore)

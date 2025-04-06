@@ -2,7 +2,7 @@
 import { ref, watch, type Ref } from 'vue'
 import { DataTable, Column } from 'primevue'
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '../../stores/appStore.ts'
+import { useAppStore } from '@/stores/appStore.ts'
 import { formatGameField } from '@/services/formatService'
 
 const appStore = useAppStore()

@@ -5,7 +5,7 @@ import { UseElementVisibility } from '@vueuse/components'
 import type { Ref } from 'vue'
 import GameCover from '@/components/elements/GameCover.vue'
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '../../stores/appStore.ts'
+import { useAppStore } from '@/stores/appStore.ts'
 
 const appStore = useAppStore()
 const {

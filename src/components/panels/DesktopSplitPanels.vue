@@ -2,10 +2,10 @@
 import { storeToRefs } from 'pinia'
 import { Button, ScrollPanel, Splitter, SplitterPanel } from 'primevue'
 
-import CustomFilters from '../../components/views/CustomFilters.vue'
-import GamesView from '../../components/views/GamesView.vue'
-import GameDetails from '../../components/views/GameDetails.vue'
-import { useAppStore } from '../../stores/appStore.ts'
+import CustomFilters from '@/components/views/CustomFilters.vue'
+import GamesView from '@/components/views/GamesView.vue'
+import GameDetails from '@/components/views/GameDetails.vue'
+import { useAppStore } from '@/stores/appStore.ts'
 
 const appStore = useAppStore()
 const { isMobile, gameOpen, customFilterOpen, gameExpanded } =

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Toolbar, Button } from 'primevue'
 import { storeToRefs } from 'pinia'
-import SavedFilters from '../menus/SavedFiltersMenu.vue'
-import { useAppStore } from '../../stores/appStore.ts'
+import SavedFilters from '@/components/menus/SavedFiltersMenu.vue'
+import { useAppStore } from '@/stores/appStore.ts'
 import { useTemplateRef } from 'vue'
-import LayoutMenu from '../menus/LayoutMenu.vue'
-import SortMenu from '../menus/SortMenu.vue'
-import BrandControls from '../controls/BrandControls.vue'
-import UserControls from '../controls/UserControls.vue'
+import LayoutMenu from '@/components/menus/LayoutMenu.vue'
+import SortMenu from '@/components/menus/SortMenu.vue'
+import BrandControls from '@/components/controls/BrandControls.vue'
+import UserControls from '@/components/controls/UserControls.vue'
 
 const appStore = useAppStore()
 const { customFilterOpen } = storeToRefs(appStore)

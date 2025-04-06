@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import UserControls from '../controls/UserControls.vue'
-import BrandControls from '../controls/BrandControls.vue'
+import UserControls from '@/components/controls/UserControls.vue'
+import BrandControls from '@/components/controls/BrandControls.vue'
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
 import { Button } from 'primevue'
-import SavedFilters from '../menus/SavedFiltersMenu.vue'
+import SavedFilters from '@/components/menus/SavedFiltersMenu.vue'
 import {
   PhArrowDown,
   PhBookmarkSimple,
@@ -9,10 +9,10 @@ import {
   PhStackSimple,
   PhToggleLeft,
 } from '@phosphor-icons/vue'
-import { useAppStore } from '../../stores/appStore.ts'
+import { useAppStore } from '@/stores/appStore.ts'
 import { storeToRefs } from 'pinia'
-import LayoutMenu from '../menus/LayoutMenu.vue'
-import SortMenu from '../menus/SortMenu.vue'
+import LayoutMenu from '@/components/menus/LayoutMenu.vue'
+import SortMenu from '@/components/menus/SortMenu.vue'
 
 const appStore = useAppStore()
 const { customFilterOpen } = storeToRefs(appStore)
