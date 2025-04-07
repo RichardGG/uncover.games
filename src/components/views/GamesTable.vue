@@ -35,21 +35,35 @@ watch(selectedGame, (selected: Game | null) => {
       scrollable
       scroll-height="flex"
       :virtual-scroller-options="{
-        itemSize: 44,
+        itemSize: 49,
         numToleratedItems: 30,
         showLoader: true,
         showSpacer: false,
       }"
       class="absolute! w-full! text-nowrap!"
-      :table-class="isMobile ? 'pb-[40vh]' : ''"
+      :table-class="{
+        'pb-[40vh]': isMobile
+      }"
     >
       <Column
         field="Name"
         header="Name"
         frozen
         class="border-r!"
-        :class="isMobile ? 'min-w-[45vw]' : 'min-w-80'"
-      />
+        :class="isMobile ? 'min-w-[45vw] max-w-[45vw]' : 'min-w-80'"
+        :body-class="isMobile ? 'p-0!' : ''"
+      >
+        <template #body="slotProps">
+          <div
+            class="max-h-[46px] h-[46px] overflow-hidden text-wrap flex p-1 items-center leading-[1.2]"
+            :class="isMobile && slotProps.data.Name?.length > 20 ? 'text-xs' : ''"
+          >
+            {{
+              formatGameField(slotProps.data, 'Name')
+            }}
+          </div>
+        </template>
+      </Column>
       <Column
         field="Platforms"
         header="Platform"
