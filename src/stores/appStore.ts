@@ -5,6 +5,7 @@ import type { Game } from '@/types/Game/Game'
 import type { FilterPreset } from '@/types/FilterTypes'
 import { useCollectionsStore } from '@/stores/collectionsStore'
 import { GetFilteredGames } from '@/services/filterService'
+import { sortGames } from '@/services/sortService'
 
 export type AppState = {
   gameOpen: Game | null
@@ -44,11 +45,18 @@ export const useAppStore = defineStore('appStore', {
       if (!collectionsStore.collections?.Games?.length) {
         return []
       }
-      return GetFilteredGames(
+      let games = GetFilteredGames(
         collectionsStore.collections?.Games,
         state.currentFilter.Settings,
         false
       )
+      console.log('order', state.currentFilter.SortingOrder)
+      games = sortGames(
+        games,
+        state.currentFilter.SortingOrder,
+        state.currentFilter.SortingOrderDirection,
+      )
+      return games
     },
   },
   actions: {

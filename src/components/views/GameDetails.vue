@@ -87,12 +87,12 @@ watch(
       <iframe
         v-if="videoId"
         id="ytplayer"
-        style="margin: 20px"
         :width="videoWidth"
         :height="videoHeight"
         :src="`https://www.youtube.com/embed/${videoId}`"
         frameborder="0"
         allowfullscreen
+        class="m-4 pointer-events-none"
       />
       <GameCover
         :file-name="gameOpen.CoverImage || undefined"

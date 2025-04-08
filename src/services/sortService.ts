@@ -1,6 +1,6 @@
 import type { Game } from '@/types/Game/Game';
 import type { GameField } from '@/types/Game/GameField';
-import { type Sort, SortOrder } from '@/types/SortTypes';
+import { SortOrder, SortOrderDirection } from '@/types/SortTypes';
 
 type SortStyle =
   | 'string'
@@ -165,6 +165,7 @@ function compareGames(
   if (sortStyle === 'string') {
     if (typeof a[sortField] !== 'string') {
       return 0;
+      console.log('wrong type')
     }
     if (typeof b[sortField] !== 'string') {
       return 0;
@@ -199,18 +200,14 @@ function compareGames(
 
 export function sortGames(
   games: Array<Game>,
-  sort: Sort | null,
-  sortDesc: boolean
+  sortType: SortOrder | null,
+  sortDirection: SortOrderDirection | null,
 ): Array<Game> {
-  if (!sort) {
+  if (sortType === null) {
     return games;
   }
 
-  const sortType = sort.value;
-  if (!sortType) {
-    return games;
-  }
-
+  const sortDesc = sortDirection === SortOrderDirection.Descending
   const sortConfig = sortConfigMap[sortType];
   if (!sortConfig) {
     return games;
@@ -227,6 +224,7 @@ export function sortGames(
     return games;
   }
 
+  console.log(sortField, sortStyle, sortDesc, sortDirection)
   return games.sort((a: Game, b: Game) => {
     const result = compareGames(sortField, sortStyle, sortDesc, a, b);
     if (sortDesc) {

@@ -5,6 +5,10 @@ export type TagFilter = {
   Text: string | null;
 };
 
+// TODO consider localization support
+// https://github.com/JosefNemec/Playnite/blob/0d6ecf6e0aa1f613c05411a8a1f94b4ba13ded6e/source/Playnite/Localization/LocSource.xaml
+// Maybe a tool to read or convert the raw files from playnite
+
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L83
 export type FilterPresetSettings = {
   UseAndFilteringStyle: boolean;
