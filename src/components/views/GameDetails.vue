@@ -19,12 +19,18 @@ const videoWidth = computed(() =>
   window.innerWidth < 600 ? window.innerWidth - 30 : 600
 )
 const videoHeight = computed(() => videoWidth.value * (9 / 16))
-const safeDescription = sanitizeHtml(
-  formatGameField(gameOpen.value, 'Description'),
-  {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-  }
-)
+const safeDescription = ref('')
+
+const updateDescription = () => {
+  safeDescription.value = sanitizeHtml(
+    formatGameField(gameOpen.value, 'Description'),
+    {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+    }
+  )
+}
+
+watch(() => gameOpen.value?.Description, updateDescription, { immediate: true })
 
 watch(
   () => gameOpen.value?.Name,
