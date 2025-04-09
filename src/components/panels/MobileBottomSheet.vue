@@ -31,7 +31,7 @@ watch(gameOpen, (val) => {
 })
 
 watch(customFilterOpen, (val) => {
-  if (val !== null) {
+  if (val === true) {
     customFilterSheet.value?.open()
   } else {
     customFilterSheet.value?.close()
