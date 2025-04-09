@@ -110,10 +110,6 @@ watch(
       </div>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="safeDescription" />
-      <div>SD: {{ safeDescription }}</div>
-      <div>D: {{ formatGameField(gameOpen, 'Description') }}</div>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="'<strong>Test v-html</strong>'" />
       <template
         v-for="field in GameFields"
         :key="field"
