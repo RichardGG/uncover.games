@@ -60,6 +60,31 @@ export const useAppStore = defineStore('appStore', {
     },
   },
   actions: {
+    init() {
+      // Load current state from local storage
+      const storeJson = window.localStorage.getItem('appStore');
+      if (storeJson) {
+        const previousState = JSON.parse(storeJson)
+
+        this.preferredCoverSize = previousState.preferredCoverSize
+        this.coversPerRow = previousState.coversPerRow
+        this.layout = previousState.layout
+        this.currentFilter = previousState.currentFilter
+      }
+
+      // On state change, update local storage
+      this.$subscribe((_mutation, state) => {
+      window.localStorage.setItem(
+        'appStore',
+        JSON.stringify({
+          preferredCoverSize: state.preferredCoverSize,
+          coversPerRow: state.coversPerRow,
+          layout: state.layout,
+          currentFilter: state.currentFilter,
+        })
+      )
+      })
+    },
     loadFromUrl() {
       const matches: string[] | null =
         window.location.pathname.match(/^\/game\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/)

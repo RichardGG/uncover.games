@@ -15,6 +15,8 @@ import { useGoogleAuthStore } from '@/stores/googleAuthStore'
 const appStore = useAppStore()
 const { isMobile } = storeToRefs(appStore)
 
+appStore.init()
+
 window.addEventListener('popstate', () => {
   appStore.loadFromUrl()
 })
