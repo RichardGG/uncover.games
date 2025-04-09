@@ -14,8 +14,9 @@ const driveStore = useDriveStore()
 const { gameOpen } = storeToRefs(appStore)
 const videoId = ref('')
 const bgUrl = ref('')
+const showJson = ref(false)
 const videoWidth = computed(() =>
-  window.innerWidth < 600 ? window.innerWidth - 40 : 600
+  window.innerWidth < 600 ? window.innerWidth - 30 : 600
 )
 const videoHeight = computed(() => videoWidth.value * (9 / 16))
 const description = sanitizeHtml(
@@ -29,6 +30,7 @@ watch(
   () => gameOpen.value?.Name,
   (name) => {
     if (name) {
+      videoId.value = ''
       getYouTubeVideoId(
         `${name} game trailer}`
       ).then((id: string | void) => {
@@ -73,43 +75,60 @@ watch(
       "
     >
     <div
-      class="p-4 relative mt-4 z-10"
+      class="p-4 relative z-10"
     >
-      <iframe
-        v-if="videoId"
-        id="ytplayer"
-        :width="videoWidth"
-        :height="videoHeight"
-        :src="`https://www.youtube.com/embed/${videoId}`"
-        frameborder="0"
-        allowfullscreen
-        class="m-4 pointer-events-none touch-none"
-      />
       <GameCover
-        class="w-50 my-4"
+        class="w-80 mb-4 mx-auto"
         :file-name="gameOpen.CoverImage || undefined"
       />
-      <h2>{{ formatGameField(gameOpen, 'Name') }}</h2>
+      <div class="text-2xl font-bold mb-8">
+        {{ formatGameField(gameOpen, 'Name') }}
+      </div>
+      <div
+        :style="{
+          width: videoWidth + 'px',
+          height: videoHeight + 'px',
+        }"
+        class="m-auto my-4"
+      >
+        <iframe
+          v-if="videoId"
+          id="ytplayer"
+          :width="videoWidth"
+          :height="videoHeight"
+          :src="`https://www.youtube.com/embed/${videoId}`"
+          frameborder="0"
+          allowfullscreen
+          class="pointer-events-none touch-none"
+        />
+      </div>
       <div v-html="description" />
-      <table>
-        <template
-          v-for="field in GameFields"
-          :key="field"
+      <template
+        v-for="field in GameFields"
+        :key="field"
+      >
+        <div
+          v-if="
+            !['Description', 'Name'].includes(field) &&
+              formatGameField(gameOpen, field)
+          "
         >
-          <tr
-            v-if="
-              !['Description', 'Name'].includes(field) &&
-                formatGameField(gameOpen, field)
-            "
-          >
-            <td>
-              <strong>{{ field }}</strong>
-            </td>
-            <td>{{ formatGameField(gameOpen, field) }}</td>
-          </tr>
-        </template>
-      </table>
-      <pre class="break-words whitespace-break-spaces">{{ JSON.stringify(gameOpen, null, ' ') }}</pre>
+          <div class="mt-4 font-light text-sm">
+            {{ field }}
+          </div>
+          <div>{{ formatGameField(gameOpen, field) }}</div>
+        </div>
+      </template>
+      <div
+        class="mt-4 text-xs opacity-40"
+        @click="showJson = !showJson"
+      >
+        Toggle JSON
+      </div>
+      <pre
+        v-if="showJson"
+        class="break-words whitespace-break-spaces text-xs bg-black p-2 rounded-xl mt-2 -mx-4 font-red!"
+      >{{ JSON.stringify(gameOpen, null, ' ') }}</pre>
     </div>
   </div>
 </template>
