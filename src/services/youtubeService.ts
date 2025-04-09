@@ -39,8 +39,8 @@ export async function getYouTubeVideoId(
       const response: YouTubeSearchResponse = data
       return response.items[0]?.id?.videoId
     })
-    .catch(() => {
+    .catch((error) => {
       // TODO check error type
-      googleAuthStore.resetToken()
+      googleAuthStore.resetToken(error)
     })
 }

@@ -1,7 +1,9 @@
+import dayjs from 'dayjs';
 import { defineStore } from 'pinia';
 
 export type GoogleAuthState = {
   token: string | null;
+  lastRefreshed: string | null;
 };
 
 export const useGoogleAuthStore = defineStore('googleAuth', {
@@ -35,8 +37,12 @@ export const useGoogleAuthStore = defineStore('googleAuth', {
       }
       return this.token;
     },
-    resetToken() {
-      // TODO log when the token was reset to prevent loop
+    resetToken(error: Error) {
+      if (dayjs(this.lastRefreshed).isAfter(dayjs().subtract(1, 'minute'))) {
+        alert('request failed: ' + error.message)
+        return
+      }
+      this.lastRefreshed = dayjs().format('YYYY-MM-DD')
       this.token = null
       this.getToken()
     }

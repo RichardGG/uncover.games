@@ -44,12 +44,10 @@ export const useDriveStore = defineStore('drive', {
 
       this.status.state = 'downloading';
       let files: Array<FileMetadata> = []
-      try {
-        files = await fetchFilesList(await googleAuthStore.getToken());
-      } catch {
-        // TODO check error type
-        googleAuthStore.resetToken()
-      }
+      files = await fetchFilesList(await googleAuthStore.getToken()).catch((error: Error) => {
+        googleAuthStore.resetToken(error)
+        throw error
+      })
 
       // Store the fetched files
       this.files = files;
@@ -66,12 +64,9 @@ export const useDriveStore = defineStore('drive', {
 
     async getJson(fileId: string) {
       const googleAuthStore = useGoogleAuthStore()
-      try {
-        return getDriveFile(await googleAuthStore.getToken(), fileId)
-      } catch {
-        // TODO check error type
-        googleAuthStore.resetToken()
-      }
+      return getDriveFile(await googleAuthStore.getToken(), fileId).catch((error: Error) => {
+        googleAuthStore.resetToken(error)
+      })
     },
 
     async getImage(
@@ -114,9 +109,8 @@ export const useDriveStore = defineStore('drive', {
           );
         setCachedData('Images', fileName, dataUri);
         return new Promise((resolve) => resolve(dataUri));
-      } catch {
-        // TODO check error type
-        googleAuthStore.resetToken()
+      } catch (error: Error|any) { // eslint-disable-line
+        googleAuthStore.resetToken(error)
         return new Promise((resolve) => resolve(false));
       }
     },
