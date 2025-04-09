@@ -100,7 +100,7 @@ onMounted(() => {
         </template>
       </Button>
     </template>
-    <div class="-mt-[1vh]">
+    <div class="-mt-[1vh] w-[100vw]">
       <GameDetails />
     </div>
   </BottomSheet>

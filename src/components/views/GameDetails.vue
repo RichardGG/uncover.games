@@ -59,18 +59,12 @@ watch(
 <template>
   <div
     v-if="gameOpen"
-    style="width: 100%"
-    @click="() => (gameOpen = null)"
+    class="w-full overflow-x-hidden"
   >
     <img
       :src="bgUrl"
+      class="w-full h-full absolute object-cover scale-110 blur-2xl"
       style="
-        position: absolute;
-        width: 100%;
-        height: 100vh;
-        object-fit: cover;
-        filter: blur(20px);
-        transform: scale(1.1);
         mask-image: linear-gradient(
           to bottom,
           rgba(0, 0, 0, 1),
@@ -79,7 +73,7 @@ watch(
       "
     >
     <div
-      style="padding: 20px; z-index: 100; position: relative; margin-top: 20px"
+      class="p-4 relative mt-4 z-10"
     >
       <iframe
         v-if="videoId"
@@ -89,9 +83,10 @@ watch(
         :src="`https://www.youtube.com/embed/${videoId}`"
         frameborder="0"
         allowfullscreen
-        class="m-4 pointer-events-none"
+        class="m-4 pointer-events-none touch-none"
       />
       <GameCover
+        class="w-50 my-4"
         :file-name="gameOpen.CoverImage || undefined"
       />
       <h2>{{ formatGameField(gameOpen, 'Name') }}</h2>
@@ -114,7 +109,7 @@ watch(
           </tr>
         </template>
       </table>
-      <pre>{{ JSON.stringify(gameOpen) }}</pre>
+      <pre class="break-words whitespace-break-spaces">{{ JSON.stringify(gameOpen, null, ' ') }}</pre>
     </div>
   </div>
 </template>
