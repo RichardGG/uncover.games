@@ -43,9 +43,8 @@ onMounted(() => {
     }
   }
 
-  const googleApiToken: string = googleAuthStore.getToken()
-  watch(files, () => collectionsStore.init(googleApiToken))
-  driveStore.init(googleApiToken)
+  watch(files, () => collectionsStore.init())
+  driveStore.init()
 })
 </script>
 

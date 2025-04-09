@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useGoogleAuthStore } from './googleAuthStore';
 import {
   getCachedData,
   needsRefresh,
@@ -31,7 +32,8 @@ export const useDriveStore = defineStore('drive', {
   },
 
   actions: {
-    async init(googleApiToken: string) {
+    async init() {
+      const googleAuthStore = useGoogleAuthStore()
       // Fetch from cache
       this.status.state = 'loading-cache';
       const cachedResponse = await getCachedData('files', 'allFiles');
@@ -41,7 +43,13 @@ export const useDriveStore = defineStore('drive', {
       }
 
       this.status.state = 'downloading';
-      const files = await fetchFilesList(googleApiToken);
+      let files: Array<FileMetadata> = []
+      try {
+        files = await fetchFilesList(await googleAuthStore.getToken());
+      } catch {
+        // TODO check error type
+        googleAuthStore.resetToken()
+      }
 
       // Store the fetched files
       this.files = files;
@@ -56,10 +64,21 @@ export const useDriveStore = defineStore('drive', {
       return this.files.find((file) => file.name === name);
     },
 
+    async getJson(fileId: string) {
+      const googleAuthStore = useGoogleAuthStore()
+      try {
+        return getDriveFile(await googleAuthStore.getToken(), fileId)
+      } catch {
+        // TODO check error type
+        googleAuthStore.resetToken()
+      }
+    },
+
     async getImage(
-      googleApiToken: string,
       fileName: string
     ): Promise<false | string> {
+      const googleAuthStore = useGoogleAuthStore()
+
       const file = this.files.find(
         (file) => file.name === fileName?.replace('\\', '_')
       );
@@ -81,7 +100,7 @@ export const useDriveStore = defineStore('drive', {
 
       try {
         const response = await getDriveFile(
-          googleApiToken,
+          await googleAuthStore.getToken(),
           file.id,
           'arraybuffer'
         );
@@ -96,6 +115,8 @@ export const useDriveStore = defineStore('drive', {
         setCachedData('Images', fileName, dataUri);
         return new Promise((resolve) => resolve(dataUri));
       } catch {
+        // TODO check error type
+        googleAuthStore.resetToken()
         return new Promise((resolve) => resolve(false));
       }
     },

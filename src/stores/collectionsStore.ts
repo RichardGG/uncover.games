@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { Game } from '@/types/Game/Game'
 import type { Tag } from '@/types/Game/GameFieldTypes'
 import type { FilterPreset } from '@/types/FilterTypes'
-import { type FileMetadata, getDriveFile } from '@/services/driveService'
+import { type FileMetadata } from '@/services/driveService'
 import type { LoadingStatus } from '@/types/LoadingStatusTypes'
 import {
   getCachedData,
@@ -76,7 +76,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
     return { collections: {}, statuses } as CollectionsState
   },
   actions: {
-    async init(googleApiToken: string) {
+    async init() {
       const driveStore = useDriveStore()
       // For each collection, loads cache, checks if file metadata updated, redownloads
       for (const collectionType of CollectionTypes) {
@@ -104,7 +104,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
 
         try {
           this.statuses[collectionType] = { state: 'downloading' }
-          getDriveFile(googleApiToken, metadata.id).then(({ data }) => {
+          driveStore.getJson(metadata.id).then(({ data }) => {
             setCachedData('Collections', collectionType, JSON.stringify(data))
             this.collections[collectionType] = data
             this.statuses[collectionType] = { state: 'done' }

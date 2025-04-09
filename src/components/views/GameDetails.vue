@@ -7,10 +7,8 @@ import { GameFields } from '@/types/Game/GameField'
 import { formatGameField } from '@/services/formatService'
 import { useDriveStore } from '@/stores/driveStore'
 import { getYouTubeVideoId } from '@/services/youtubeService'
-import { useGoogleAuthStore } from '@/stores/googleAuthStore'
 import GameCover from '@/components/elements/GameCover.vue'
 
-const googleAuthStore = useGoogleAuthStore()
 const appStore = useAppStore()
 const driveStore = useDriveStore()
 const { gameOpen } = storeToRefs(appStore)
@@ -32,9 +30,8 @@ watch(
   (name) => {
     if (name) {
       getYouTubeVideoId(
-        googleAuthStore.getToken(),
         `${name} game trailer}`
-      ).then((id: string | null) => {
+      ).then((id: string | void) => {
         videoId.value = id || ''
       })
     }
@@ -47,7 +44,7 @@ watch(
   (fileName) => {
     if (fileName) {
       driveStore
-        .getImage(googleAuthStore.getToken(), fileName)
+        .getImage(fileName)
         .then((dataUri) => {
           if (dataUri) {
             bgUrl.value = dataUri

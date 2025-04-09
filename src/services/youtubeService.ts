@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useGoogleAuthStore } from '@/stores/googleAuthStore'
 
 export type YouTubeIdData = {
   kind: string
@@ -16,9 +17,10 @@ export type YouTubeSearchResponse = {
 }
 
 export async function getYouTubeVideoId(
-  googleApiToken: string,
   searchTerm: string
 ) {
+  const googleAuthStore = useGoogleAuthStore()
+
   // https://developers.google.com/youtube/v3/docs/search/list
   return axios
     .get('https://www.googleapis.com/youtube/v3/search', {
@@ -30,11 +32,15 @@ export async function getYouTubeVideoId(
         safeSearch: 'strict',
       },
       headers: {
-        Authorization: 'Bearer ' + googleApiToken,
+        Authorization: 'Bearer ' + await googleAuthStore.getToken(),
       },
     })
     .then(({ data }) => {
       const response: YouTubeSearchResponse = data
       return response.items[0]?.id?.videoId
+    })
+    .catch(() => {
+      // TODO check error type
+      googleAuthStore.resetToken()
     })
 }

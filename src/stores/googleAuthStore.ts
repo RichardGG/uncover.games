@@ -35,5 +35,10 @@ export const useGoogleAuthStore = defineStore('googleAuth', {
       }
       return this.token;
     },
+    resetToken() {
+      // TODO log when the token was reset to prevent loop
+      this.token = null
+      this.getToken()
+    }
   },
 });

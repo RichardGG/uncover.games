@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useDriveStore } from '@/stores/driveStore'
-import { useGoogleAuthStore } from '@/stores/googleAuthStore'
 
 const props = defineProps({
   fileName: {
@@ -12,7 +11,6 @@ const props = defineProps({
 })
 
 const driveStore = useDriveStore()
-const googleAuthStore = useGoogleAuthStore()
 
 const url = ref('')
 
@@ -20,7 +18,7 @@ const fetchImage = () => {
   url.value = ''
   if (props.fileName) {
     driveStore
-      .getImage(googleAuthStore.getToken(), props.fileName)
+      .getImage(props.fileName)
       .then((dataUri: string|false) => {
         if (dataUri) {
           url.value = dataUri
