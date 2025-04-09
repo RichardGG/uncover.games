@@ -105,7 +105,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
 
         try {
           this.statuses[collectionType] = { state: 'downloading' }
-          driveStore.getJson(metadata.id).then((response: AxiosResponse | undefined) => {
+          driveStore.getJson(metadata.id).then((response: void | AxiosResponse<any, any>) => { // eslint-disable-line
             if (! response) {
               // TODO handle
               console.error(
