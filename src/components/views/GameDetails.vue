@@ -104,6 +104,8 @@ watch(
       </div>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="safeDescription" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="'<strong>Test v-html</strong>'" />
       <template
         v-for="field in GameFields"
         :key="field"
