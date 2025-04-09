@@ -19,7 +19,7 @@ const videoWidth = computed(() =>
   window.innerWidth < 600 ? window.innerWidth - 30 : 600
 )
 const videoHeight = computed(() => videoWidth.value * (9 / 16))
-const description = sanitizeHtml(
+const safeDescription = sanitizeHtml(
   formatGameField(gameOpen.value, 'Description'),
   {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
@@ -102,7 +102,8 @@ watch(
           class="pointer-events-none touch-none"
         />
       </div>
-      <div v-html="description" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="safeDescription" />
       <template
         v-for="field in GameFields"
         :key="field"
