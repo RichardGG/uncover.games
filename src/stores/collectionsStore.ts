@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import type { AxiosResponse } from 'axios'
 import type { Game } from '@/types/Game/Game'
 import type { Tag } from '@/types/Game/GameFieldTypes'
 import type { FilterPreset } from '@/types/FilterTypes'
@@ -104,7 +105,15 @@ export const useCollectionsStore = defineStore('collectionsStore', {
 
         try {
           this.statuses[collectionType] = { state: 'downloading' }
-          driveStore.getJson(metadata.id).then(({ data }) => {
+          driveStore.getJson(metadata.id).then((response: AxiosResponse | undefined) => {
+            if (! response) {
+              // TODO handle
+              console.error(
+                `Failed to download ${collectionType} file from Google Drive`
+              )
+              return
+            }
+            const { data } = response;
             setCachedData('Collections', collectionType, JSON.stringify(data))
             this.collections[collectionType] = data
             this.statuses[collectionType] = { state: 'done' }
