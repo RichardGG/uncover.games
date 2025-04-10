@@ -1,5 +1,24 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { Divider, InputText, SelectButton, ToggleSwitch } from 'primevue'
+import { useAppStore } from '@/stores/appStore'
+
+const appStore = useAppStore()
+
+const name = ref('')
+
+watch(() => appStore.currentFilter.Settings, (settings) => {
+  name.value = settings?.Name || ''
+}, { immediate: true, deep: true })
+
+watch(name, (newName) => {
+  // TODO this shouldn't happen
+  if (!appStore.currentFilter.Settings) {
+    return
+  }
+  appStore.currentFilter.Settings.Name = newName || null
+})
+
 </script>
 
 <template>
@@ -33,7 +52,10 @@ import { Divider, InputText, SelectButton, ToggleSwitch } from 'primevue'
         <i class="pi pi-search mr-2" />
         Name
       </label>
-      <InputText id="username" />
+      <InputText
+        id="username"
+        v-model="name"
+      />
     </div>
     <div class="mt-1 flex items-center justify-between">
       <label
