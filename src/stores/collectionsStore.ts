@@ -74,7 +74,22 @@ export const useCollectionsStore = defineStore('collectionsStore', {
         state: 'pending',
       }
     })
-    return { collections: {}, statuses } as CollectionsState
+    return { collections: {
+      Games: [],
+      AgeRatings: [],
+      Categories: [],
+      Companies: [],
+      CompletionStatuses: [],
+      Emulators: [],
+      Features: [],
+      FilterPresets: [],
+      Genres: [],
+      Platforms: [],
+      Regions: [],
+      Series: [],
+      Sources: [],
+      Tags: [],
+    }, statuses } as CollectionsState
   },
   actions: {
     async init() {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PhLockSimple, PhLockSimpleOpen } from '@phosphor-icons/vue'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Button } from 'primevue'
 import BottomSheet from '@douxcode/vue-spring-bottom-sheet'
@@ -17,6 +17,8 @@ const customFilterSheet = ref<InstanceType<typeof BottomSheet>>()
 const maxSheetHeight = ref(0)
 const lockSheet = ref(false)
 const isGameSheetOpen = ref(false)
+
+const gameSheetSize = computed(() => lockSheet.value ? 300 : maxSheetHeight.value)
 
 watch(gameOpen, (val) => {
   if (val !== null) {
@@ -49,6 +51,11 @@ const closeGameSheet = () => {
   gameSheet.value?.close()
 }
 
+const pinSheet = () => {
+  lockSheet.value = !lockSheet.value
+  gameSheet.value?.snapToPoint(gameSheetSize.value)
+}
+
 const onGameSheetClosed = () => {
   isGameSheetOpen.value = false
   appStore.setGame(null)
@@ -71,7 +78,7 @@ onMounted(() => {
 <template>
   <BottomSheet
     ref="gameSheet"
-    :snap-points="[300, maxSheetHeight]"
+    :snap-points="[gameSheetSize]"
     :expand-on-content-drag="!lockSheet"
     :blocking="false"
     @max-height="(n) => (maxSheetHeight = n)"
@@ -84,7 +91,7 @@ onMounted(() => {
         severity="secondary"
         :text="!lockSheet"
         class="!absolute -top-0.5 right-1 bg-black/0! border-0!"
-        @click="lockSheet = !lockSheet"
+        @click="pinSheet"
       >
         <template #icon>
           <PhLockSimple
@@ -107,7 +114,7 @@ onMounted(() => {
 
   <BottomSheet
     ref="customFilterSheet"
-    :snap-points="[300, maxSheetHeight]"
+    :snap-points="[maxSheetHeight]"
     @max-height="(n) => (maxSheetHeight = n)"
     @closed="customFilterOpen = false"
   >
