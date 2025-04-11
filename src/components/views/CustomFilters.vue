@@ -26,25 +26,21 @@ const installed: Ref<string[]> = ref([])
 let installedChangeFromComponent = false
 
 watch(() => appStore.currentFilter.Settings.IsInstalled, (isInstalled) => {
-  console.log('watch installed', isInstalled)
   const selectedInstalled = installed.value.indexOf('Installed') !== -1
   if (selectedInstalled && !isInstalled) {
     installed.value = installed.value.filter((item) => item !== 'Installed')
   } else if (!selectedInstalled && isInstalled) {
-    installed.value.push('Installed')
+    installed.value = [...installed.value, 'Installed']
   }
-  console.log('in', installed.value)
 }, { immediate: true })
 
 watch(() => appStore.currentFilter.Settings.IsUnInstalled, (isUnInstalled) => {
-  console.log('watch uninstalled', isUnInstalled)
   const selectedUninstalled = installed.value.indexOf('Uninstalled') !== -1
   if (selectedUninstalled && !isUnInstalled) {
     installed.value = installed.value.filter((item) => item !== 'Uninstalled')
   } else if (!selectedUninstalled && isUnInstalled) {
-    installed.value.push('Uninstalled')
+    installed.value = [...installed.value, 'Uninstalled']
   }
-  console.log('un', installed.value)
 }, { immediate: true })
 
 watch(installed, (newVals, oldVals) => {
