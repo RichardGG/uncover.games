@@ -115,6 +115,7 @@ onMounted(() => {
   <BottomSheet
     ref="customFilterSheet"
     :snap-points="[maxSheetHeight]"
+    :blocking="false"
     @max-height="(n) => (maxSheetHeight = n)"
     @closed="customFilterOpen = false"
   >
