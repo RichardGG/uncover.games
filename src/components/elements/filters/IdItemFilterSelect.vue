@@ -39,7 +39,7 @@ const allOptions = computed(() => [
             label: item,
             value: item,
         })),
-    ...props.options,
+    ...structuredClone(props.options).sort((a, b) => `${a.label}`.localeCompare(`${b.label}`)),
 ])
 
 const filterExists = computed(() => allOptions.value.some((item) => item.value === filter.value))
@@ -109,9 +109,9 @@ watch(() => selected.value, (values: string[]) => {
     option-label="label"
     option-value="value"
     filter
-    display="chip"
     :show-toggle-all="false"
     reset-filter-on-hide
+    class="w-50 max-w-50"
     overlay-class="z-9999!"
     :virtual-scroller-options="{ itemSize: 44 }"
     @filter="filterChanged"
@@ -120,7 +120,7 @@ watch(() => selected.value, (values: string[]) => {
       <Button
         size="small"
         class="-mt-2 -mr-1.5"
-        :disabled="filterExists"
+        :disabled="filterExists || !filter.length"
         @click="addItem"
       >
         +

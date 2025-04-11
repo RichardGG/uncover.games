@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Divider, InputText, SelectButton, ToggleSwitch } from 'primevue'
+import type { Ref } from 'vue'
 import { useAppStore } from '@/stores/appStore'
 import { useCollectionsStore } from '@/stores/collectionsStore'
 import IdItemFilterSelect from '@/components/elements/filters/IdItemFilterSelect.vue'
@@ -21,12 +22,49 @@ import type { Tag } from '@/types/Game/GameFieldTypes'
 const appStore = useAppStore()
 const collectionsStore = useCollectionsStore()
 
-const installed = ref('Installed')
+const installed: Ref<string[]> = ref([])
+let installedChangeFromComponent = false
 
-// watch(installed, (vals) => {
-  // appStore.currentFilter.Settings.
-  // TODO ideally it only supports one, but will display if both selected
-// })
+watch(() => appStore.currentFilter.Settings.IsInstalled, (isInstalled) => {
+  console.log('watch installed', isInstalled)
+  const selectedInstalled = installed.value.indexOf('Installed') !== -1
+  if (selectedInstalled && !isInstalled) {
+    installed.value = installed.value.filter((item) => item !== 'Installed')
+  } else if (!selectedInstalled && isInstalled) {
+    installed.value.push('Installed')
+  }
+  console.log('in', installed.value)
+}, { immediate: true })
+
+watch(() => appStore.currentFilter.Settings.IsUnInstalled, (isUnInstalled) => {
+  console.log('watch uninstalled', isUnInstalled)
+  const selectedUninstalled = installed.value.indexOf('Uninstalled') !== -1
+  if (selectedUninstalled && !isUnInstalled) {
+    installed.value = installed.value.filter((item) => item !== 'Uninstalled')
+  } else if (!selectedUninstalled && isUnInstalled) {
+    installed.value.push('Uninstalled')
+  }
+  console.log('un', installed.value)
+}, { immediate: true })
+
+watch(installed, (newVals, oldVals) => {
+  // When selected manually, change to single item
+  if (installedChangeFromComponent && newVals.length === 2) {
+    installedChangeFromComponent = false
+    const newItem = newVals.find((val) => oldVals.indexOf(val) === -1)
+    if (newItem) {
+      installed.value = [newItem]
+    }
+  } else {
+    // Save to store values
+    appStore.currentFilter.Settings.IsInstalled = newVals.indexOf('Installed') !== -1
+    appStore.currentFilter.Settings.IsUnInstalled = newVals.indexOf('Uninstalled') !== -1
+  }
+})
+
+const onInstalledChanged = () => {
+  installedChangeFromComponent = true
+}
 
 const pastTimeOptions = (Object.keys(PastTimeSegment).filter(k => isNaN(Number(k))) as (keyof typeof PastTimeSegment)[]).map(
   (key: keyof typeof PastTimeSegment) => ({
@@ -58,11 +96,16 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
   <div class="px-4 pb-4">
     <div class="flex w-full items-center justify-between my-4">
       <span>
-        <i class="pi pi-download mr-2" />
+        <i
+          class="pi pi-download mr-2"
+          @click="installed = ['Installed', 'Uninstalled']"
+        />
       </span>
       <SelectButton
         v-model="installed"
         :options="['Installed', 'Uninstalled']"
+        multiple
+        @change="onInstalledChanged"
       />
     </div>
     <div class="flex w-full items-center justify-between my-4">
@@ -89,7 +132,6 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         Name
       </label>
       <InputText
-        id="username"
         v-model="appStore.currentFilter.Settings.Name"
       />
     </div>
@@ -101,7 +143,9 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         <i class="pi pi-asterisk mr-2" />
         Version
       </label>
-      <InputText id="username" />
+      <InputText
+        v-model="appStore.currentFilter.Settings.Version"
+      />
     </div>
     <div class="mt-1 flex items-center justify-between">
       <label
