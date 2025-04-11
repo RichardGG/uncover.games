@@ -47,5 +47,7 @@ watch(() => selected.value, (values: number[]) => {
     option-value="value"
     filter
     display="chip"
+    overlay-class="z-9999!"
+    :virtual-scroller-options="{ itemSize: 44 }"
   />
 </template>

@@ -47,5 +47,6 @@ watch(() => selected.value, (values: string[]) => {
     option-value="value"
     filter
     display="chip"
+    overlay-class="z-9999!"
   />
 </template>

@@ -112,6 +112,8 @@ watch(() => selected.value, (values: string[]) => {
     display="chip"
     :show-toggle-all="false"
     reset-filter-on-hide
+    overlay-class="z-9999!"
+    :virtual-scroller-options="{ itemSize: 44 }"
     @filter="filterChanged"
   >
     <template #filtericon>
