@@ -8,8 +8,8 @@ export type Link = {
 };
 
 export type Tag = {
-  Id: string | null;
-  Name: string | null;
+  Id: string;
+  Name: string;
 };
 
 export type Platform = {
@@ -17,8 +17,8 @@ export type Platform = {
   Icon: string | null;
   Cover: string | null;
   Background: string | null;
-  Id: string | null;
-  Name: string | null;
+  Id: string;
+  Name: string;
 };
 
 export type GameFieldTypes = {

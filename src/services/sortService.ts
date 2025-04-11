@@ -165,7 +165,6 @@ function compareGames(
   if (sortStyle === 'string') {
     if (typeof a[sortField] !== 'string') {
       return 0;
-      console.log('wrong type')
     }
     if (typeof b[sortField] !== 'string') {
       return 0;
@@ -224,7 +223,6 @@ export function sortGames(
     return games;
   }
 
-  console.log(sortField, sortStyle, sortDesc, sortDirection)
   return games.sort((a: Game, b: Game) => {
     const result = compareGames(sortField, sortStyle, sortDesc, a, b);
     if (sortDesc) {

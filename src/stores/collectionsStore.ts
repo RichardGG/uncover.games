@@ -38,7 +38,7 @@ export type CollectionsMap<Types> = {
 }
 
 export interface CollectionsData
-  extends CollectionsMap<Array<FileMetadata> | Array<Tag> | Array<Game>> {
+  extends CollectionsMap<Array<FileMetadata> | Array<Tag> | Array<Game> | Array<FilterPreset>> {
   Games: Array<Game>
   AgeRatings: Array<Tag>
   Categories: Array<Tag>

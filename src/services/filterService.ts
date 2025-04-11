@@ -6,7 +6,7 @@ import {
 } from '@/types/FilterTypes'
 import type { Game } from '@/types/Game/Game'
 import { getNameGroup } from '@/services/groupService'
-import type { Tag } from '@/types/Game/GameFieldTypes'
+import type { Tag, Platform } from '@/types/Game/GameFieldTypes'
 
 // https://learn.microsoft.com/en-us/dotnet/api/system.guid.empty?view=net-9.0
 const GuidEmpty = '00000000-0000-0000-0000-000000000000'
@@ -490,7 +490,9 @@ function FilterByStyleAnd(
       !IsFilterMatchingList(
         filterSettings.Platform,
         game.PlatformIds,
-        game.Platforms
+        // TODO quick hack to get around type issue with Tag[] vs Platform[]
+        // game.Platforms
+        game.Platforms.map((platform: Platform): Tag => ({ Id: platform.Id, Name: platform.Name}))
       )
     ) {
       return false

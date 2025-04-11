@@ -2,10 +2,12 @@ import { defineStore } from 'pinia'
 import { useWindowSize } from '@vueuse/core'
 import { nextTick } from 'vue'
 import type { Game } from '@/types/Game/Game'
-import type { FilterPreset } from '@/types/FilterTypes'
+import { emptyFilter, type FilterPreset } from '@/types/FilterTypes'
 import { useCollectionsStore } from '@/stores/collectionsStore'
 import { GetFilteredGames } from '@/services/filterService'
 import { sortGames } from '@/services/sortService'
+import { GroupableField } from '@/types/GroupTypes'
+import { SortOrder, SortOrderDirection } from '@/types/SortTypes'
 
 export type AppState = {
   gameOpen: Game | null
@@ -30,12 +32,12 @@ export const useAppStore = defineStore('appStore', {
     lastSelectedCoversPerRow: 4,
     layout: 'covers',
     currentFilter: {
-      Settings: null,
+      Settings: emptyFilter,
       Id: null,
       Name: null,
-      GroupingOrder: null,
-      SortingOrder: null,
-      SortingOrderDirection: null,
+      GroupingOrder: GroupableField.None,
+      SortingOrder: SortOrder.Name,
+      SortingOrderDirection: SortOrderDirection.Ascending,
     },
   }),
   getters: {
@@ -50,7 +52,6 @@ export const useAppStore = defineStore('appStore', {
         state.currentFilter.Settings,
         false
       )
-      console.log('order', state.currentFilter.SortingOrder)
       games = sortGames(
         games,
         state.currentFilter.SortingOrder,
@@ -58,6 +59,18 @@ export const useAppStore = defineStore('appStore', {
       )
       return games
     },
+    releaseYears: () => {
+      const collectionsStore = useCollectionsStore()
+      if (!collectionsStore.collections?.Games?.length) {
+        return []
+      }
+      return collectionsStore.collections.Games.reduce((uniqueArray: number[], game: Game) => {
+        if (game.ReleaseYear && uniqueArray.indexOf(game.ReleaseYear) == -1) {
+          uniqueArray.push(game.ReleaseYear)
+        }
+        return uniqueArray
+      }, []).sort((a, b) => b - a)
+    }
   },
   actions: {
     init() {

@@ -1,3 +1,5 @@
+import type { GroupableField } from './GroupTypes';
+import type { SortOrder, SortOrderDirection } from './SortTypes';
 import type { CollectionsData } from '@/stores/collectionsStore';
 
 export type TagFilter = {
@@ -43,18 +45,18 @@ export type FilterPresetSettings = {
   CompletionStatuses: TagFilter | null;
 };
 
-// TODO consider removing nulls
 export type IdItemFilterItemProperties = {
   Ids: Array<string> | null;
   Text: string | null;
 };
 
+// TODO consider removing nulls
 export type EnumFilterItemProperties = {
-  Values: Array<number> | null;
+  Values: Array<number>;
 };
 
 export type StringFilterItemProperties = {
-  Values: Array<string> | null;
+  Values: Array<string>;
 };
 
 export type FilterSettings = {
@@ -71,11 +73,11 @@ export type FilterSettings = {
   Region: IdItemFilterItemProperties | null;
   Source: IdItemFilterItemProperties | null;
   AgeRating: IdItemFilterItemProperties | null;
-  UseAndFilteringStyle: boolean | null;
-  IsInstalled: boolean | null;
-  IsUnInstalled: boolean | null;
-  Hidden: boolean | null;
-  Favorite: boolean | null;
+  UseAndFilteringStyle: boolean;
+  IsInstalled: boolean;
+  IsUnInstalled: boolean;
+  Hidden: boolean;
+  Favorite: boolean;
   Library: IdItemFilterItemProperties | null;
   CompletionStatuses: IdItemFilterItemProperties | null;
   UserScore: EnumFilterItemProperties | null;
@@ -125,12 +127,12 @@ export const emptyFilter: FilterSettings = {
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L243
 export type FilterPreset = {
-  Settings: FilterSettings | null;
+  Settings: FilterSettings;
   Id: string | null;
   Name: string | null;
-  GroupingOrder: number | null; // TODO should be an enum from export?
-  SortingOrder: number | null; // TODO should be an enum from export?
-  SortingOrderDirection: number | null; // TODO should be an enum from export?
+  GroupingOrder: GroupableField;
+  SortingOrder: SortOrder;
+  SortingOrderDirection: SortOrderDirection;
 };
 
 // TODO consider if we want the options here or set against type
