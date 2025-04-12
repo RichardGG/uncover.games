@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import {
-  PhArrowDown,
-  PhBookmarkSimple,
-  PhSquaresFour,
-  PhStackSimple,
-  PhToggleLeft,
-} from '@phosphor-icons/vue'
 import { useTemplateRef, computed } from 'vue'
 import { Button, Badge } from 'primevue'
 import { storeToRefs } from 'pinia'
@@ -13,6 +6,9 @@ import SavedFilters from '@/components/menus/SavedFiltersMenu.vue'
 import { useAppStore } from '@/stores/appStore.ts'
 import LayoutMenu from '@/components/menus/LayoutMenu.vue'
 import SortMenu from '@/components/menus/SortMenu.vue'
+import GroupMenu from '@/components/menus/GroupMenu.vue'
+import ButtonIcon from '@/components/elements/ButtonIcon.vue'
+import { SortOrderDirection } from '@/types/SortTypes'
 
 const appStore = useAppStore()
 const { customFilterOpen } = storeToRefs(appStore)
@@ -20,6 +16,7 @@ const { customFilterOpen } = storeToRefs(appStore)
 const savedFiltersMenu = useTemplateRef('saved-filters-menu')
 const layoutMenu = useTemplateRef('layout-menu')
 const sortMenu = useTemplateRef('sort-menu')
+const groupMenu = useTemplateRef('group-menu')
 
 const customFilterCount = computed(() => {
   let count = 0
@@ -77,8 +74,8 @@ const customFilterCount = computed(() => {
         @click="customFilterOpen = true"
       >
         <template #icon>
-          <PhToggleLeft
-            :size="24"
+          <ButtonIcon
+            :button="customFilterCount ? 'filterOn' : 'filter'"
             class="shrink-0 -mb-2"
           />
         </template>
@@ -93,8 +90,8 @@ const customFilterCount = computed(() => {
       @click="sortMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhArrowDown
-          :size="24"
+        <ButtonIcon
+          :button="appStore.currentFilter.SortingOrderDirection === SortOrderDirection.Descending ? 'sort' : 'sortAsc'"
           class="shrink-0 -mb-2"
         />
       </template>
@@ -109,8 +106,8 @@ const customFilterCount = computed(() => {
       @click="savedFiltersMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhBookmarkSimple
-          :size="24"
+        <ButtonIcon
+          button="saved"
           class="shrink-0 -mb-2"
         />
       </template>
@@ -122,14 +119,16 @@ const customFilterCount = computed(() => {
       severity="secondary"
       text
       class="w-1/5 mx-2 h-14 text-[14px]!"
+      @click="groupMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhStackSimple
-          :size="24"
+        <ButtonIcon
+          button="group"
           class="shrink-0 -mb-2"
         />
       </template>
     </Button>
+    <GroupMenu ref="group-menu" />
     <Button
       label="Layout"
       icon-pos="top"
@@ -139,8 +138,8 @@ const customFilterCount = computed(() => {
       @click="layoutMenu?.menu?.toggle($event)"
     >
       <template #icon>
-        <PhSquaresFour
-          :size="24"
+        <ButtonIcon
+          button="layout"
           class="shrink-0 -mb-2"
         />
       </template>
