@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
 import { UseElementVisibility } from '@vueuse/components'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
+import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primevue'
 import GameCover from '@/components/elements/GameCover.vue'
 import { useAppStore } from '@/stores/appStore.ts'
 
@@ -14,7 +15,7 @@ const {
   coversPerRow,
   lastSelectedCoversPerRow,
   isMobile,
-  games,
+  groupedGames,
 } = storeToRefs(appStore)
 const coversPanel = useTemplateRef('covers-panel')
 const { width } = useElementSize(coversPanel)
@@ -33,7 +34,6 @@ const chunk = <T,>(arr: T[], chunkSize: number): T[][] => {
   return chunks
 }
 
-const rows = computed(() => chunk(games.value || [], coversPerRow.value))
 const flipEmoji: Ref<boolean> = ref(false)
 
 const setPreferredCoverSize = () => {
@@ -80,52 +80,68 @@ onMounted(() => {
     class="relative h-full w-full"
   >
     <div class="absolute h-full w-full overflow-y-scroll">
-      <UseElementVisibility
-        v-for="(item, index) in rows"
-        v-slot="{ isVisible }"
-        :key="`row-${index}`"
+      <Accordion
+        multiple
+        :value="groupedGames.map((group) => group.value)"
       >
-        <div class="flex justify-around md:my-2 my-1 mx-1">
-          <div
-            v-for="(game, gameIndex) in item"
-            :id="`game-cover-${game?.Id}`"
-            :key="`game-${gameIndex}`"
-            class="relative w-full rounded-2xl border-4 md:mx-1 mx-0.5 overflow-hidden border-primary transition-colors cursor-pointer"
-            :class="{
-              'border-transparent': gameOpen?.Id !== game?.Id,
-            }"
-            :style="`height: ${(width / coversPerRow) * 1.4}px;`"
-          >
-            <div
-              class="absolute inset-0 flex items-center justify-center text-center p-4 bg-gray-500/10"
-            >
-              {{ game.Name }}
-            </div>
-            <GameCover
-              v-if="isVisible"
-              :file-name="game.CoverImage || undefined"
-              class="w-full"
-              @click="appStore.setGame(game)"
-            />
-          </div>
-          <div
-            v-for="n in coversPerRow - item.length"
-            :key="n"
-            class="w-full mx-1 border-4 border-transparent"
-          />
-        </div>
-      </UseElementVisibility>
-      <div
-        v-if="isMobile"
-        class="h-[40vh] flex justify-center items-center"
-      >
-        <div
-          class="text-5xl transition-transform"
-          :class="flipEmoji ? '-scale-x-100' : ''"
-          @click="flipEmoji = !flipEmoji"
+        <AccordionPanel
+          v-for="(group) in groupedGames"
+          :key="group.value"
+          :value="group.value"
         >
-          🗿
-        </div>
+          <AccordionHeader class="sticky top-0 z-10">
+            {{ group.name }}
+          </AccordionHeader>
+          <AccordionContent>
+            <UseElementVisibility
+              v-for="(item, index) in chunk(group.games || [], coversPerRow)"
+              v-slot="{ isVisible }"
+              :key="`row-${index}`"
+            >
+              <div class="flex justify-around md:my-2 my-1 mx-1">
+                <div
+                  v-for="(game, gameIndex) in item"
+                  :id="`game-cover-${game?.Id}`"
+                  :key="`game-${gameIndex}`"
+                  class="relative w-full rounded-2xl border-4 md:mx-1 mx-0.5 overflow-hidden border-primary transition-colors cursor-pointer"
+                  :class="{
+                    'border-transparent': gameOpen?.Id !== game?.Id,
+                  }"
+                  :style="`height: ${(width / coversPerRow) * 1.4}px;`"
+                >
+                  <div
+                    class="absolute inset-0 flex items-center justify-center text-center p-4 bg-gray-500/10"
+                  >
+                    {{ game.Name }}
+                  </div>
+                  <GameCover
+                    v-if="isVisible"
+                    :file-name="game.CoverImage || undefined"
+                    class="w-full"
+                    @click="appStore.setGame(game)"
+                  />
+                </div>
+                <div
+                  v-for="n in coversPerRow - item.length"
+                  :key="n"
+                  class="w-full mx-1 border-4 border-transparent"
+                />
+              </div>
+            </UseElementVisibility>
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+    </div>
+    <div
+      v-if="isMobile"
+      class="h-[40vh] flex justify-center items-center"
+    >
+      <div
+        class="text-5xl transition-transform"
+        :class="flipEmoji ? '-scale-x-100' : ''"
+        @click="flipEmoji = !flipEmoji"
+      >
+        🗿
       </div>
     </div>
   </div>

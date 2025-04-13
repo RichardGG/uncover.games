@@ -193,6 +193,15 @@ function addTagsToGroup(groups: Record<string|number, GameGroup>, tags: Tag[]|nu
 // building groups
 export function getGroups(games: Game[], order: GroupableField)
 {
+  if (order === GroupableField.None) {
+    return [
+      {
+        name: '',
+        value: '',
+        games: games,
+      }
+    ]
+  }
   let groups: Record<string|number, GameGroup> = {}
   for (const game of games) {
     // Multiple values per game

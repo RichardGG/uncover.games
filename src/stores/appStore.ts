@@ -64,7 +64,7 @@ export const useAppStore = defineStore('appStore', {
       if (!this.games) {
         return []
       }
-      return getGroups(this.games, state.currentFilter.GroupingOrder)
+      return getGroups(this.games, state.currentFilter.GroupingOrder).sort((a, b) => a.name.localeCompare(b.name))
     },
     releaseYears: () => {
       const collectionsStore = useCollectionsStore()
