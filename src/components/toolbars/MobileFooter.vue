@@ -8,6 +8,7 @@ import LayoutMenu from '@/components/menus/LayoutMenu.vue'
 import SortMenu from '@/components/menus/SortMenu.vue'
 import GroupMenu from '@/components/menus/GroupMenu.vue'
 import ButtonIcon from '@/components/elements/ButtonIcon.vue'
+import FieldIcon from '@/components/elements/FieldIcon.vue'
 import { SortOrderDirection } from '@/types/SortTypes'
 
 const appStore = useAppStore()
@@ -58,12 +59,13 @@ const customFilterCount = computed(() => {
   <div
     class="flex justify-around items-center h-16 px-1 border-t border-(--p-content-border-color) z-10"
   >
-    <div class="relative w-1/5 mx-2">
+    <div class="relative w-1/5 mx-1">
       <Badge
         v-if="customFilterCount"
+        severity="contrast"
         :value="customFilterCount"
         size="small"
-        class="absolute right-0"
+        class="absolute right-0 z-10"
       />
       <Button
         label="Filter"
@@ -75,75 +77,120 @@ const customFilterCount = computed(() => {
       >
         <template #icon>
           <ButtonIcon
+            weight="fill"
             :button="customFilterCount ? 'filterOn' : 'filter'"
             class="shrink-0 -mb-2"
           />
         </template>
       </Button>
     </div>
-    <Button
-      label="Sort"
-      icon-pos="top"
-      severity="secondary"
-      text
-      class="w-1/5 mx-2 h-14 text-[14px]!"
-      @click="sortMenu?.menu?.toggle($event)"
-    >
-      <template #icon>
-        <ButtonIcon
-          :button="appStore.currentFilter.SortingOrderDirection === SortOrderDirection.Descending ? 'sort' : 'sortAsc'"
-          class="shrink-0 -mb-2"
+    <div class="relative w-1/5 mx-1">
+      <Badge
+        v-if="appStore.currentFilter.SortingOrder"
+        severity="contrast"
+        size="small"
+        class="absolute right-0 z-10"
+      >
+        <FieldIcon
+          :sort="appStore.currentFilter.SortingOrder"
+          :size="16"
+          class="-m-2"
         />
-      </template>
-    </Button>
+      </Badge>
+      <Button
+        label="Sort"
+        icon-pos="top"
+        severity="secondary"
+        text
+        class="w-full h-14 text-[14px]!"
+        @click="sortMenu?.menu?.toggle($event)"
+      >
+        <template #icon>
+          <ButtonIcon
+            weight="fill"
+            :button="appStore.currentFilter.SortingOrderDirection === SortOrderDirection.Descending ? 'sort' : 'sortAsc'"
+            class="shrink-0 -mb-2"
+          />
+        </template>
+      </Button>
+    </div>
     <SortMenu ref="sort-menu" />
-    <Button
-      label="Saved"
-      icon-pos="top"
-      severity="secondary"
-      text
-      class="w-1/5 mx-2 h-14 text-[14px]!"
-      @click="savedFiltersMenu?.menu?.toggle($event)"
-    >
-      <template #icon>
-        <ButtonIcon
-          button="saved"
-          class="shrink-0 -mb-2"
-        />
-      </template>
-    </Button>
+    <div class="relative w-1/5 mx-1">
+      <Badge
+        v-if="appStore.currentFilter.Name"
+        severity="contrast"
+        :value="appStore.currentFilter.Name.charAt(0)"
+        size="small"
+        class="absolute right-0 z-10"
+      />
+      <Button
+        label="Saved"
+        icon-pos="top"
+        severity="secondary"
+        text
+        class="w-full h-14 text-[14px]!"
+        @click="savedFiltersMenu?.menu?.toggle($event)"
+      >
+        <template #icon>
+          <ButtonIcon
+            weight="fill"
+            button="saved"
+            class="shrink-0 -mb-2"
+          />
+        </template>
+      </Button>
+    </div>
     <SavedFilters ref="saved-filters-menu" />
-    <Button
-      label="Group"
-      icon-pos="top"
-      severity="secondary"
-      text
-      class="w-1/5 mx-2 h-14 text-[14px]!"
-      @click="groupMenu?.menu?.toggle($event)"
-    >
-      <template #icon>
-        <ButtonIcon
-          button="group"
-          class="shrink-0 -mb-2"
+    <div class="relative w-1/5 mx-1">
+      <Badge
+        v-if="appStore.currentFilter.GroupingOrder"
+        severity="contrast"
+        :value="1"
+        size="small"
+        class="absolute right-0 z-10"
+      >
+        <FieldIcon
+          :group="appStore.currentFilter.GroupingOrder"
+          :size="16"
+          class="-m-2"
         />
-      </template>
-    </Button>
+      </Badge>
+      <Button
+        label="Group"
+        icon-pos="top"
+        severity="secondary"
+        text
+        class="w-full h-14 text-[14px]!"
+        @click="groupMenu?.menu?.toggle($event)"
+      >
+        <template #icon>
+          <ButtonIcon
+            weight="fill"
+            button="group"
+            class="shrink-0 -mb-2"
+          />
+        </template>
+      </Button>
+    </div>
     <GroupMenu ref="group-menu" />
-    <Button
-      label="Layout"
-      icon-pos="top"
-      severity="secondary"
-      text
-      class="w-1/5 mx-2 h-14 text-[14px]!"
-      @click="layoutMenu?.menu?.toggle($event)"
-    >
-      <template #icon>
-        <ButtonIcon
-          button="layout"
-          class="shrink-0 -mb-2"
-        />
-      </template>
-    </Button>
+    <div class="relative w-1/5 mx-1">
+      <Button
+        label="Layout"
+        icon-pos="top"
+        severity="secondary"
+        text
+        class="w-full h-14 text-[14px]!"
+        @click="layoutMenu?.menu?.toggle($event)"
+      >
+        <template #icon>
+          <ButtonIcon
+            weight="fill"
+            button="layout"
+            class="shrink-0 -mb-2"
+          />
+        </template>
+      </Button>
+    </div>
     <LayoutMenu ref="layout-menu" />
   </div>
 </template>
