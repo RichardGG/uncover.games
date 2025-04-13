@@ -82,7 +82,7 @@ onMounted(() => {
     <div class="absolute h-full w-full overflow-y-scroll">
       <Accordion
         multiple
-        :value="groupedGames.map((group) => group.value)"
+        :value="groupedGames.map((group) => `${group.value}`)"
       >
         <AccordionPanel
           v-for="(group) in groupedGames"
