@@ -8,7 +8,7 @@ import { GetFilteredGames } from '@/services/filterService'
 import { sortGames } from '@/services/sortService'
 import { GroupableField } from '@/types/GroupTypes'
 import { SortOrder, SortOrderDirection } from '@/types/SortTypes'
-import { getGroups } from '@/services/groupService'
+import { getGroups, type GameGroup } from '@/services/groupService'
 
 export type AppState = {
   gameOpen: Game | null
@@ -60,7 +60,7 @@ export const useAppStore = defineStore('appStore', {
       )
       return games
     },
-    groupedGames(state) {
+    groupedGames(state): GameGroup[] {
       if (!this.games) {
         return []
       }

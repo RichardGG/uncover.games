@@ -292,6 +292,5 @@ export function getGroups(games: Game[], order: GroupableField)
     }
   }
 
-  // TODO remove keys, just values?
-  return groups
+  return Object.values(groups)
 }
