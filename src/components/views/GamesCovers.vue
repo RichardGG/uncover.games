@@ -87,7 +87,7 @@ onMounted(() => {
         <AccordionPanel
           v-for="(group) in groupedGames"
           :key="group.value"
-          :value="group.value"
+          :value="`${group.value}`"
         >
           <AccordionHeader class="sticky top-0 z-10">
             {{ group.name }}
