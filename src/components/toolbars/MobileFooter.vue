@@ -62,7 +62,7 @@ const customFilterCount = computed(() => {
     <div class="relative w-1/5 mx-1">
       <Badge
         v-if="customFilterCount"
-        severity="contrast"
+        severity="secondary"
         :value="customFilterCount"
         size="small"
         class="absolute right-0 z-10"
@@ -77,7 +77,7 @@ const customFilterCount = computed(() => {
       >
         <template #icon>
           <ButtonIcon
-            weight="fill"
+            weight="regular"
             :button="customFilterCount ? 'filterOn' : 'filter'"
             class="shrink-0 -mb-2"
           />
@@ -87,7 +87,8 @@ const customFilterCount = computed(() => {
     <div class="relative w-1/5 mx-1">
       <Badge
         v-if="appStore.currentFilter.SortingOrder"
-        severity="contrast"
+        severity="secondary"
+        :value="1"
         size="small"
         class="absolute right-0 z-10"
       >
@@ -107,7 +108,7 @@ const customFilterCount = computed(() => {
       >
         <template #icon>
           <ButtonIcon
-            weight="fill"
+            weight="regular"
             :button="appStore.currentFilter.SortingOrderDirection === SortOrderDirection.Descending ? 'sort' : 'sortAsc'"
             class="shrink-0 -mb-2"
           />
@@ -118,7 +119,7 @@ const customFilterCount = computed(() => {
     <div class="relative w-1/5 mx-1">
       <Badge
         v-if="appStore.currentFilter.Name"
-        severity="contrast"
+        severity="secondary"
         :value="appStore.currentFilter.Name.charAt(0)"
         size="small"
         class="absolute right-0 z-10"
@@ -133,7 +134,7 @@ const customFilterCount = computed(() => {
       >
         <template #icon>
           <ButtonIcon
-            weight="fill"
+            weight="regular"
             button="saved"
             class="shrink-0 -mb-2"
           />
@@ -144,7 +145,7 @@ const customFilterCount = computed(() => {
     <div class="relative w-1/5 mx-1">
       <Badge
         v-if="appStore.currentFilter.GroupingOrder"
-        severity="contrast"
+        severity="secondary"
         :value="1"
         size="small"
         class="absolute right-0 z-10"
@@ -165,7 +166,7 @@ const customFilterCount = computed(() => {
       >
         <template #icon>
           <ButtonIcon
-            weight="fill"
+            weight="regular"
             button="group"
             class="shrink-0 -mb-2"
           />
@@ -184,7 +185,7 @@ const customFilterCount = computed(() => {
       >
         <template #icon>
           <ButtonIcon
-            weight="fill"
+            weight="regular"
             button="layout"
             class="shrink-0 -mb-2"
           />
