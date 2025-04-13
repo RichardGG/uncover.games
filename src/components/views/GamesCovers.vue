@@ -7,6 +7,7 @@ import type { Ref } from 'vue'
 import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primevue'
 import GameCover from '@/components/elements/GameCover.vue'
 import { useAppStore } from '@/stores/appStore.ts'
+import { GroupableField } from '@/types/GroupTypes'
 
 const appStore = useAppStore()
 const {
@@ -89,7 +90,12 @@ onMounted(() => {
           :key="group.value"
           :value="`${group.value}`"
         >
-          <AccordionHeader class="sticky top-0 z-10">
+          <AccordionHeader
+            class="sticky top-0 z-10"
+            :class="{
+              'hidden': appStore.currentFilter.GroupingOrder === GroupableField.None
+            }"
+          >
             {{ group.name }}
           </AccordionHeader>
           <AccordionContent>
@@ -131,17 +137,17 @@ onMounted(() => {
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
-    </div>
-    <div
-      v-if="isMobile"
-      class="h-[40vh] flex justify-center items-center"
-    >
       <div
-        class="text-5xl transition-transform"
-        :class="flipEmoji ? '-scale-x-100' : ''"
-        @click="flipEmoji = !flipEmoji"
+        v-if="isMobile"
+        class="h-[40vh] flex justify-center items-center"
       >
-        🗿
+        <div
+          class="text-5xl transition-transform"
+          :class="flipEmoji ? '-scale-x-100' : ''"
+          @click="flipEmoji = !flipEmoji"
+        >
+          🗿
+        </div>
       </div>
     </div>
   </div>
