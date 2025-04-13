@@ -8,6 +8,7 @@ import { GetFilteredGames } from '@/services/filterService'
 import { sortGames } from '@/services/sortService'
 import { GroupableField } from '@/types/GroupTypes'
 import { SortOrder, SortOrderDirection } from '@/types/SortTypes'
+import { getGroups } from '@/services/groupService'
 
 export type AppState = {
   gameOpen: Game | null
@@ -42,7 +43,7 @@ export const useAppStore = defineStore('appStore', {
   }),
   getters: {
     isMobile: () => width.value < 768,
-    games: (state) => {
+    games(state) {
       const collectionsStore = useCollectionsStore()
       if (!collectionsStore.collections?.Games?.length) {
         return []
@@ -58,6 +59,12 @@ export const useAppStore = defineStore('appStore', {
         state.currentFilter.SortingOrderDirection,
       )
       return games
+    },
+    groupedGames(state) {
+      if (!this.games) {
+        return []
+      }
+      return getGroups(this.games, state.currentFilter.GroupingOrder)
     },
     releaseYears: () => {
       const collectionsStore = useCollectionsStore()
