@@ -103,7 +103,10 @@ onMounted(() => {
     class="relative h-full w-full"
   >
     <div class="absolute h-full w-full overflow-y-scroll">
-      <div class="w-full flex items-center">
+      <div
+        v-if="appStore.currentFilter.GroupingOrder !== GroupableField.None"
+        class="w-full flex items-center"
+      >
         <div class="ml-4 font-medium flex items-center">
           <FieldIcon
             :group="appStore.currentFilter.GroupingOrder"
@@ -112,7 +115,6 @@ onMounted(() => {
           {{ groupableFieldTranslations[appStore.currentFilter.GroupingOrder] }}
         </div>
         <Button
-          v-if="appStore.currentFilter.GroupingOrder !== GroupableField.None"
           severity="secondary"
           class="m-2 ml-auto mr-4"
           @click="toggleGroups"
