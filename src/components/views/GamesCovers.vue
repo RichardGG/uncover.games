@@ -4,10 +4,11 @@ import { useElementSize } from '@vueuse/core'
 import { UseElementVisibility } from '@vueuse/components'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primevue'
+import { Accordion, AccordionPanel, AccordionHeader, AccordionContent, Button } from 'primevue'
 import GameCover from '@/components/elements/GameCover.vue'
 import { useAppStore } from '@/stores/appStore.ts'
-import { GroupableField } from '@/types/GroupTypes'
+import { GroupableField, groupableFieldTranslations } from '@/types/GroupTypes'
+import FieldIcon from '@/components/elements/FieldIcon.vue'
 
 const appStore = useAppStore()
 const {
@@ -35,6 +36,7 @@ const chunk = <T,>(arr: T[], chunkSize: number): T[][] => {
   return chunks
 }
 
+const expandedGroups: Ref<string[]> = ref([])
 const flipEmoji: Ref<boolean> = ref(false)
 
 const setPreferredCoverSize = () => {
@@ -48,6 +50,18 @@ const scrollToGame = () => {
         .getElementById(`game-cover-${gameOpen.value?.Id}`)
         ?.scrollIntoView({ behavior: 'instant', block: 'center' })
     })
+  }
+}
+
+const expandAllGroups = () => {
+  expandedGroups.value = groupedGames.value?.map((group) => `${group.value}`)
+}
+
+const toggleGroups = () => {
+  if (expandedGroups.value?.length) {
+    expandedGroups.value = []
+  } else {
+    expandAllGroups()
   }
 }
 
@@ -70,6 +84,14 @@ watch(lastSelectedCoversPerRow, () => {
   setPreferredCoverSize()
 })
 
+watch(groupedGames, (groups) => {
+  if (groups.length > 20) {
+    expandedGroups.value = []
+  } else {
+    expandAllGroups()
+  }
+}, { immediate: true })
+
 onMounted(() => {
   // TODO maybe we don't want this?
   // setPreferredCoverSize()
@@ -81,9 +103,26 @@ onMounted(() => {
     class="relative h-full w-full"
   >
     <div class="absolute h-full w-full overflow-y-scroll">
+      <div class="w-full flex items-center">
+        <div class="ml-4 font-medium flex items-center">
+          <FieldIcon
+            :group="appStore.currentFilter.GroupingOrder"
+            class="mr-2 text-surface-500"
+          />
+          {{ groupableFieldTranslations[appStore.currentFilter.GroupingOrder] }}
+        </div>
+        <Button
+          v-if="appStore.currentFilter.GroupingOrder !== GroupableField.None"
+          severity="secondary"
+          class="m-2 ml-auto mr-4"
+          @click="toggleGroups"
+        >
+          {{ expandedGroups.length ? 'Collapse all' : 'Expand all' }}
+        </Button>
+      </div>
       <Accordion
         multiple
-        :value="groupedGames.map((group) => `${group.value}`)"
+        :value="expandedGroups"
       >
         <AccordionPanel
           v-for="(group) in groupedGames"
