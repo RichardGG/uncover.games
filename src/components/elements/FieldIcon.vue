@@ -47,6 +47,11 @@ defineProps({
       type: Number,
       required: false,
       default: 24,
+    },
+    filter: {
+      type: String,
+      required: false,
+      default: '',
     }
 })
 </script>
@@ -55,6 +60,7 @@ defineProps({
     v-if="
       sort === SortOrder.Name
         || group === GroupableField.Name
+        || filter === 'Name'
     "
     :size="size"
   />
@@ -62,6 +68,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Platforms
         || group === GroupableField.Platform
+        || filter === 'Platform'
     "
     :size="size"
   />
@@ -69,6 +76,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Library
         || group === GroupableField.Library
+        || filter === 'Library'
     "
     :size="size"
   />
@@ -76,6 +84,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Categories
         || group === GroupableField.Category
+        || filter === 'Category'
     "
     :size="size"
   />
@@ -83,6 +92,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.LastActivity
         || group === GroupableField.LastActivity
+        || filter === 'LastActivity'
     "
     :size="size"
   />
@@ -90,6 +100,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Genres
         || group === GroupableField.Genre
+        || filter === 'Genre'
     "
     :size="size"
   />
@@ -97,6 +108,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.ReleaseDate
         || group === GroupableField.ReleaseYear
+        || filter === 'ReleaseYear'
     "
     :size="size"
   />
@@ -104,6 +116,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Developers
         || group === GroupableField.Developer
+        || filter === 'Developer'
     "
     :size="size"
   />
@@ -111,6 +124,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Publishers
         || group === GroupableField.Publisher
+        || filter === 'Publisher'
     "
     :size="size"
   />
@@ -118,6 +132,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Tags
         || group === GroupableField.Tag
+        || filter === 'Tag'
     "
     :size="size"
   />
@@ -125,6 +140,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Series
         || group === GroupableField.Series
+        || filter === 'Series'
     "
     :size="size"
   />
@@ -132,12 +148,14 @@ defineProps({
     v-else-if="
       sort === SortOrder.AgeRatings
         || group === GroupableField.AgeRating
+        || filter === 'AgeRating'
     "
     :size="size"
   />
   <PhAsterisk
     v-else-if="
       sort === SortOrder.Version
+        || filter === 'Version'
     "
     :size="size"
   />
@@ -145,6 +163,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Regions
         || group === GroupableField.Region
+        || filter === 'Region'
     "
     :size="size"
   />
@@ -152,6 +171,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Source
         || group === GroupableField.Source
+        || filter === 'Source'
     "
     :size="size"
   />
@@ -165,6 +185,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Playtime
         || group === GroupableField.PlayTime
+        || filter === 'PlayTime'
     "
     :size="size"
   />
@@ -172,6 +193,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.CompletionStatus
         || group === GroupableField.CompletionStatus
+        || filter === 'CompletionStatuses'
     "
     :size="size"
   />
@@ -179,6 +201,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.UserScore
         || group === GroupableField.UserScore
+        || filter === 'UserScore'
     "
     :size="size"
   />
@@ -186,6 +209,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.CriticScore
         || group === GroupableField.CriticScore
+        || filter === 'CriticScore'
     "
     :size="size"
   />
@@ -193,6 +217,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.CommunityScore
         || group === GroupableField.CommunityScore
+        || filter === 'CommunityScore'
     "
     :size="size"
   />
@@ -200,6 +225,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Added
         || group === GroupableField.Added
+        || filter === 'Added'
     "
     :size="size"
   />
@@ -207,6 +233,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Modified
         || group === GroupableField.Modified
+        || filter === 'Modified'
     "
     :size="size"
   />
@@ -214,18 +241,21 @@ defineProps({
     v-else-if="
       sort === SortOrder.IsInstalled
         || group === GroupableField.InstallationStatus
+        || filter === 'InstallationStatus'
     "
     :size="size"
   />
   <PhEyeSlash
     v-else-if="
       sort === SortOrder.Hidden
+        || filter === 'Hidden'
     "
     :size="size"
   />
   <PhStar
     v-else-if="
       sort === SortOrder.Favorite
+        || filter === 'Favorite'
     "
     :size="size"
   />
@@ -233,6 +263,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.InstallDirectory
         || group === GroupableField.InstallDrive
+        || filter === 'InstallDrive'
     "
     :size="size"
   />
@@ -240,6 +271,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.Features
         || group === GroupableField.Feature
+        || filter === 'Feature'
     "
     :size="size"
   />
@@ -247,6 +279,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.InstallSize
         || group === GroupableField.InstallSize
+        || filter === 'InstallSize'
     "
     :size="size"
   />
@@ -254,6 +287,7 @@ defineProps({
     v-else-if="
       sort === SortOrder.RecentActivity
         || group === GroupableField.RecentActivity
+        || filter === 'RecentActivity'
     "
     :size="size"
   />

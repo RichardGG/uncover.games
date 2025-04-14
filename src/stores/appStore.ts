@@ -2,12 +2,10 @@ import { defineStore } from 'pinia'
 import { useWindowSize } from '@vueuse/core'
 import { nextTick } from 'vue'
 import type { Game } from '@/types/Game/Game'
-import { emptyFilter, type FilterPreset } from '@/types/FilterTypes'
+import { emptyFilterPreset, emptyFilterSettings, type FilterPreset } from '@/types/FilterTypes'
 import { useCollectionsStore } from '@/stores/collectionsStore'
 import { GetFilteredGames } from '@/services/filterService'
 import { sortGames } from '@/services/sortService'
-import { GroupableField } from '@/types/GroupTypes'
-import { SortOrder, SortOrderDirection } from '@/types/SortTypes'
 import { getGroups, type GameGroup } from '@/services/groupService'
 
 export type AppState = {
@@ -32,14 +30,7 @@ export const useAppStore = defineStore('appStore', {
     coversPerRow: 4,
     lastSelectedCoversPerRow: 4,
     layout: 'covers',
-    currentFilter: {
-      Settings: emptyFilter,
-      Id: null,
-      Name: null,
-      GroupingOrder: GroupableField.None,
-      SortingOrder: SortOrder.Name,
-      SortingOrderDirection: SortOrderDirection.Ascending,
-    },
+    currentFilter: emptyFilterPreset,
   }),
   getters: {
     isMobile: () => width.value < 768,
@@ -141,6 +132,11 @@ export const useAppStore = defineStore('appStore', {
       } else {
         this.updateUrl(push)
       }
+    },
+    clearFilters() {
+      this.currentFilter.Settings = emptyFilterSettings
+      this.currentFilter.Id = null
+      this.currentFilter.Name = null
     },
     // setCustomFilter (filter) {
     //   this.customFilter = filter

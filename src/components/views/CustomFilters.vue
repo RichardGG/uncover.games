@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { PhBroom } from '@phosphor-icons/vue'
 import { ref, watch } from 'vue'
-import { Divider, InputText, SelectButton, ToggleSwitch } from 'primevue'
+import { Button, Divider, InputText, SelectButton, ToggleSwitch } from 'primevue'
 import type { Ref } from 'vue'
 import { useAppStore } from '@/stores/appStore'
 import { useCollectionsStore } from '@/stores/collectionsStore'
 import IdItemFilterSelect from '@/components/elements/filters/IdItemFilterSelect.vue'
 import StringFilterSelect from '@/components/elements/filters/StringFilterSelect.vue'
 import EnumFilterSelect from '@/components/elements/filters/EnumFilterSelect.vue'
+import FieldIcon from '@/components/elements/FieldIcon.vue'
 import {
   PastTimeSegment,
   pastTimeSegmentTranslations,
@@ -86,16 +88,25 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
     value: PlaytimeCategory[key]
   })
 )
+
+const clearFilters = () => {
+  appStore.clearFilters()
+}
 </script>
 
 <template>
   <div class="px-4 pb-4">
+    <Button
+      class="w-full mt-2"
+      severity="secondary"
+      @click="clearFilters"
+    >
+      <PhBroom :size="20" />
+      Clear filters
+    </Button>
     <div class="flex w-full items-center justify-between my-4">
       <span>
-        <i
-          class="pi pi-download mr-2"
-          @click="installed = ['Installed', 'Uninstalled']"
-        />
+        <FieldIcon filter="InstallationStatus" />
       </span>
       <SelectButton
         v-model="installed"
@@ -106,14 +117,20 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
     </div>
     <div class="flex w-full items-center justify-between my-4">
       <span>
-        <i class="pi pi-eye-slash mr-2" />
+        <FieldIcon
+          filter="Hidden"
+          class="inline mr-2"
+        />
         Hidden
       </span>
       <ToggleSwitch v-model="appStore.currentFilter.Settings.Hidden" />
     </div>
     <div class="flex w-full items-center justify-between my-4">
       <span>
-        <i class="pi pi-star mr-2" />
+        <FieldIcon
+          filter="Favorite"
+          class="inline mr-2"
+        />
         Favorite
       </span>
       <ToggleSwitch v-model="appStore.currentFilter.Settings.Favorite" />
@@ -124,7 +141,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-search mr-2" />
+        <FieldIcon
+          filter="Name"
+          class="inline mr-2"
+        />
         Name
       </label>
       <InputText
@@ -136,7 +156,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-asterisk mr-2" />
+        <FieldIcon
+          filter="Version"
+          class="inline mr-2"
+        />
         Version
       </label>
       <InputText
@@ -148,7 +171,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-calendar mr-2" />
+        <FieldIcon
+          filter="ReleaseYear"
+          class="inline mr-2"
+        />
         Release year
       </label>
       <!-- TODO do we want to filter the options by what's available in the current games? -->
@@ -163,7 +189,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-car mr-2" />
+        <FieldIcon
+          filter="Genre"
+          class="inline mr-2"
+        />
         Genre
       </label>
       <IdItemFilterSelect
@@ -176,7 +205,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-box mr-2" />
+        <FieldIcon
+          filter="Platform"
+          class="inline mr-2"
+        />
         Platform
       </label>
       <IdItemFilterSelect
@@ -189,7 +221,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-dollar mr-2" />
+        <FieldIcon
+          filter="Publisher"
+          class="inline mr-2"
+        />
         Publishser
       </label>
       <IdItemFilterSelect
@@ -202,7 +237,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-code mr-2" />
+        <FieldIcon
+          filter="Developer"
+          class="inline mr-2"
+        />
         Developer
       </label>
       <IdItemFilterSelect
@@ -215,7 +253,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-folder mr-2" />
+        <FieldIcon
+          filter="Category"
+          class="inline mr-2"
+        />
         Category
       </label>
       <IdItemFilterSelect
@@ -228,7 +269,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-tag mr-2" />
+        <FieldIcon
+          filter="Tag"
+          class="inline mr-2"
+        />
         Tag
       </label>
       <IdItemFilterSelect
@@ -241,7 +285,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-clone mr-2" />
+        <FieldIcon
+          filter="Series"
+          class="inline mr-2"
+        />
         Series
       </label>
       <IdItemFilterSelect
@@ -254,7 +301,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-globe mr-2" />
+        <FieldIcon
+          filter="Region"
+          class="inline mr-2"
+        />
         Region
       </label>
       <IdItemFilterSelect
@@ -268,7 +318,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-cart-arrow-down mr-2" />
+        <FieldIcon
+          filter="Source"
+          class="inline mr-2"
+        />
         Source
       </label>
       <IdItemFilterSelect
@@ -281,7 +334,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-user mr-2" />
+        <FieldIcon
+          filter="AgeRating"
+          class="inline mr-2"
+        />
         Age rating
       </label>
       <IdItemFilterSelect
@@ -294,7 +350,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-book mr-2" />
+        <FieldIcon
+          filter="Library"
+          class="inline mr-2"
+        />
         Library
       </label>
       <!-- <IdItemFilterSelect
@@ -307,7 +366,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-discord mr-2" />
+        <FieldIcon
+          filter="Feature"
+          class="inline mr-2"
+        />
         Feature
       </label>
       <IdItemFilterSelect
@@ -321,7 +383,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-thumbs-up mr-2" />
+        <FieldIcon
+          filter="UserScore"
+          class="inline mr-2"
+        />
         User score
       </label>
       <EnumFilterSelect
@@ -334,7 +399,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-briefcase mr-2" />
+        <FieldIcon
+          filter="CriticScore"
+          class="inline mr-2"
+        />
         Critic score
       </label>
       <EnumFilterSelect
@@ -347,7 +415,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-face-smile mr-2" />
+        <FieldIcon
+          filter="CommunityScore"
+          class="inline mr-2"
+        />
         Community score
       </label>
       <EnumFilterSelect
@@ -361,7 +432,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-history mr-2" />
+        <FieldIcon
+          filter="LastActivity"
+          class="inline mr-2"
+        />
         Last played
       </label>
       <EnumFilterSelect
@@ -374,7 +448,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-file-edit mr-2" />
+        <FieldIcon
+          filter="RecentActivity"
+          class="inline mr-2"
+        />
         Recent activity
       </label>
       <EnumFilterSelect
@@ -387,7 +464,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-plus-circle mr-2" />
+        <FieldIcon
+          filter="Added"
+          class="inline mr-2"
+        />
         Date added
       </label>
       <EnumFilterSelect
@@ -400,7 +480,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-pencil mr-2" />
+        <FieldIcon
+          filter="Modified"
+          class="inline mr-2"
+        />
         Date modified
       </label>
       <EnumFilterSelect
@@ -413,7 +496,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-clock mr-2" />
+        <FieldIcon
+          filter="PlayTime"
+          class="inline mr-2"
+        />
         Time played
       </label>
       <EnumFilterSelect
@@ -427,7 +513,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-download mr-2" />
+        <FieldIcon
+          filter="InstallSize"
+          class="inline mr-2"
+        />
         Install size
       </label>
       <EnumFilterSelect
@@ -440,7 +529,10 @@ const playtimeOptions = (Object.keys(PlaytimeCategory).filter(k => isNaN(Number(
         for="username"
         class="block mb-2"
       >
-        <i class="pi pi-check mr-2" />
+        <FieldIcon
+          filter="CompletionStatuses"
+          class="inline mr-2"
+        />
         Completion status
       </label>
       <IdItemFilterSelect

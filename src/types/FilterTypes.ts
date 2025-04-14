@@ -1,5 +1,5 @@
-import type { GroupableField } from './GroupTypes';
-import type { SortOrder, SortOrderDirection } from './SortTypes';
+import { GroupableField } from './GroupTypes';
+import { SortOrder, SortOrderDirection } from './SortTypes';
 import type { CollectionsData } from '@/stores/collectionsStore';
 
 export type TagFilter = {
@@ -92,7 +92,7 @@ export type FilterSettings = {
   Feature: IdItemFilterItemProperties | null;
 };
 
-export const emptyFilter: FilterSettings = {
+export const emptyFilterSettings: FilterSettings = {
   UseAndFilteringStyle: false,
   IsInstalled: false,
   IsUnInstalled: false,
@@ -124,6 +124,15 @@ export const emptyFilter: FilterSettings = {
   InstallSize: null,
   CompletionStatuses: null,
 };
+
+export const emptyFilterPreset: FilterPreset = {
+  Settings: emptyFilterSettings,
+  Id: null,
+  Name: null,
+  GroupingOrder: GroupableField.None,
+  SortingOrder: SortOrder.Name,
+  SortingOrderDirection: SortOrderDirection.Ascending,
+}
 
 // https://github.com/JosefNemec/Playnite/blob/master/source/PlayniteSDK/Models/FilterPreset.cs#L243
 export type FilterPreset = {
