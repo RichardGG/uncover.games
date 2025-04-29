@@ -20,10 +20,10 @@ const sortOptions = computed(() => sortKeys.map((key) => ({
 })))
 
 const scrollToTop = () => {
-  if (menu.value) {
-    // TODO this doesn't work
-    // console.log('open menu', menu.value.$el)
-    // menu.value.$el.querySelector('.overflow-y-scroll')[0].scrollTop = 0
+  // @ts-expect-error list is not provided in the type definition
+  const list: element = menu.value?.list
+  if (list) {
+    list.parentElement.scrollTop = 0
   }
 }
 

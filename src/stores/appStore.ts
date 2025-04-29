@@ -98,7 +98,7 @@ export const useAppStore = defineStore('appStore', {
     },
     loadFromUrl() {
       const matches: string[] | null =
-        window.location.pathname.match(/^\/game\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/)
+        window.location.hash.match(/^#?\/game\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/)
       if (matches) {
         // We will open a game route, but we should make sure the view without the game is loaded initially
         window.history.replaceState({}, '', '/')
@@ -110,9 +110,9 @@ export const useAppStore = defineStore('appStore', {
     },
     updateUrl(push: boolean = false) {
       // General rule, only pushState when navigating deeper, when switching within the same view: replaceState
-      let path = '/'
+      let path = '#/'
       if (this.gameOpen !== null) {
-        path = `/game/${this.gameOpen.Id}`
+        path = `#/game/${this.gameOpen.Id}`
       }
       if (push) {
         nextTick(() => window.history.pushState({}, '', path))

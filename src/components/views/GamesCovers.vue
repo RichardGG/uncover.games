@@ -139,7 +139,7 @@ onMounted(() => {
           >
             {{ group.name }}
           </AccordionHeader>
-          <AccordionContent>
+          <AccordionContent :pt="{ content: { class: 'px-0!' } }">
             <UseElementVisibility
               v-for="(item, index) in chunk(group.games || [], coversPerRow)"
               v-slot="{ isVisible }"

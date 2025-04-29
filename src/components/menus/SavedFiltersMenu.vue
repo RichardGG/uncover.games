@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Popover } from 'primevue'
+import { Menu } from 'primevue'
 import { defineExpose, useTemplateRef } from 'vue'
 import { storeToRefs } from 'pinia'
 
@@ -14,16 +14,22 @@ const menu = useTemplateRef('saved-filters-menu')
 defineExpose({ menu })
 </script>
 <template>
-  <Popover ref="saved-filters-menu">
-    <div
-      v-for="(filter, index) in collectionsStore.collections.FilterPresets"
-      :key="filter.Id || index"
-      :class="{
-        'bg-primary': currentFilter?.Id === filter.Id,
-      }"
-      @click="currentFilter = filter"
-    >
-      {{ filter.Name }}
-    </div>
-  </Popover>
+  <Menu
+    ref="saved-filters-menu"
+    :model="collectionsStore.collections.FilterPresets"
+    :popup="true"
+    class="max-h-[50vh] overflow-y-scroll"
+  >
+    <template #item="slotProps">
+      <div
+        class="px-2 py-1.5"
+        :class="{
+          'bg-(--p-menu-item-focus-background)/50 rounded font-medium text-primary': currentFilter?.Id === slotProps.item.Id,
+        }"
+        @click="currentFilter = slotProps.item"
+      >
+        {{ slotProps.item.Name }}
+      </div>
+    </template>
+  </Menu>
 </template>

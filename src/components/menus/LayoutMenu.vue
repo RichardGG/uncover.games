@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PhMinus, PhPlus } from '@phosphor-icons/vue'
+import { PhMagnifyingGlassMinus, PhMagnifyingGlassPlus } from '@phosphor-icons/vue'
 import { storeToRefs } from 'pinia'
-import { InputNumber, Popover } from 'primevue'
+import { Menu, ButtonGroup, Button } from 'primevue'
 import { useTemplateRef } from 'vue'
 import { useAppStore } from '@/stores/appStore'
 
@@ -12,23 +12,39 @@ const menu = useTemplateRef('menu')
 
 defineExpose({ menu })
 
-const changeRowSize = () => {
+const adjustRowSize = (event: Event, amount: number) => {
+  event.preventDefault()
+  event.stopPropagation()
+  if (coversPerRow.value + amount > 0) {
+    coversPerRow.value += amount
+  }
   lastSelectedCoversPerRow.value = coversPerRow.value
 }
+
 </script>
 <template>
-  <Popover ref="menu">
-    <ul class="list-none p-0 m-0 flex flex-col w-52">
-      <li
+  <Menu
+    ref="menu"
+    :model="[
+      {label: 'Table'},
+      {label: 'Covers'},
+    ]"
+    :popup="true"
+    class="max-h-[50vh] overflow-y-scroll"
+  >
+    <template #item="slotProps">
+      <div
+        v-if="slotProps.item.label === 'Table'"
         class="flex items-center gap-2 px-2 rounded-md h-8 hover:bg-highlight-emphasis cursor-pointer"
-        :class="layout === 'table' ? 'bg-highlight-emphasis' : ''"
+        :class="layout === 'table' ? 'bg-(--p-menu-item-focus-background)/50 rounded font-medium text-primary' : ''"
         @click="layout = 'table'"
       >
         <span class="font-medium">Table</span>
-      </li>
-      <li
+      </div>
+      <div
+        v-if="slotProps.item.label === 'Covers'"
         class="flex items-center justify-between gap-2 px-2 rounded-md h-8 hover:bg-highlight-emphasis cursor-pointer"
-        :class="layout === 'covers' ? 'bg-highlight-emphasis' : ''"
+        :class="layout === 'covers' ? 'bg-(--p-menu-item-focus-background)/50 rounded font-medium text-primary' : ''"
         @click="layout = 'covers'"
       >
         <span class="font-medium">Covers</span>
@@ -36,29 +52,30 @@ const changeRowSize = () => {
           v-if="layout === 'covers'"
           class="ml-4"
         >
-          <InputNumber
-            v-model="coversPerRow"
-            show-buttons
-            button-layout="horizontal"
-            increment-icon="pi-plus"
-            decrement-icon="pi-minus"
-            increment-button-class="bg-(--p-content-background) w-8"
-            decrement-button-class="bg-(--p-content-background) w-8"
-            class="-mr-2 h-8"
-            input-class="w-8! text-center p-0"
-            :min="1"
-            size="small"
-            @input="changeRowSize"
-          >
-            <template #decrementicon>
-              <PhMinus />
-            </template>
-            <template #incrementicon>
-              <PhPlus />
-            </template>
-          </InputNumber>
+          <ButtonGroup>
+            <Button
+              class="py-1"
+              severity="secondary"
+              @click="adjustRowSize($event, 1)"
+            >
+              <PhMagnifyingGlassMinus
+                size="22"
+                class="p-0"
+              />
+            </Button>
+            <Button
+              class="py-1"
+              severity="secondary"
+              @click="adjustRowSize($event, -1)"
+            >
+              <PhMagnifyingGlassPlus
+                size="22"
+                class="p-0"
+              />
+            </Button>
+          </ButtonGroup>
         </div>
-      </li>
-    </ul>
-  </Popover>
+      </div>
+    </template>
+  </Menu>
 </template>
