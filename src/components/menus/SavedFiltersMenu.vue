@@ -26,7 +26,9 @@ defineExpose({ menu })
         :class="{
           'bg-(--p-menu-item-focus-background)/50 rounded font-medium text-primary': currentFilter?.Id === slotProps.item.Id,
         }"
-        @click="currentFilter = slotProps.item"
+        @click="
+          // @ts-expect-error filter will actually be FilterPreset
+          currentFilter = slotProps.item"
       >
         {{ slotProps.item.Name }}
       </div>
