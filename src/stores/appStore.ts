@@ -125,6 +125,11 @@ export const useAppStore = defineStore('appStore', {
       }
     },
     setGame(game: Game | null) {
+      if (game === null && this.gameOpen === null) {
+        // Don't trigger history back if game is already closed
+        return
+      }
+
       // Push to history if game isn't currently open
       const push = this.gameOpen === null
       this.gameOpen = game
