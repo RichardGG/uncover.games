@@ -17,6 +17,7 @@ export type AppState = {
   lastSelectedCoversPerRow: number
   layout: 'table' | 'covers'
   currentFilter: FilterPreset
+  historyStack: string[]
 }
 
 const { width } = useWindowSize()
@@ -31,6 +32,7 @@ export const useAppStore = defineStore('appStore', {
     lastSelectedCoversPerRow: 4,
     layout: 'covers',
     currentFilter: emptyFilterPreset,
+    historyStack: [],
   }),
   getters: {
     isMobile: () => width.value < 768,
@@ -116,8 +118,10 @@ export const useAppStore = defineStore('appStore', {
       }
       if (push) {
         nextTick(() => window.history.pushState({}, '', path))
+        this.historyStack.push(path)
       } else {
         window.history.replaceState({}, '', path)
+        this.historyStack[this.historyStack.length - 1] = path
       }
     },
     setGame(game: Game | null) {

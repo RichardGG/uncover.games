@@ -18,6 +18,7 @@ const { isMobile } = storeToRefs(appStore)
 appStore.init()
 
 window.addEventListener('popstate', () => {
+  appStore.historyStack.pop()
   appStore.loadFromUrl()
 })
 
