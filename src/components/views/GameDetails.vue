@@ -6,7 +6,7 @@ import { useAppStore } from '@/stores/appStore'
 import { GameFields } from '@/types/Game/GameField'
 import { formatGameField } from '@/services/formatService'
 import { useDriveStore } from '@/stores/driveStore'
-import { getYouTubeVideoId } from '@/services/youtubeService'
+// import { getYouTubeVideoId } from '@/services/youtubeService'
 import GameCover from '@/components/elements/GameCover.vue'
 
 const appStore = useAppStore()
