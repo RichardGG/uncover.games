@@ -36,12 +36,12 @@ watch(
   () => gameOpen.value?.Name,
   (name) => {
     if (name) {
-      videoId.value = ''
-      getYouTubeVideoId(
-        `${name} game trailer}`
-      ).then((id: string | void) => {
-        videoId.value = id || ''
-      })
+      // videoId.value = ''
+      // getYouTubeVideoId(
+      //   `${name} game trailer}`
+      // ).then((id: string | void) => {
+      //   videoId.value = id || ''
+      // })
     }
   },
   { immediate: true }

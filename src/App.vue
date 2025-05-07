@@ -18,6 +18,7 @@ const { isMobile } = storeToRefs(appStore)
 appStore.init()
 
 window.addEventListener('popstate', () => {
+  console.log('popstate')
   appStore.historyStack.pop()
   appStore.loadFromUrl()
 })
@@ -32,7 +33,7 @@ const collectionsStore = useCollectionsStore()
 const { files } = storeToRefs(driveStore)
 
 onMounted(() => {
-  if (window.location.pathname.startsWith('/website/callback')) {
+  if (window.location.hash.includes('access_token')) {
     const url = new URL(
       window.location.hash.replace(/^#/g, '?'),
       import.meta.env.VITE_BASE_URL
