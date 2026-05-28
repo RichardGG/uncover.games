@@ -15,7 +15,7 @@
     "@tailwindcss/vite": "^4.0.15",
     "@vueuse/components": "^13.0.0",
     "@vueuse/core": "^13.0.0",
-    "axios": "^1.8.4",
+    "axios": "^1.16.1",
     "dayjs": "^1.11.13",
     "pinia": "^3.0.1",
     "primeicons": "^7.0.0",
@@ -42,7 +42,7 @@
     "prettier": "^3.5.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.28.0",
-    "vite": "^6.2.0",
+    "vite": "^6.4.2",
     "vue-tsc": "^2.2.4"
   }
 }
