@@ -75,7 +75,9 @@ export const useDriveStore = defineStore('drive', {
       const googleAuthStore = useGoogleAuthStore()
 
       const file = this.files.find(
-        (file) => file.name === fileName?.replace(/\//g, '_')
+        // The way we store image files in Google Drive is different from Playnite
+        // We don't use a folder structure, instead combine the folder name and file name with an underscore
+        (file) => file.name === fileName?.replace(/\\/g, '_')
       );
 
       if (!file) {
