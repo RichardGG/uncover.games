@@ -91,6 +91,7 @@ watch(
         {{ formatGameField(gameOpen, 'Name') }}
       </div>
       <div
+        v-if="videoId"
         :style="{
           width: videoWidth + 'px',
           height: videoHeight + 'px',
@@ -98,7 +99,6 @@ watch(
         class="m-auto my-4"
       >
         <iframe
-          v-if="videoId"
           id="ytplayer"
           :width="videoWidth"
           :height="videoHeight"

@@ -12,64 +12,90 @@ import CustomFilters from '@/components/views/CustomFilters.vue'
 const appStore = useAppStore()
 const { gameOpen, customFilterOpen } = storeToRefs(appStore)
 
+enum SheetType
+{
+  Game,
+  CustomFilter,
+}
+
 const gameSheet = ref<InstanceType<typeof BottomSheet>>()
 const customFilterSheet = ref<InstanceType<typeof BottomSheet>>()
-const maxSheetHeight = ref(0)
-const lockSheet = ref(false)
-const isGameSheetOpen = ref(false)
 
-const gameSheetSize = computed(() => lockSheet.value ? 300 : maxSheetHeight.value)
+const maxSheetHeight = ref(0)
+
+const lockedSheets = ref<SheetType[]>([])
+const openSheets = ref<SheetType[]>([])
+
+const gameSheetSize = computed(() => lockedSheets.value.includes(SheetType.Game) ? 300 : maxSheetHeight.value)
+const customFilterSheetSize = computed(() => lockedSheets.value.includes(SheetType.CustomFilter) ? 300 : maxSheetHeight.value)
 
 watch(gameOpen, (val) => {
+  console.log
   if (val !== null) {
-    if (!isGameSheetOpen.value) {
-      openGameSheet()
+    if (!openSheets.value.includes(SheetType.Game)) {
+      openSheet(SheetType.Game)
     }
   } else {
-    if (isGameSheetOpen.value) {
-      closeGameSheet()
+    if (openSheets.value.includes(SheetType.Game)) {
+      closeSheet(SheetType.Game)
     }
   }
 })
 
 watch(customFilterOpen, (val) => {
   if (val === true) {
-    customFilterSheet.value?.open()
+    openSheet(SheetType.CustomFilter)
   } else {
-    customFilterSheet.value?.close()
+    closeSheet(SheetType.CustomFilter)
   }
 })
 
-const openGameSheet = () => {
-  gameSheet.value?.open()
-
-  // opened event doesn't seem to work
-  isGameSheetOpen.value = true
+const openSheet = (sheetType: SheetType) => {
+  if (sheetType === SheetType.Game) {
+    gameSheet.value?.open()
+    openSheets.value.push(SheetType.Game)
+  } else if (sheetType === SheetType.CustomFilter) {
+    customFilterSheet.value?.open()
+    openSheets.value.push(SheetType.CustomFilter)
+  }
 }
 
-const closeGameSheet = () => {
-  gameSheet.value?.close()
+const closeSheet = (sheetType: SheetType) => {
+  console.log('closing sheet', sheetType)
+  if (sheetType === SheetType.Game) {
+    gameSheet.value?.close()
+    openSheets.value = openSheets.value.filter((s) => s !== SheetType.Game)
+    appStore.setGame(null)
+  } else if (sheetType === SheetType.CustomFilter) {
+    customFilterSheet.value?.close()
+    openSheets.value = openSheets.value.filter((s) => s !== SheetType.CustomFilter)
+    customFilterOpen.value = false
+  }
 }
 
-const pinSheet = () => {
-  lockSheet.value = !lockSheet.value
-  gameSheet.value?.snapToPoint(gameSheetSize.value)
-}
-
-const onGameSheetClosed = () => {
-  isGameSheetOpen.value = false
-  appStore.setGame(null)
+const pinSheet = (sheetType: SheetType) => {
+  if (sheetType === SheetType.Game) {
+    lockedSheets.value = lockedSheets.value.includes(SheetType.Game)
+      ? lockedSheets.value.filter((s) => s !== SheetType.Game)
+      : [...lockedSheets.value, SheetType.Game]
+      gameSheet.value?.snapToPoint(gameSheetSize.value)
+  } else if (sheetType === SheetType.CustomFilter) {
+    lockedSheets.value = lockedSheets.value.includes(SheetType.CustomFilter)
+      ? lockedSheets.value.filter((s) => s !== SheetType.CustomFilter)
+      : [...lockedSheets.value, SheetType.CustomFilter]
+      customFilterSheet.value?.snapToPoint(customFilterSheetSize.value)
+  }
 }
 
 onMounted(() => {
   if (gameOpen.value) {
-    customFilterOpen.value = false
     nextTick(function () {
-      openGameSheet()
+      openSheet(SheetType.Game)
     })
-  } else if (customFilterOpen.value) {
+  }
+  if (customFilterOpen.value) {
     nextTick(function () {
-      customFilterSheet.value?.open()
+      openSheet(SheetType.CustomFilter)
     })
   }
 })
@@ -77,25 +103,63 @@ onMounted(() => {
 
 <template>
   <BottomSheet
-    ref="gameSheet"
-    :snap-points="[gameSheetSize]"
-    :expand-on-content-drag="!lockSheet"
+    ref="customFilterSheet"
+    :swipe-close-threshold="30"
+    :snap-points="[customFilterSheetSize]"
+    :expand-on-content-drag="!lockedSheets.includes(SheetType.Game)"
     :blocking="false"
-    @max-height="(n) => (maxSheetHeight = n)"
-    @closed="onGameSheetClosed"
+    @closed="openSheets = openSheets.filter((s) => s !== SheetType.CustomFilter)"
+    @instinct-height="(n) => (maxSheetHeight = n)"
   >
     <template #header>
       <div class="h-1" />
       <Button
         size="small"
         severity="secondary"
-        :text="!lockSheet"
+        :text="!lockedSheets.includes(SheetType.CustomFilter)"
         class="!absolute -top-0.5 right-1 bg-black/0! border-0!"
-        @click="pinSheet"
+        @click="pinSheet(SheetType.CustomFilter)"
       >
         <template #icon>
           <PhLockSimple
-            v-if="lockSheet"
+            v-if="lockedSheets.includes(SheetType.CustomFilter)"
+            class="shrink-0"
+            :size="18"
+          />
+          <PhLockSimpleOpen
+            v-else
+            class="shrink-0"
+            :size="18"
+          />
+        </template>
+      </Button>
+    </template>
+    <div class="-mt-[1vh]">
+      <CustomFilters />
+    </div>
+  </BottomSheet>
+
+  <BottomSheet
+    ref="gameSheet"
+    :swipe-close-threshold="30"
+    :snap-points="[gameSheetSize]"
+    :expand-on-content-drag="!lockedSheets.includes(SheetType.Game)"
+    :blocking="false"
+    @closed="openSheets = openSheets.filter((s) => s !== SheetType.Game)"
+    @instinct-height="(n) => (maxSheetHeight = n)"
+  >
+    <template #header>
+      <div class="h-1" />
+      <Button
+        size="small"
+        severity="secondary"
+        :text="!lockedSheets.includes(SheetType.Game)"
+        class="!absolute -top-0.5 right-1 bg-black/0! border-0!"
+        @click="pinSheet(SheetType.Game)"
+      >
+        <template #icon>
+          <PhLockSimple
+            v-if="lockedSheets.includes(SheetType.Game)"
             class="shrink-0"
             :size="18"
           />
@@ -109,18 +173,6 @@ onMounted(() => {
     </template>
     <div class="-mt-[1vh] w-[100vw]">
       <GameDetails />
-    </div>
-  </BottomSheet>
-
-  <BottomSheet
-    ref="customFilterSheet"
-    :snap-points="[maxSheetHeight]"
-    :blocking="false"
-    @max-height="(n) => (maxSheetHeight = n)"
-    @closed="customFilterOpen = false"
-  >
-    <div class="-mt-[1vh]">
-      <CustomFilters />
     </div>
   </BottomSheet>
 </template>
