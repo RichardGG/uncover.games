@@ -60,14 +60,18 @@ const openSheet = (sheetType: SheetType) => {
   }
 }
 
-const closeSheet = (sheetType: SheetType) => {
+const closeSheet = (sheetType: SheetType, closeSheet: boolean = true) => {
   console.log('closing sheet', sheetType)
   if (sheetType === SheetType.Game) {
-    gameSheet.value?.close()
+    if (closeSheet) {
+      gameSheet.value?.close()
+    }
     openSheets.value = openSheets.value.filter((s) => s !== SheetType.Game)
     appStore.setGame(null)
   } else if (sheetType === SheetType.CustomFilter) {
-    customFilterSheet.value?.close()
+    if (closeSheet) {
+      customFilterSheet.value?.close()
+    }
     openSheets.value = openSheets.value.filter((s) => s !== SheetType.CustomFilter)
     customFilterOpen.value = false
   }
@@ -106,9 +110,8 @@ onMounted(() => {
     ref="customFilterSheet"
     :swipe-close-threshold="30"
     :snap-points="[customFilterSheetSize]"
-    :expand-on-content-drag="!lockedSheets.includes(SheetType.Game)"
     :blocking="false"
-    @closed="openSheets = openSheets.filter((s) => s !== SheetType.CustomFilter)"
+    @closed="closeSheet(SheetType.CustomFilter, false)"
     @instinct-height="(n) => (maxSheetHeight = n)"
   >
     <template #header>
@@ -143,9 +146,8 @@ onMounted(() => {
     ref="gameSheet"
     :swipe-close-threshold="30"
     :snap-points="[gameSheetSize]"
-    :expand-on-content-drag="!lockedSheets.includes(SheetType.Game)"
-    :blocking="false"
-    @closed="openSheets = openSheets.filter((s) => s !== SheetType.Game)"
+    :blocking="true"
+    @closed="closeSheet(SheetType.Game, false)"
     @instinct-height="(n) => (maxSheetHeight = n)"
   >
     <template #header>
