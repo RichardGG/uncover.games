@@ -75,7 +75,7 @@ export const useDriveStore = defineStore('drive', {
       const googleAuthStore = useGoogleAuthStore()
 
       const file = this.files.find(
-        (file) => file.name === fileName?.replace('\\', '_')
+        (file) => file.name === fileName?.replace(/\//g, '_')
       );
 
       if (!file) {

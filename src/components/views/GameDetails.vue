@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import sanitizeHtml from 'sanitize-html'
+import { Button } from 'primevue'
 import { computed, ref, watch } from 'vue'
 import { useAppStore } from '@/stores/appStore'
 import { GameFields } from '@/types/Game/GameField'
@@ -28,6 +29,10 @@ const updateDescription = () => {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
     }
   )
+}
+
+const openLink = (url: string) => {
+  window.open(url, '_blank')
 }
 
 watch(() => gameOpen.value?.Description, updateDescription, { immediate: true })
@@ -107,6 +112,17 @@ watch(
           allowfullscreen
           class="pointer-events-none touch-none"
         />
+      </div>
+      <div class="flex flex-wrap mb-6">
+        <Button
+          v-for="link in gameOpen.Links || []"
+          :key="`link-${link.Name}`"
+          @click="() => openLink(link?.Url ?? '')"
+          class="mr-2 mb-2 flex-grow"
+          severity="secondary"
+        >
+          {{ link.Name }}
+        </Button>
       </div>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="safeDescription" />
