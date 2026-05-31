@@ -12,7 +12,7 @@ const { isMobile } = storeToRefs(appStore)
       class="mr-6"
     >
       <InputIcon class="pi pi-search" />
-      <InputText type="text" />
+      <InputText v-model="appStore.currentFilter.Settings.Name" type="text" />
     </IconField>
     <OverlayBadge class="mr-5">
       <i class="pi pi-bell text-xl! text-(--p-button-text-secondary-color)!" />
