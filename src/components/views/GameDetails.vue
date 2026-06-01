@@ -4,11 +4,14 @@ import sanitizeHtml from 'sanitize-html'
 import { Button } from 'primevue'
 import { computed, ref, watch } from 'vue'
 import { useAppStore } from '@/stores/appStore'
-import { GameFields } from '@/types/Game/GameField'
+import { GameFields, type GameField } from '@/types/Game/GameField'
 import { formatGameField } from '@/services/formatService'
 import { useDriveStore } from '@/stores/driveStore'
 // import { getYouTubeVideoId } from '@/services/youtubeService'
 import GameCover from '@/components/elements/GameCover.vue'
+import CriticScore from '../elements/data/CriticScore.vue'
+import CommunityScore from '../elements/data/CommunityScore.vue'
+import UserScore from '../elements/data/UserScore.vue'
 
 const appStore = useAppStore()
 const driveStore = useDriveStore()
@@ -21,6 +24,31 @@ const videoWidth = computed(() =>
 )
 const videoHeight = computed(() => videoWidth.value * (9 / 16))
 const safeDescription = ref('')
+
+  const fieldsConfiguration:GameField[] = [
+    'CompletionStatus',
+    'Favorite',
+  ]
+  
+  const fieldsGenres:GameField[] = [
+    'Genres',
+    'Tags',
+    'Features',
+  ]
+  
+  const fieldsOther:GameField[] = [
+    'Series',
+    'Categories',
+    'AgeRatings',
+    'Regions',
+  ]
+
+  const fieldsInstallation:GameField[] = [
+    'InstallDirectory',
+    'Version',
+    'IsInstalled',
+    'InstallSize',
+  ]
 
 const updateDescription = () => {
   safeDescription.value = sanitizeHtml(
@@ -124,10 +152,102 @@ watch(
           {{ link.Name }}
         </Button>
       </div>
+
+      <div class="flex items-center justify-center space-x-4 my-6 flex-wrap">
+        <CommunityScore />
+        <UserScore />
+        <CriticScore />
+      </div>
+      <div class="flex items-center justify-center space-x-4 my-6 flex-wrap">
+        <template
+          v-for="field in fieldsConfiguration"
+          :key="field"
+        >
+          <div v-if="formatGameField(gameOpen, field)" class="bg-[#0003] p-3 rounded-md mb-4">
+            <div class="font-light text-sm">
+              {{ field }}  
+            </div>
+            <div>{{ formatGameField(gameOpen, field) }}</div>
+          </div>
+        </template>
+        <div v-if="formatGameField(gameOpen, 'Playtime')" class="bg-[#0003] p-3 rounded-md mb-4">
+          <div class="font-light text-sm">
+            {{ 'Playtime' }}
+          </div>
+          <div>{{ formatGameField(gameOpen, 'Playtime') }}</div>
+        </div>
+        <div v-if="formatGameField(gameOpen, 'ReleaseDate')" class="bg-[#0003] p-3 rounded-md mb-4">
+          <div class="font-light text-sm">
+            {{ 'ReleaseDate' }}
+          </div>
+          <div>{{ formatGameField(gameOpen, 'ReleaseDate') }}</div>
+        </div>
+        <div v-if="formatGameField(gameOpen, 'Platforms')" class="bg-[#0003] p-3 rounded-md mb-4">
+          <div class="font-light text-sm">
+            {{ 'Platforms' }}
+          </div>
+          <div>{{ formatGameField(gameOpen, 'Platforms') }}</div>
+        </div>
+        <div v-if="formatGameField(gameOpen, 'Source')" class="bg-[#0003] p-3 rounded-md mb-4">
+          <div class="font-light text-sm">
+            {{ 'Source' }}
+          </div>
+          <div>{{ formatGameField(gameOpen, 'Source') }}</div>
+        </div>
+        <div v-if="formatGameField(gameOpen, 'Publishers')" class="bg-[#0003] p-3 rounded-md mb-4">
+          <div class="font-light text-sm">
+            {{ 'Publishers' }}
+          </div>
+          <div>{{ formatGameField(gameOpen, 'Publishers') }}</div>
+        </div>
+        <div v-if="formatGameField(gameOpen, 'Developers')" class="bg-[#0003] p-3 rounded-md mb-4">
+          <div class="font-light text-sm">
+            {{ 'Developers' }}
+          </div>
+          <div>{{ formatGameField(gameOpen, 'Developers') }}</div>
+        </div>
+      </div>
+
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="safeDescription" />
-      <template
-        v-for="field in GameFields"
+      
+      <!-- fieldsGenres -->
+       <template
+        v-for="field in fieldsGenres"
+        :key="field"
+      >
+        <div
+          v-if="
+            !['Description', 'Name'].includes(field) &&
+              formatGameField(gameOpen, field)
+          "
+        >
+          <div class="mt-4 font-light text-sm">
+            {{ field }}
+          </div>
+          <div>{{ formatGameField(gameOpen, field) }}</div>
+        </div>
+      </template>
+      <!-- fieldsOther -->
+       <template
+        v-for="field in fieldsOther"
+        :key="field"
+      >
+        <div
+          v-if="
+            !['Description', 'Name'].includes(field) &&
+              formatGameField(gameOpen, field)
+          "
+        >
+          <div class="mt-4 font-light text-sm">
+            {{ field }}
+          </div>
+          <div>{{ formatGameField(gameOpen, field) }}</div>
+        </div>
+      </template>
+      <!-- fieldsInstallation -->
+       <template
+        v-for="field in fieldsInstallation"
         :key="field"
       >
         <div

@@ -1,6 +1,7 @@
 import type { Game } from '@/types/Game/Game'
 import type { GameField } from '@/types/Game/GameField'
 import type { Tag } from '@/types/Game/GameFieldTypes'
+import dayjs from 'dayjs'
 
 export type GameValueTypeMap = {
   [K in GameField]:
@@ -140,7 +141,7 @@ export const formatGameField = (game: Game|null, field: GameField): string => {
   }
 
   if (GameValueTypes[field] === 'date' && typeof game[field] === 'string') {
-    return game[field]
+    return dayjs(game[field]).format('MMMM D, YYYY h:mma')
   }
 
   if (GameValueTypes[field] === 'duration' && typeof game[field] === 'number') {
@@ -174,7 +175,7 @@ export const formatGameField = (game: Game|null, field: GameField): string => {
     game[field] !== null &&
     'ReleaseDate' in game[field]
   ) {
-    return game[field].ReleaseDate + ''
+    return dayjs(game[field].ReleaseDate + '').format('MMMM D, YYYY')
   }
 
   return ''
