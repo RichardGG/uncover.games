@@ -11,6 +11,7 @@ import {
   setCachedData,
 } from '@/services/cacheService'
 import { useDriveStore } from '@/stores/driveStore'
+import { useNotificationStore } from '@/stores/notificationStore'
 
 export const CollectionTypes = [
   'Games',
@@ -94,6 +95,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
   actions: {
     async init() {
       const driveStore = useDriveStore()
+      const notificationStore = useNotificationStore()
       // For each collection, loads cache, checks if file metadata updated, redownloads
       for (const collectionType of CollectionTypes) {
         this.statuses[collectionType] = { state: 'pending' }
@@ -108,7 +110,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
 
         const metadata = driveStore.getFileMetadata(`${collectionType}.json`)
         if (!metadata) {
-          console.error(`No file in Google Drive for ${collectionType}`)
+          notificationStore.addNotification(`No file in Google Drive for ${collectionType}`)
           // Couldn't find file
           continue
         }
@@ -123,9 +125,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
           driveStore.getJson(metadata.id).then((response: void | AxiosResponse<any, any>) => { // eslint-disable-line
             if (! response) {
               // TODO handle
-              console.error(
-                `Failed to download ${collectionType} file from Google Drive`
-              )
+              notificationStore.addNotification(`Failed to download ${collectionType} file from Google Drive`)
               return
             }
             const { data } = response;
@@ -135,9 +135,7 @@ export const useCollectionsStore = defineStore('collectionsStore', {
           })
         } catch {
           // TODO should we do something if the request fails
-          console.error(
-            `Failed to download ${collectionType} file from Google Drive`
-          )
+          notificationStore.addNotification(`Failed to download ${collectionType} file from Google Drive`)
         }
       }
     },

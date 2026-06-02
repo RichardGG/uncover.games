@@ -11,11 +11,16 @@ import { useAppStore } from '@/stores/appStore'
 import { useCollectionsStore } from '@/stores/collectionsStore'
 import { useDriveStore } from '@/stores/driveStore'
 import { useGoogleAuthStore } from '@/stores/googleAuthStore'
+import HomePage from './components/views/HomePage.vue'
 
 const appStore = useAppStore()
+const collectionsStore = useCollectionsStore()
+const driveStore = useDriveStore()
+const googleAuthStore = useGoogleAuthStore()
 const { isMobile } = storeToRefs(appStore)
 
 appStore.init()
+googleAuthStore.init()
 
 window.addEventListener('popstate', () => {
   console.log('popstate')
@@ -24,11 +29,6 @@ window.addEventListener('popstate', () => {
 })
 
 appStore.loadFromUrl()
-
-const googleAuthStore = useGoogleAuthStore()
-const driveStore = useDriveStore()
-// const uiStore = useUIStore();
-const collectionsStore = useCollectionsStore()
 
 const { files } = storeToRefs(driveStore)
 
@@ -47,13 +47,18 @@ onMounted(() => {
     }
   }
 
-  watch(files, () => collectionsStore.init())
-  driveStore.init()
+  if (googleAuthStore.authenticated) {
+    watch(files, () => collectionsStore.init())
+    driveStore.init()
+  }
 })
 </script>
 
 <template>
-  <template v-if="isMobile">
+  <template v-if="!googleAuthStore.authenticated">
+    <HomePage />
+  </template>
+  <template v-else-if="isMobile">
     <MobileBottomSheet />
     <MobileHeader />
     <GamesView />

@@ -8,13 +8,22 @@ import {
 import {
   type FileMetadata,
   fetchFilesList,
+  getDriveAbout,
   getDriveFile,
 } from '@/services/driveService';
 import type { LoadingStatus } from '@/types/LoadingStatusTypes';
 
+export type StorageQuota = {
+  limit: number;
+  usage: number;
+  usageInDrive: number;
+  usageInDriveTrash: number;
+};
+
 export type DriveState = {
   files: Array<FileMetadata>;
   status: LoadingStatus;
+  storageQuota?: StorageQuota;
 };
 
 export interface ProgressUpdate {
@@ -28,6 +37,7 @@ export const useDriveStore = defineStore('drive', {
       status: {
         state: 'pending',
       },
+      storageQuota: undefined,
     } as DriveState;
   },
 
@@ -41,6 +51,15 @@ export const useDriveStore = defineStore('drive', {
         // Store the cached files
         this.files = await cachedResponse.json();
       }
+
+      getDriveAbout(await googleAuthStore.getToken()).then((response) => {
+        this.storageQuota = {
+          limit: Number(response.data.storageQuota.limit),
+          usage: Number(response.data.storageQuota.usage),
+          usageInDrive: Number(response.data.storageQuota.usageInDrive),
+          usageInDriveTrash: Number(response.data.storageQuota.usageInDriveTrash),
+        };
+      });
 
       this.status.state = 'downloading';
       let files: Array<FileMetadata> = []

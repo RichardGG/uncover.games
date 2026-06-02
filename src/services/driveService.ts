@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { ResponseType } from 'axios';
 
-const DRIVE_BASE_URL = 'https://www.googleapis.com/drive/v3/files';
+const DRIVE_BASE_URL = 'https://www.googleapis.com/drive/v3';
 
 export type FileMetadata = {
   size: string;
@@ -16,12 +16,25 @@ export type ListResponse = {
   files: Array<FileMetadata>;
 };
 
+export function getDriveAbout(
+  apiToken: string
+) {
+  return axios.get(`${DRIVE_BASE_URL}/about`, {
+    params: {
+      fields: 'storageQuota',
+    },
+    headers: {
+      Authorization: 'Bearer ' + apiToken,
+    },
+  });
+}
+
 export function getDriveFile(
   apiToken: string,
   fileId: string,
   responseType: ResponseType | undefined = undefined
 ) {
-  return axios.get(`${DRIVE_BASE_URL}/${fileId}`, {
+  return axios.get(`${DRIVE_BASE_URL}/files/${fileId}`, {
     params: {
       alt: 'media',
     },
@@ -39,7 +52,7 @@ export function fetchFilesList(
 ): Promise<Array<FileMetadata>> {
   // Loads all pages of files
   return axios
-    .get(DRIVE_BASE_URL, {
+    .get(`${DRIVE_BASE_URL}/files`, {
       params: {
         spaces: 'appDataFolder',
         fields: 'files(id,name,size,createdTime,modifiedTime),nextPageToken',
