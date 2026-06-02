@@ -84,7 +84,7 @@ const handleReset = () => {
     >
       <template #icon>
         <Avatar
-          icon="pi pi-user"
+          :icon="'pi pi-user'"
           shape="circle"
         />
       </template>
@@ -93,7 +93,7 @@ const handleReset = () => {
       ref="user-menu"
       :model="[
         {
-          label: (collectionsStore?.collections?.Games?.length || 0) + ' games',
+          label: (driveStore.user?.displayName || 'User') + ' - ' + (collectionsStore?.collections?.Games?.length || 0) + ' games',
         },
         {
           label: storageUsage,

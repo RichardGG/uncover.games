@@ -20,10 +20,17 @@ export type StorageQuota = {
   usageInDriveTrash: number;
 };
 
+export type UserDriveInfo = {
+  displayName: string;
+  emailAddress: string;
+  photoLink: string;
+};
+
 export type DriveState = {
   files: Array<FileMetadata>;
   status: LoadingStatus;
   storageQuota?: StorageQuota;
+  user?: UserDriveInfo;
 };
 
 export interface ProgressUpdate {
@@ -38,6 +45,7 @@ export const useDriveStore = defineStore('drive', {
         state: 'pending',
       },
       storageQuota: undefined,
+      user: undefined,
     } as DriveState;
   },
 
@@ -58,6 +66,11 @@ export const useDriveStore = defineStore('drive', {
           usage: Number(response.data.storageQuota.usage),
           usageInDrive: Number(response.data.storageQuota.usageInDrive),
           usageInDriveTrash: Number(response.data.storageQuota.usageInDriveTrash),
+        };
+        this.user = {
+          displayName: response.data.user.displayName,
+          emailAddress: response.data.user.emailAddress,
+          photoLink: response.data.user.photoLink,
         };
       });
 

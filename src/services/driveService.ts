@@ -21,7 +21,7 @@ export function getDriveAbout(
 ) {
   return axios.get(`${DRIVE_BASE_URL}/about`, {
     params: {
-      fields: 'storageQuota',
+      fields: 'storageQuota,user',
     },
     headers: {
       Authorization: 'Bearer ' + apiToken,
