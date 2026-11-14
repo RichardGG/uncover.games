@@ -3,6 +3,17 @@ import type { GameField } from '@/types/Game/GameField'
 import type { Tag } from '@/types/Game/GameFieldTypes'
 import dayjs from 'dayjs'
 
+function formatBytes(bytes: number): string {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB']
+  let value = bytes
+  let unit = 0
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024
+    unit++
+  }
+  return `${unit === 0 ? value : value.toFixed(value < 10 ? 2 : 1)} ${units[unit]}`
+}
+
 export type GameValueTypeMap = {
   [K in GameField]:
     | 'text'
@@ -158,7 +169,7 @@ export const formatGameField = (game: Game|null, field: GameField): string => {
   }
 
   if (GameValueTypes[field] === 'size' && typeof game[field] === 'number') {
-    return `${game[field]}b` // TODO human size
+    return formatBytes(game[field])
   }
 
   if (GameValueTypes[field] === 'bool') {

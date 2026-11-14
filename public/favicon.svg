@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#41d1ff"/>
+      <stop offset="1" stop-color="#bd34fe"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0.30" stop-color="#fff"/>
+      <stop offset="0.80" stop-color="#000"/>
+    </linearGradient>
+    <mask id="dissolve" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <rect width="512" height="512" fill="url(#fade)"/>
+    </mask>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#17152a"/>
+  <g mask="url(#dissolve)">
+    <path fill="url(#g)" d="M160 170c-42 0-74 62-86 150-7 52 22 86 58 68 26-13 40-48 66-58h116c26 10 40 45 66 58 36 18 65-16 58-68-12-88-44-150-86-150z"/>
+    <g fill="#17152a">
+      <rect x="130" y="228" width="72" height="20" rx="6"/>
+      <rect x="156" y="202" width="20" height="72" rx="6"/>
+      <circle cx="350" cy="214" r="13"/>
+      <circle cx="350" cy="262" r="13"/>
+      <circle cx="326" cy="238" r="13"/>
+      <circle cx="374" cy="238" r="13"/>
+    </g>
+  </g>
+  <g fill="url(#g)">
+    <circle cx="384" cy="196" r="12" opacity=".85"/>
+    <circle cx="412" cy="250" r="10" opacity=".8"/>
+    <circle cx="392" cy="310" r="14" opacity=".75"/>
+    <circle cx="430" cy="172" r="8" opacity=".7"/>
+    <circle cx="448" cy="222" r="9" opacity=".6"/>
+    <circle cx="424" cy="290" r="7" opacity=".55"/>
+    <circle cx="452" cy="338" r="10" opacity=".5"/>
+    <circle cx="466" cy="270" r="5" opacity=".45"/>
+    <circle cx="410" cy="352" r="6" opacity=".45"/>
+    <circle cx="472" cy="190" r="5" opacity=".4"/>
+    <circle cx="438" cy="130" r="5" opacity=".35"/>
+    <circle cx="480" cy="316" r="4" opacity=".3"/>
+    <circle cx="466" cy="148" r="3.5" opacity=".3"/>
+    <circle cx="486" cy="236" r="3" opacity=".25"/>
+  </g>
+</svg>

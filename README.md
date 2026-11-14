@@ -37,7 +37,18 @@ Initial load may take a bit longer, assets will be cached in your browser for be
 
 ## Local Development
 
-TODO add instructions for creating Google Drive OAuth credentials
+To sign in to Google locally you need your own OAuth credentials:
+
+1. In the [Google Cloud Console](https://console.cloud.google.com/), create a project
+2. Enable the **Google Drive API** (APIs & Services > Library)
+3. Configure the OAuth consent screen and add the scope `https://www.googleapis.com/auth/drive.appdata`
+4. Create an **OAuth client ID** (Web application) and add your dev URL (e.g. `http://localhost:5173/`) as an authorised redirect URI
+5. Create a `.env.local` file in the project root:
+
+```bash
+VITE_DRIVE_CLIENT_ID=<your OAuth client ID>
+VITE_BASE_URL=http://localhost:5173/
+```
 
 Install and run locally
 

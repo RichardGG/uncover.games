@@ -1025,7 +1025,9 @@ function ContainsInvariantCulture(
     value = OnlyLettersOrDigits(value)
   }
   if (compareOptions.IgnoreNonSpace) {
-    // TODO
+    // Strip combining diacritical marks (e.g. é -> e)
+    source = source.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   }
   return source.indexOf(value) >= 0
 }
